@@ -3,13 +3,17 @@ package com.team214.nctue4.client
 import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
+import com.team214.nctue4.model.AnnItem
 import io.reactivex.Observable
 import okhttp3.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.HashMap
 
 class OldE3Client(context: Context) : E3Client() {
-    class SessionExpiredException : Exception()
+    class SessionInvalidException : Exception()
 
     companion object {
         const val WEB_URL = "https://e3.nctu.edu.tw/NCTU_Easy_E3P/lms31"
@@ -19,6 +23,9 @@ class OldE3Client(context: Context) : E3Client() {
     private var sessionId: Cookie? = null
     private var aspXAuth: Cookie? = null
     private var viewState: String = ""
+    private var currentPage: String = "home"
+    private var courseIdMap = HashMap<String, String>()
+
     private val client = OkHttpClient().newBuilder()
         .cookieJar(object : CookieJar {
             override fun loadForRequest(url: HttpUrl): MutableList<Cookie>? {
@@ -41,23 +48,21 @@ class OldE3Client(context: Context) : E3Client() {
         .followSslRedirects(false)
         .build()
 
-    fun get(path: String): Observable<Response> {
-        val request = Request.Builder()
-            .url(WEB_URL + path)
-            .build()
+    private fun get(path: String): Observable<Response> {
         return Observable.fromCallable {
-            Log.d("OldE3Get",path)
+            if (path != "/login.aspx" && (sessionId == null || aspXAuth == null)) throw SessionInvalidException()
+            Log.d("OldE3Get", path)
+            val request = Request.Builder()
+                .url(WEB_URL + path)
+                .build()
             client.newCall(request).execute().apply {
                 if (this.header("Location", "")!!.contains(Regex("(logout|login)"))) {
-                    print("Throw get")
-                    throw SessionExpiredException()
+                    throw SessionInvalidException()
                 }
             }
         }.retryWhen {
-            it.filter { error -> error is SessionExpiredException }
+            it.filter { error -> error is SessionInvalidException }
                 .flatMap { _ -> login() }
-                .take(1)
-                .concatMap { _ -> Observable.error<ServiceErrorException>(ServiceErrorException()) }
         }
     }
 
@@ -66,24 +71,24 @@ class OldE3Client(context: Context) : E3Client() {
         path: String,
         data: HashMap<String, String>
     ): Observable<Response> {
-        val formBodyBuilder = FormBody.Builder()
-        data.forEach { entry -> formBodyBuilder.add(entry.key, entry.value) }
-        formBodyBuilder.add("__VIEWSTATE", viewState)
-        val formBody = formBodyBuilder.build()
-        val request = okhttp3.Request.Builder()
-            .url(WEB_URL + path)
-            .post(formBody)
-            .build()
         return Observable.fromCallable {
-            Log.d("OldE3Post",path)
+            if (path != "/login.aspx" && (sessionId == null || aspXAuth == null)) throw SessionInvalidException()
+            Log.d("OldE3Post", path)
+            val formBodyBuilder = FormBody.Builder()
+            data.forEach { entry -> formBodyBuilder.add(entry.key, entry.value) }
+            formBodyBuilder.add("__VIEWSTATE", viewState)
+            val formBody = formBodyBuilder.build()
+            val request = okhttp3.Request.Builder()
+                .url(WEB_URL + path)
+                .post(formBody)
+                .build()
             client.newCall(request).execute().apply {
-                if (this.header("Location", "")!!.contains(Regex("(logout|login)"))) {
-                    print("Throw post")
-                    throw SessionExpiredException()
+                if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx")) {
+                    throw SessionInvalidException()
                 }
             }
         }.retryWhen {
-            it.filter { error -> error is SessionExpiredException }
+            it.filter { error -> error is SessionInvalidException }
                 .flatMap { _ -> login() }
                 .take(1)
                 .concatMap { _ -> Observable.error<ServiceErrorException>(ServiceErrorException()) }
@@ -96,6 +101,34 @@ class OldE3Client(context: Context) : E3Client() {
                 viewState = it.select("#__VIEWSTATE").attr("value")
             }
         }
+    }
+
+
+    private fun toHomePage(): Observable<Document> {
+        return get("/enter_course_index.aspx").flatMap { response ->
+            currentPage = "home"
+            Observable.just(response)
+        }.flatMap { parseHtmlResponse(it) }
+    }
+
+    private fun ensureCourseIdMap(): Observable<Unit> {
+        return if (courseIdMap.isEmpty()) {
+            toHomePage().flatMap { Observable.fromCallable { buildCourseIdMap(it) } }
+        } else {
+            Observable.just(Unit)
+        }
+    }
+
+    private fun buildCourseIdMap(document: Document) {
+        if (!courseIdMap.isEmpty()) return
+        val courseEls = document
+            .getElementById("ctl00_ContentPlaceHolder1_gvCourse")
+            .getElementsByTag("a")
+        courseEls.forEach {
+            courseIdMap[it.attr("courseid")] =
+                    it.attr("id").replace('_', '$')
+        }
+        Log.d("E3Map", courseIdMap.toString())
     }
 
     override fun login(
@@ -118,11 +151,39 @@ class OldE3Client(context: Context) : E3Client() {
             }
             .flatMap {
                 Observable.fromCallable {
-                    if (it.body()!!.string().contains("window.location.href='login.aspx';")) {
+                    if (it.body()!!.string().contains("window.currentPage.href='login.aspx';")) {
                         throw WrongCredentialsException()
                     }
+                    currentPage = "home"
                 }
             }
+    }
+
+    override fun getFrontPageAnn(): Observable<MutableList<AnnItem>> {
+        return toHomePage().flatMap { document ->
+            Observable.fromCallable {
+                buildCourseIdMap(document)
+                val annItems = mutableListOf<AnnItem>()
+                val dateCourseElId = "ctl00_ContentPlaceHolder1_rptNewList_ctl%02d_lbCourseNa"
+                val titleElId = "ctl00_ContentPlaceHolder1_rptNewList_ctl%02d_lnkMore"
+                val contentElId = "ctl00_ContentPlaceHolder1_rptNewList_ctl%02d_lbContent"
+                val df = SimpleDateFormat("yyyy/MM/dd", Locale.US)
+                var idx = 0
+                while (true) {
+                    val dateCourse = document.getElementById(dateCourseElId.format(idx))?.text()
+                    val titleEl = document.getElementById(titleElId.format(idx))
+                    val content = document.getElementById(contentElId.format(idx))?.html()
+                    if (dateCourse == null || titleEl == null || content == null) break
+                    idx++
+                    val courseName = dateCourse.split("【")[1].removeSuffix("】")
+                    val date = df.parse(dateCourse.split("【")[0])
+                    val title = titleEl.text()
+                    val courseId = titleEl.attr("courseid")
+                    annItems.add(AnnItem(E3Type.OLD, title, date, courseName, courseId))
+                }
+                annItems
+            }
+        }
     }
 
 }

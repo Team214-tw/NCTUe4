@@ -3,6 +3,7 @@ package com.team214.nctue4.client
 import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
+import com.team214.nctue4.model.AnnItem
 import io.reactivex.Observable
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
@@ -12,7 +13,7 @@ import org.json.JSONException
 import org.json.JSONObject
 
 class NewE3ApiClient(context: Context) : E3Client() {
-    class TokenExpiredException : Exception()
+    class TokenInvalidException : Exception()
 
     companion object {
         const val API_URL = "https://e3new.nctu.edu.tw/webservice/rest/server.php?moodlewsrestformat=json"
@@ -24,12 +25,13 @@ class NewE3ApiClient(context: Context) : E3Client() {
         .followSslRedirects(false)
         .build()
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    private var token = prefs.getString("newE3Token", "")
+    private var token = prefs.getString("newE3Token", null)
     private var userId = prefs.getString("newE3UserId", "")
 
     private fun post(
         data: HashMap<String, String>
     ): Observable<String> {
+        if (token == null) throw TokenInvalidException()
         data["wstoken"] = token
         val formBodyBuilder = FormBody.Builder()
         data.forEach { entry -> formBodyBuilder.add(entry.key, entry.value) }
@@ -44,7 +46,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
                         if (resJson.has("errorcode") &&
                             resJson.getString("errorcode") == "invalidtoken"
                         ) {
-                            throw TokenExpiredException()
+                            throw TokenInvalidException()
                         }
                     } catch (e: JSONException) {
                         // Response is a JsonArray, Pass
@@ -52,10 +54,8 @@ class NewE3ApiClient(context: Context) : E3Client() {
                 }
             }
         }.retryWhen {
-            it.filter { error -> error is TokenExpiredException }
+            it.filter { error -> error is TokenInvalidException }
                 .flatMap { _ -> login() }
-                .take(1)
-                .concatMap { _ -> Observable.error<ServiceErrorException>(ServiceErrorException()) }
         }
     }
 
@@ -98,5 +98,9 @@ class NewE3ApiClient(context: Context) : E3Client() {
             prefs.edit().putString("studentName", name).apply()
             Observable.just(Unit)
         }
+    }
+
+    override fun getFrontPageAnn(): Observable<MutableList<AnnItem>> {
+        throw NotImplementedError()
     }
 }
