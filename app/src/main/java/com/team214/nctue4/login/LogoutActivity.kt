@@ -5,15 +5,18 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.R
 import com.team214.nctue4.model.CourseDBHelper
 import java.io.File
 
 class LogoutActivity : AppCompatActivity() {
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_logout)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val prefsEditor = prefs.edit()
         prefsEditor.clear().apply()

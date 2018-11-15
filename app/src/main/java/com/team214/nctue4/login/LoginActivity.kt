@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.client.NewE3ApiClient
@@ -20,10 +21,12 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         //detect soft keyboard
         login_root.viewTreeObserver.addOnGlobalLayoutListener {
@@ -69,10 +72,8 @@ class LoginActivity : AppCompatActivity() {
 
             oldE3Client.login(studentId, studentPassword)
                 .mergeWith(
-                    newE3ApiClient.login(
-                        studentId,
-                        studentPortalPassword
-                    ).flatMap { _ -> newE3ApiClient.saveUserId() })
+                    newE3ApiClient.login(studentId, studentPortalPassword)
+                        .flatMap { _ -> newE3ApiClient.saveUserInfo(studentId) })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(

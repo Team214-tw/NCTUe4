@@ -7,6 +7,7 @@ import io.reactivex.Observable
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -24,6 +25,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
         .build()
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     private var token = prefs.getString("newE3Token", "")
+    private var userId = prefs.getString("newE3UserId", "")
 
     private fun post(
         data: HashMap<String, String>
@@ -79,12 +81,20 @@ class NewE3ApiClient(context: Context) : E3Client() {
         }
     }
 
-    fun saveUserId(): Observable<Unit> {
-        return post(hashMapOf("wsfunction" to "core_webservice_get_site_info")).flatMap {
-            val resJson = JSONObject(it)
-            val userId = resJson.getString("userid")
-            val name = resJson.getString("firstname")
+    fun saveUserInfo(studentId: String): Observable<Unit> {
+        return post(
+            hashMapOf(
+                "wsfunction" to "core_user_get_users_by_field",
+                "values[0]" to studentId,
+                "field" to "username"
+            )
+        ).flatMap {
+            val resJson = JSONArray(it).getJSONObject(0)
+            val name = resJson.getString("fullname")
+            val email = resJson.getString("email")
+            userId = resJson.getString("id")
             prefs.edit().putString("newE3UserId", userId).apply()
+            prefs.edit().putString("studentEmail", email).apply()
             prefs.edit().putString("studentName", name).apply()
             Observable.just(Unit)
         }
