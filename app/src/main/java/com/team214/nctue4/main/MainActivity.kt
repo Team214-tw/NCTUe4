@@ -143,11 +143,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intent)
                 null
             }
-//            R.id.nav_about -> {
-//                firebaseAnalytics.setCurrentScreen(this, "LicenseDialog", LicenseDialog::class.java.simpleName)
-//                LicenseDialog().show(supportFragmentManager, "TAG")
-//                null
-//            }
+            R.id.nav_about -> {
+                firebaseAnalytics.setCurrentScreen(this, "LicenseDialog", LicenseDialog::class.java.simpleName)
+                LicenseDialog().show(supportFragmentManager, "TAG")
+                null
+            }
             else -> {
                 // TODO set this to homefragment
                 firebaseAnalytics.setCurrentScreen(this, "HomeFragment", HomeAnnFragment::class.java.simpleName)
