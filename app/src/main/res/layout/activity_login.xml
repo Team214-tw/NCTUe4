@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/login_root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorPrimaryDark"
+              android:orientation="vertical">
+
+
+    <ScrollView
+            android:id="@+id/login_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toTopOf="@+id/login_button">
+
+
+        <LinearLayout
+                android:id="@+id/logo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                android:paddingBottom="40dp">
+
+            <ImageView
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_fox"/>
+
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/logo"/>
+
+
+            <TextView
+                    android:id="@+id/login_error_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="8dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
+
+
+            <EditText
+                    android:id="@+id/student_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:autofillHints="username"
+                    android:background="@drawable/edit_text"
+                    android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_account_circle_black_24dp"
+                    android:hint="@string/student_id"
+                    android:maxLines="1"
+                    android:padding="10dp"/>
+
+
+            <EditText
+                    android:id="@+id/student_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:autofillHints="password"
+                    android:background="@drawable/edit_text"
+                    android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_key_black_24dp"
+                    android:hint="@string/student_old_e3_password"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:padding="10dp"/>
+
+            <EditText
+                    android:id="@+id/student_portal_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:autofillHints="password"
+                    android:background="@drawable/edit_text"
+                    android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_key_black_24dp"
+                    android:hint="@string/portal_password"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:padding="10dp"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp">
+
+                <TextView
+                        android:id="@+id/login_help"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:text="@string/login_help"
+                        android:textColor="@android:color/white"/>
+
+                <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/logout"
+                        android:visibility="gone"
+                        android:id="@+id/logout_button"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+        <Button
+                android:id="@+id/login_button"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/md_red_900"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:text="@string/login"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"/>
+
+        <ProgressBar
+                android:id="@+id/login_progressbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="10dp"
+                android:indeterminate="true"
+                android:indeterminateTint="#FFFFFF"
+                android:visibility="gone"/>
+
+    </RelativeLayout>
+</LinearLayout>

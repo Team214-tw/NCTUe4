@@ -1,0 +1,110 @@
+<resources>
+    <string name="app_name">NCTU e4</string>
+    <string name="action_settings">設定</string>
+
+    <string name="navigation_drawer_close">關閉側邊選單</string>
+    <string name="navigation_drawer_open">開啟側邊選單</string>
+
+    <!--Nav Bar-->
+    <string name="home">首頁</string>
+    <string name="bookmarked_courses">收藏課程</string>
+    <string name="old_e3">e3 教學平台</string>
+    <string name="new_e3">New e3 教學平台</string>
+    <string name="switch_account">帳號管理</string>
+    <string name="settings">設定</string>
+
+    <string name="constructing">這個頁面還在吸收日月精華</string>
+
+    <!--Login Activity-->
+    <string name="student_id">學號</string>
+    <string name="student_old_e3_password">舊e3密碼</string>
+    <string name="portal_password">單一入口密碼 (新e3用)</string>
+    <string name="login_hint">請輸入學號以及 e3 密碼</string>
+    <string name="login">登入</string>
+    <string name="logout">登出</string>
+    <string name="login_id_or_password_error">學號或密碼錯誤，請重試</string>
+    <string name="login_success">登入成功</string>
+    <string name="logout_success">登出成功</string>
+
+    <string name="generic_error">錯誤</string>
+
+
+    <!--Course Activity-->
+    <string name="title_activity_course">課程</string>
+    <string name="course_nav_ann">公告</string>
+    <string name="course_nav_doc">文件</string>
+    <string name="course_nav_assignment">作業</string>
+    <string name="course_nav_score">成績</string>
+    <string name="course_nav_other">其他</string>
+    <string name="course_doc_type_handout">課程講義</string>
+    <string name="course_doc_type_reference">參考資料</string>
+
+    <!--Title Activity-->
+    <string name="title_activity_ann">公告</string>
+    <string name="try_again">再試一次</string>
+    <string name="download_start">開始下載&#8230;</string>
+    <string name="download">下載</string>
+    <string name="empty_request">這裡空空如也</string>
+
+    <string name="license">授權訊息</string>
+    <string name="font_awesome_license">本程式使用 <a href="https://fontawesome.com/license">Font Awesome</a> 圖示</string>
+    <string name="flat_icon_license">這個圖示是由<a href="https://www.flaticon.com/authors/freepik"> Freepik from Flaticon.</a>製作</string>
+    <string name="detect_same_file">下載目錄下已經有一個相同檔名的檔案，你想要開啟舊檔還是下載新的。</string>
+    <string name="download_again">重新下載</string>
+    <string name="open_existed">開啟舊檔</string>
+    <string name="download_completed">下載完成</string>
+    <string name="open_file">開啟</string>
+
+    <!--Title-->
+    <string name="title_ann">公告</string>
+    <string name="latest_ann">最新公告</string>
+    <string name="download_history">下載紀錄</string>
+    <string name="more">更多</string>
+    <string name="more_ann">更多公告</string>
+    <string name="more_download_history">更多下載紀錄</string>
+    <string name="more_bookmarked_course">更多收藏課程</string>
+    <string name="confirm_delete">你確定要刪除%s嗎？</string>
+    <string name="delete">刪除</string>
+    <string name="rename">重新命名</string>
+    <string name="share">分享</string>
+    <string name="positive">確定</string>
+
+    <string name="logout_confirm">登出會清除目前所有的收藏課程和下載紀錄。繼續嗎？</string>
+    <string name="cancel">取消</string>
+    <string name="no_compatible_app">沒有任何應用程式可以開啟這類檔案</string>
+    <string name="ann_e3_identifier">舊E3</string>
+    <string name="ann_new_e3_identifier">新E3</string>
+    <string name="refresh_success">重新整理成功</string>
+    <string name="action_refresh">重新整理</string>
+    <string name="action_goto_course">到課程頁面</string>
+    <string name="wait">請稍候</string>
+    <string name="no_email">沒有電子郵件</string>
+    <string name="course_nav_members">成員</string>
+    <string name="action_select_all">全選</string>
+    <string name="feedback">意見回饋</string>
+    <string name="title_activity_assign">作業</string>
+    <string name="start_time">開始：</string>
+    <string name="end_time">結束：</string>
+    <string name="wrong_credential">登入資訊錯誤</string>
+    <string name="login_again">重新登入</string>
+    <string name="drag_drop_tip">長按即可重新排序</string>
+    <string name="action_download_assign">已繳交的檔案</string>
+    <string name="no_submitted_assign">沒有已繳交的檔案</string>
+    <string name="timetable">課表</string>
+    <string name="mon">一</string>
+    <string name="tue">二</string>
+    <string name="sun">日</string>
+    <string name="sat">六</string>
+    <string name="fri">五</string>
+    <string name="thu">四</string>
+    <string name="wed">三</string>
+    <string name="new_e3_ann_error">現在無法取得新e3公告\n下拉重試</string>
+    <string name="old_e3_ann_error">現在無法取得舊e3公告\n下拉重試</string>
+    <string name="new_e3_not_init">你尚未啟用新e3系統，請至新e3網站啟用</string>
+    <string name="login_help">登入幫助</string>
+    <string name="login_help_student_id">學號：就是你的學號（例如：0612345）</string>
+    <string name="login_help_old_e3">舊e3密碼：登入ecampus（如下圖）所使用的密碼。\n網址：https://dcpc.nctu.edu.tw\n如果沒有手動更改，則和選課系統相同（選課系統密碼預設為身分證後六碼）。</string>
+    <string name="login_help_new_e3">單一入口密碼：登入單一入口（如下圖）時用的密碼。\n網址：https://portal.nctu.edu.tw</string>
+
+    <string name="old_e3_broken">其他舊e3功能壞了QQ</string>
+</resources>

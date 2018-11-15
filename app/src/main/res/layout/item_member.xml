@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/member_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:paddingBottom="8dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="8dp">
+
+
+    <ImageView
+        android:id="@+id/course_member_thumb"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_account_circle_black_240dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp">
+
+            <TextView
+                android:id="@+id/member_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="8dp"
+                android:text="多拉美"
+                android:textColor="@color/blackText"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/member_department"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="二十一世紀系" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/member_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="doremon@doremon.com" />
+    </LinearLayout>
+</LinearLayout>

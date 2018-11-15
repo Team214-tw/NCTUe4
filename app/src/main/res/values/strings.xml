@@ -1,0 +1,148 @@
+<resources>
+    <string name="app_name">NCTU e4</string>
+    <string name="action_settings">Settings</string>
+
+    <!--Main Activity-->
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="logout_confirm">Logging out will erase your current bookmarked courses and download history.
+        Continue?
+    </string>
+
+    <!--Nav Drawer-->
+    <string name="home">Home</string>
+    <string name="latest_ann">Announcement</string>
+    <string name="download_history">Download History</string>
+    <string name="bookmarked_courses">Bookmarked</string>
+    <string name="old_e3">Old e3</string>
+    <string name="new_e3">New e3</string>
+    <string name="timetable">Timetable</string>
+    <string name="switch_account">Switch Account</string>
+    <string name="settings">Settings</string>
+    <string name="license">License</string>
+
+    <!--Login Activity-->
+    <string name="student_id">Student ID</string>
+    <string name="student_old_e3_password">Old E3 Password</string>
+    <string name="portal_password">Portal Password (For New e3)</string>
+    <string name="login_hint">Please enter ID and e3 password.</string>
+    <string name="login">LogIn</string>
+    <string name="logout">Log out</string>
+    <string name="login_id_or_password_error">ID or Password incorrect, try again?</string>
+    <string name="login_success">Login Success</string>
+    <string name="logout_success">Logout Success</string>
+    <string name="login_help">Login Help</string>
+
+    <!--Status-->
+    <string name="generic_error">Error</string>
+    <string name="try_again">Try Again</string>
+    <string name="constructing">This place is still under construction.</string>
+    <string name="empty_request">There\'s nothing here</string>
+
+    <!--Course Activity-->
+    <string name="title_activity_course">CourseActivity</string>
+    <string name="course_nav_ann">Ann</string>
+    <string name="course_nav_doc">Doc</string>
+    <string name="course_nav_assignment">Homework</string>
+    <string name="course_nav_score">Score</string>
+    <string name="course_nav_other">Others</string>
+    <string name="course_nav_members">Members</string>
+    <string name="course_doc_type_handout">Handout</string>
+    <string name="course_doc_type_reference">Reference</string>
+    <string name="download_start">Start downloading&#8230;</string>
+    <string name="download">Download</string>
+
+    <!--Ann Activity-->
+    <string name="title_activity_ann">Announcement</string>
+
+    <!--License-->
+    <string name="font_awesome_license">This app uses <a href="https://fontawesome.com/license">Font Awesome</a> icons.
+    </string>
+    <string name="flat_icon_license">This icon is made by
+        <a href="https://www.flaticon.com/authors/freepik">Freepik from Flaticon.</a>
+    </string>
+
+    <!--SameFile Alert Dialog-->
+    <string name="detect_same_file">There is already a file with the same name under download directory.\nWould you like
+        to open the existed one or get the fresh one?
+    </string>
+    <string name="download_again">Download Again</string>
+    <string name="open_existed">Open Existed</string>
+
+    <string name="download_completed">Download Completed</string>
+    <string name="open_file">Open</string>
+
+    <!--Title-->
+    <string name="title_ann">Announcement</string>
+
+    <!--Home Fragment-->
+    <string name="more">More&#8230;</string>
+    <string name="more_ann">More announcement</string>
+    <string name="more_download_history">More history</string>
+    <string name="more_bookmarked_course">More bookmarked</string>
+
+    <!--Download Fragment-->
+    <string name="confirm_delete">Are you sure you want to delete %1s ?</string>
+    <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
+    <string name="share">Share</string>
+    <string name="positive">OK</string>
+
+    <string name="cancel">Cancel</string>
+
+    <string name="no_compatible_app">No app can handle this kind of file</string>
+
+    <!--identifier-->
+    <string name="ann_e3_identifier">Old</string>
+    <string name="ann_new_e3_identifier">New</string>
+
+    <string name="action_refresh">Refresh</string>
+    <string name="refresh_success">Refresh Success</string>
+    <string name="action_goto_course">Goto Course Page</string>
+    <string name="wait">Please Wait</string>
+
+    <string name="no_email">no email</string>
+    <string name="action_select_all">Select All</string>
+    <string name="feedback">Feedback</string>
+
+    <string name="title_activity_assign">Assignment</string>
+    <string name="start_time">Start:</string>
+    <string name="end_time">End:</string>
+
+    <string name="wrong_credential">Wrong Credentials</string>
+    <string name="login_again">Login Again</string>
+    <string name="drag_drop_tip">Long press to rearrange items.</string>
+
+    <string name="action_download_assign">Submitted Files</string>
+    <string name="no_submitted_assign">No submitted files</string>
+
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
+
+    <string name="new_e3_ann_error">Can\'t display new e3 announcements at the moment.\nPull to retry.</string>
+    <string name="old_e3_ann_error">Can\'t display old e3 announcements at the moment.\nPull to retry.</string>
+    <string name="new_e3_not_init">You haven\'t activate new e3 yet, please go to new e3\'s website and activate.
+    </string>
+
+
+    <string name="login_help_student_id">Student ID: Your Student ID (Ex: 0612345)</string>
+    <string name="login_help_old_e3">Old E3 password: The password you use when logging in ecampus (as figure
+        below)\nURL: https://dcpc.nctu.edu.tw\nIf you never change it manually, the password should be same as NCTU
+        Course Registration System　(The default password for Course System is the last 6 digits of your National ID or
+        "123456").
+    </string>
+    <string name="login_help_new_e3">Portal password: The password you use when logging in NCTU Portal (as figure
+        below)\nURL: https://portal.nctu.edu.tw
+    </string>
+
+    <string name="old_e3_broken">Other Old e3 functionalities are currently broken QQ</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

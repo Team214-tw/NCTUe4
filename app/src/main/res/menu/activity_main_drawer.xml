@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/nav_menu_first"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/nav_ann"
+            android:icon="@drawable/ic_announcement_black_24dp"
+            android:title="@string/title_activity_ann" />
+        <item
+            android:id="@+id/nav_bookmarked"
+            android:icon="@drawable/ic_bookmark_black_24dp"
+            android:title="@string/bookmarked_courses" />
+        <item
+            android:id="@+id/nav_download"
+            android:icon="@drawable/ic_file_download_black_24dp"
+            android:title="@string/download_history" />
+        <!--<item-->
+            <!--android:id="@+id/nav_timetable"-->
+            <!--android:icon="@drawable/ic_event_black_24dp"-->
+            <!--android:title="@string/timetable" />-->
+        <!--<item-->
+            <!--android:id="@+id/nav_old_e3"-->
+            <!--android:icon="@drawable/ic_keyboard_arrow_right_black_24dp"-->
+            <!--android:title="@string/old_e3" />-->
+        <item
+            android:id="@+id/nav_new_e3"
+            android:icon="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:title="@string/new_e3" />
+    </group>
+
+    <group>
+        <item
+            android:id="@+id/nav_log_out"
+            android:title="@string/logout" />
+        <item
+            android:id="@+id/nav_feedback"
+            android:title="@string/feedback" />
+        <item
+            android:id="@+id/nav_about"
+            android:title="@string/license" />
+    </group>
+
+</menu>

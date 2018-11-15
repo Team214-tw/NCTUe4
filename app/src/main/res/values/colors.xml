@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#225ebb</color>
+    <color name="colorPrimaryDark">#104698</color>
+    <color name="colorAccent">#2196F3</color>
+    <color name="blueGrey">#90A4AE</color>
+    <color name="whiteBackground">#FAFAFA</color>
+    <color name="msWord">#2b579a</color>
+    <color name="msExcel">#217346</color>
+    <color name="msPowerPoint">#d24726</color>
+    <color name="adobePdf">#780000</color>
+    <color name="new_e3">#0277BD</color>
+    <color name="old_e3">#104698</color>
+    <color name="blackText">#212121</color>
+</resources>

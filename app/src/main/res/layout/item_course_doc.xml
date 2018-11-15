@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/course_doc_card_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:gravity="center_vertical"
+    android:background="?android:attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="8dp">
+
+
+        <ImageView
+            android:id="@+id/doc_file_circle"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:src="@drawable/circle"
+            android:layout_centerInParent="true" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/doc_file_icon"
+            android:src="@drawable/file_alt"
+            android:layout_centerInParent="true" />
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/doc_display_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="18dp"
+        android:text="檔案名稱檔案名稱檔案名稱檔案名稱檔案名稱"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textColor="#616161"
+        android:textSize="18sp" />
+</LinearLayout>
