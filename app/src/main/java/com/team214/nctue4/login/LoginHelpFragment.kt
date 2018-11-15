@@ -2,10 +2,10 @@ package com.team214.nctue4.login
 
 
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import com.team214.nctue4.R
 
 

@@ -1,7 +1,7 @@
-package com.team214.nctue4.login
+package com.team214.nctue4.main
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.team214.nctue4.R
 
 class MainActivity : AppCompatActivity() {

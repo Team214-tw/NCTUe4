@@ -3,15 +3,15 @@ package com.team214.nctue4
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.team214.nctue4.login.LoginActivity
+import com.team214.nctue4.main.MainActivity
 
 class LandingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)  //End Splash Screen
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_landing)
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
@@ -31,5 +31,9 @@ class LandingActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
