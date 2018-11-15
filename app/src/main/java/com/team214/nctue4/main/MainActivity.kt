@@ -100,12 +100,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //                    .setCurrentScreen(this, "BookmarkedFragment", BookmarkedFragment::class.java.simpleName)
 //                BookmarkedFragment()
 //            }
-//            R.id.nav_download -> {
-//                currentFragment = id
-//                firebaseAnalytics
-//                    .setCurrentScreen(this, "DownloadFragment", DownloadFragment::class.java.simpleName)
-//                DownloadFragment()
-//            }
+            R.id.nav_download -> {
+                currentFragment = id
+                firebaseAnalytics
+                    .setCurrentScreen(this, "DownloadFragment", DownloadFragment::class.java.simpleName)
+                DownloadFragment()
+            }
 //            R.id.nav_old_e3 -> {
 //                currentFragment = id
 //                firebaseAnalytics

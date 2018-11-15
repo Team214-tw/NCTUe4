@@ -23,7 +23,7 @@ class LicenseDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dialog!!.window!!.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
         flat_icon_license?.setOnClickListener {
             goToUrl("https://www.flaticon.com/authors/freepik")
         }
