@@ -3,7 +3,7 @@
           package="com.team214.nctue4">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
             android:icon="@mipmap/ic_launcher_fox"
@@ -11,6 +11,16 @@
             android:roundIcon="@mipmap/ic_launcher_fox_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <provider
+                android:name="com.team214.nctue4.utility.GenericFileProvider"
+                android:authorities="${applicationId}.com.team214"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/provider_paths"/>
+        </provider>
+
 
         <activity
                 android:name="com.team214.nctue4.main.MainActivity"
@@ -44,7 +54,7 @@
                 android:name="com.team214.nctue4.ann.AnnActivity"
                 android:configChanges="orientation|screenSize"
                 android:label="@string/title_activity_ann"
-                android:theme="@style/AppTheme.NoActionBar" />
+                android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
