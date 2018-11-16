@@ -11,12 +11,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.team214.nctue4.ann.AnnActivity
 import com.team214.nctue4.R
+import com.team214.nctue4.ann.AnnActivity
+import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.client.NewE3WebClient
 import com.team214.nctue4.client.OldE3Client
+import com.team214.nctue4.login.LoginActivity
 import com.team214.nctue4.model.AnnItem
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.mergeDelayError
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -30,10 +33,16 @@ class HomeAnnFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var oldE3Client: OldE3Client
     private lateinit var newE3WebClient: NewE3WebClient
+    private var disposable: Disposable? = null
     private var fromHome: Boolean = false
     private var oldE3Failed = false
     private var newE3Failed = false
     private val annItems = mutableListOf<AnnItem>()
+
+    override fun onDestroy() {
+        disposable?.dispose()
+        super.onDestroy()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,11 +78,10 @@ class HomeAnnFragment : Fragment() {
     }
 
     private fun getData() {
-        ann_swipe_refresh_layout?.visibility = View.VISIBLE
         error_request?.visibility = View.GONE
         error_wrong_credential?.visibility = View.GONE
         annItems.clear()
-        mutableListOf(
+        disposable = mutableListOf(
             oldE3Client.getFrontPageAnn()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -84,21 +92,38 @@ class HomeAnnFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext { annItems.addAll(it) }
                 .doOnError { newE3Failed = true }
-        ).mergeDelayError()
-            .subscribeBy(
-                onComplete = {
-                    annItems.sortByDescending { it.date }
-                    displayErrorToast()
-                    ann_swipe_refresh_layout.isEnabled = !fromHome
-                    displayData()
-                },
-                onError = {
-                    annItems.sortByDescending { it.date }
-                    displayErrorToast()
-                    ann_swipe_refresh_layout.isEnabled = !fromHome
-                    displayData()
+        ).mergeDelayError().subscribeBy(
+            onComplete = {
+                annItems.sortByDescending { it.date }
+                displayErrorToast()
+                displayData()
+            },
+            onError = {
+                if (it is E3Client.WrongCredentialsException) {
+                    displayWrongCredentialsError()
+                } else {
+                    if (newE3Failed && oldE3Failed) {
+                        displayError()
+                    } else {
+                        annItems.sortByDescending { it.date }
+                        displayErrorToast()
+                        displayData()
+                    }
                 }
-            )
+            }
+        )
+
+    }
+
+    private fun displayWrongCredentialsError() {
+        error_wrong_credential.visibility = View.VISIBLE
+        progress_bar.visibility = View.GONE
+        login_again_button?.setOnClickListener {
+            val intent = Intent()
+            intent.setClass(context!!, LoginActivity::class.java)
+            startActivity(intent)
+            activity!!.finish()
+        }
     }
 
     private fun displayErrorToast() {
@@ -110,9 +135,21 @@ class HomeAnnFragment : Fragment() {
         }
     }
 
+    private fun displayError() {
+        error_request.visibility = View.VISIBLE
+        progress_bar.visibility = View.GONE
+        ann_swipe_refresh_layout.visibility = View.GONE
+        error_request_retry.setOnClickListener {
+            progress_bar.visibility = View.VISIBLE
+            getData()
+        }
+    }
+
     private fun displayData() {
         val emptyRequestView = if (arguments?.getBoolean("home") != null) empty_request_compact else empty_request
-        progress_bar?.visibility = View.GONE
+        ann_swipe_refresh_layout?.visibility = View.VISIBLE
+        progress_bar.visibility = View.GONE
+        ann_swipe_refresh_layout.isEnabled = !fromHome
         if (annItems.isEmpty()) {
             recyclerView.visibility = View.GONE
             emptyRequestView.visibility = View.VISIBLE

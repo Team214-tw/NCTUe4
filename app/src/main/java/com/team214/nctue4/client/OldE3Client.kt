@@ -62,8 +62,9 @@ class OldE3Client(context: Context) : E3Client() {
                 }
             }
         }.retryWhen {
-            it.filter { error -> error is SessionInvalidException }
-                .flatMap { login() }
+            it.flatMap { error ->
+                return@flatMap if (error is SessionInvalidException) login() else Observable.error(error)
+            }
         }
     }
 
@@ -89,10 +90,9 @@ class OldE3Client(context: Context) : E3Client() {
                 }
             }
         }.retryWhen {
-            it.filter { error -> error is SessionInvalidException }
-                .flatMap { login() }
-                .take(1)
-                .concatMap { Observable.error<ServiceErrorException>(ServiceErrorException()) }
+            it.flatMap { error ->
+                return@flatMap if (error is SessionInvalidException) login() else Observable.error(error)
+            }
         }
     }
 
@@ -159,7 +159,7 @@ class OldE3Client(context: Context) : E3Client() {
             }
             .flatMap {
                 Observable.fromCallable {
-                    if (it.body()!!.string().contains("window.currentPage.href='login.aspx';")) {
+                    if (it.body()!!.string().contains("window.location.href='login.aspx';")) {
                         throw WrongCredentialsException()
                     }
                     currentPage = "home"

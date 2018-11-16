@@ -55,8 +55,9 @@ class NewE3ApiClient(context: Context) : E3Client() {
                 }
             }
         }.retryWhen {
-            it.filter { error -> error is TokenInvalidException }
-                .flatMap { _ -> login() }
+            it.flatMap { error ->
+                return@flatMap if (error is TokenInvalidException) login() else Observable.error(error)
+            }
         }
     }
 

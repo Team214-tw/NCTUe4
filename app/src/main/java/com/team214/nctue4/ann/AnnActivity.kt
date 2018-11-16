@@ -17,6 +17,7 @@ import com.team214.nctue4.client.E3Type
 import com.team214.nctue4.model.AnnItem
 import com.team214.nctue4.utility.downloadFile
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_ann.*
@@ -30,6 +31,12 @@ class AnnActivity : AppCompatActivity() {
     private lateinit var url: String
     private lateinit var fileName: String
     private lateinit var client: E3Client
+    private var disposable: Disposable? = null
+
+    override fun onDestroy() {
+        disposable?.dispose()
+        super.onDestroy()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +50,7 @@ class AnnActivity : AppCompatActivity() {
     private fun getData() {
         val annItem = intent?.extras?.getParcelable<AnnItem>("annItem")
         client = E3ClientFactory.createFromAnn(this, annItem!!)
-        client.getAnn(annItem)
+        disposable = client.getAnn(annItem)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

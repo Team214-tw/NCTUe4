@@ -16,12 +16,19 @@ import com.team214.nctue4.client.NewE3ApiClient
 import com.team214.nctue4.client.OldE3Client
 import com.team214.nctue4.main.MainActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private var disposable: Disposable? = null
+
+    override fun onDestroy() {
+        disposable?.dispose()
+        super.onDestroy()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
             var studentPortalPassword = student_portal_password.text.toString()
             if (studentPortalPassword == "") studentPortalPassword = studentPassword
 
-            oldE3Client.login(studentId, studentPassword)
+            disposable = oldE3Client.login(studentId, studentPassword)
                 .mergeWith(
                     newE3ApiClient.login(studentId, studentPortalPassword)
                         .flatMap { _ -> newE3ApiClient.saveUserInfo(studentId) })
