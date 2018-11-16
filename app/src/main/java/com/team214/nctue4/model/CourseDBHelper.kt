@@ -12,7 +12,7 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
         db!!.execSQL(
             "CREATE TABLE if not exists courses ( id integer PRIMARY KEY autoincrement, " +
                     "e3_type text, course_name text, course_id text," +
-                    "additional_info int, bookmarked int, bookmark_idx int)"
+                    "additional_info text, bookmarked int, bookmark_idx int)"
         )
     }
 
@@ -22,8 +22,8 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
         }
     }
 
-    fun readBookmarkedCourse(limit: Int?): ArrayList<CourseItem> {
-        val data = ArrayList<CourseItem>()
+    fun readBookmarkedCourse(limit: Int?): MutableList<CourseItem> {
+        val data = mutableListOf<CourseItem>()
         val cursor = readableDatabase.query(
             "courses", null, "bookmarked = ?",
             arrayOf(1.toString()), null, null, "bookmark_idx", limit?.toString()
@@ -44,7 +44,7 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
         writableDatabase.update("courses", values, "course_id = ?", arrayOf(courseId))
     }
 
-    fun updateBookmarkIdx(data: ArrayList<CourseItem>) {
+    fun updateBookmarkIdx(data: MutableList<CourseItem>) {
         (0 until data.size).forEach {
             val values = ContentValues()
             values.put("bookmark_idx", it)
@@ -85,8 +85,8 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
     }
 
 
-    fun readCourses(e3Type: E3Type): ArrayList<CourseItem> {
-        val data = ArrayList<CourseItem>()
+    fun readCourses(e3Type: E3Type): MutableList<CourseItem> {
+        val data = mutableListOf<CourseItem>()
         val cursor =
             readableDatabase.query(
                 "courses",

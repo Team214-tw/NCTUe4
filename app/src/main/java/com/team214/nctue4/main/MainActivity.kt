@@ -76,28 +76,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun switchFragment(id: Int) {
+    fun switchFragment(id: Int) {
         if (id != -1) nav_view.setCheckedItem(id)
         else nav_view.setCheckedItem(R.id.nav_home)
         val fragment = when (id) {
-//            R.id.nav_home -> {
-//                currentFragment = id
-//                firebaseAnalytics
-//                    .setCurrentScreen(this, "HomeFragment", HomeFragment::class.java.simpleName)
-//                HomeFragment()
-//            }
+            R.id.nav_home -> {
+                currentFragment = id
+                firebaseAnalytics
+                    .setCurrentScreen(this, "HomeFragment", HomeFragment::class.java.simpleName)
+                HomeFragment()
+            }
             R.id.nav_ann -> {
                 currentFragment = id
                 firebaseAnalytics
                     .setCurrentScreen(this, "HomeAnnFragment", HomeAnnFragment::class.java.simpleName)
                 HomeAnnFragment()
             }
-//            R.id.nav_bookmarked -> {
-//                currentFragment = id
-//                firebaseAnalytics
-//                    .setCurrentScreen(this, "BookmarkedFragment", BookmarkedFragment::class.java.simpleName)
-//                BookmarkedFragment()
-//            }
+            R.id.nav_bookmarked -> {
+                currentFragment = id
+                firebaseAnalytics
+                    .setCurrentScreen(this, "BookmarkedFragment", BookmarkedFragment::class.java.simpleName)
+                BookmarkedFragment()
+            }
             R.id.nav_download -> {
                 currentFragment = id
                 firebaseAnalytics
@@ -155,10 +155,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 null
             }
             else -> {
-                // TODO set this to homefragment
                 firebaseAnalytics.setCurrentScreen(this, "HomeFragment", HomeAnnFragment::class.java.simpleName)
                 currentFragment = R.id.nav_home
-                HomeAnnFragment()
+                HomeFragment()
             }
         }
         if (fragment != null) {

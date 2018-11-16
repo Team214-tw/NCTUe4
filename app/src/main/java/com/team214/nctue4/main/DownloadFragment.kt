@@ -18,13 +18,13 @@ import java.io.File
 
 class DownloadFragment : Fragment() {
     private var fromHome: Boolean = false
-    
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (arguments?.getBoolean("home") == null)
-            activity!!.setTitle(R.string.download_history)
+        fromHome = arguments?.getBoolean("home") != null
+        if (!fromHome) activity!!.setTitle(R.string.download_history)
         return inflater.inflate(R.layout.fragment_download, container, false)
     }
 
@@ -33,13 +33,12 @@ class DownloadFragment : Fragment() {
     private lateinit var emptyRequest: View
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fromHome = fromHome
         emptyRequest = if (fromHome) empty_request_compact else empty_request
         updateList()
 
     }
 
-    private fun updateList(homeActivity: FragmentActivity? = null) {
+    fun updateList(homeActivity: FragmentActivity? = null) {
         val path = if (homeActivity != null) homeActivity.getExternalFilesDir(null) else
             activity!!.getExternalFilesDir(null)
         val dir = File(path, "Download")

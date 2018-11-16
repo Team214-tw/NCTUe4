@@ -42,7 +42,7 @@ fun openFile(fileName: String, file: File, context: Context, activity: Activity)
 
 fun downloadFile(
     fileName: String, uri: String, context: Context, activity: Activity, view: View,
-    e3WebCookie: MutableList<Cookie>? = null, requestPermissions: (() -> Unit?)?
+    cookies: MutableList<Cookie>? = null, requestPermissions: (() -> Unit?)?
 ) {
     Log.d("URI", uri)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -60,7 +60,7 @@ fun downloadFile(
                 .setMessage(context.getString(R.string.detect_same_file))
                 .setPositiveButton(R.string.download_again) { _, _ ->
                     file.delete()
-                    downloadFile(fileName, uri, context, activity, view, e3WebCookie, requestPermissions)
+                    downloadFile(fileName, uri, context, activity, view, cookies, requestPermissions)
                 }
                 .setNegativeButton(R.string.open_existed) { _, _ ->
                     openFile(fileName, file, context, activity)
@@ -68,9 +68,9 @@ fun downloadFile(
                 .show()
         } else {
             val request = DownloadManager.Request(Uri.parse(uri))
-            if (e3WebCookie != null) {
+            if (cookies != null) {
                 var cookieString = ""
-                e3WebCookie.forEach { cookieString += "${it.name()}=${it.value()};" }
+                cookies.forEach { cookieString += "${it.name()}=${it.value()};" }
                 request.addRequestHeader("Cookie", cookieString)
             }
             request.setTitle(fileName)
@@ -85,11 +85,9 @@ fun downloadFile(
                     Snackbar.make(
                         view, "$fileName ${context.getString(R.string.download_completed)}",
                         Snackbar.LENGTH_LONG
-                    )
-                        .setAction(context.getString(R.string.open_file)) {
-                            openFile(fileName, file, context, activity)
-                        }
-                        .show()
+                    ).setAction(context.getString(R.string.open_file)) {
+                        openFile(fileName, file, context, activity)
+                    }.show()
                     activity.unregisterReceiver(this)
                 }
             }

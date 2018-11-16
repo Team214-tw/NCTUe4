@@ -32,7 +32,7 @@
                 android:layout_marginBottom="5dp"
                 android:background="@color/md_red_500" />
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -62,7 +62,7 @@
                         android:textSize="16sp" />
 
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <!--ann-->
             <TextView
@@ -81,7 +81,7 @@
                 android:layout_marginBottom="5dp"
                 android:background="@color/md_green_500" />
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -112,7 +112,7 @@
                         android:textSize="16sp" />
 
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <!--bookmarked-->
             <TextView
@@ -132,7 +132,7 @@
                 android:layout_marginBottom="5dp"
                 android:background="@color/md_indigo_500" />
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -162,7 +162,7 @@
                         android:textSize="16sp" />
 
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
 
         </LinearLayout>
