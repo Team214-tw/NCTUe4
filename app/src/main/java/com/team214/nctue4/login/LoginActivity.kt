@@ -80,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
             disposable = oldE3Client.login(studentId, studentPassword)
                 .mergeWith(
                     newE3ApiClient.login(studentId, studentPortalPassword)
-                        .flatMap { _ -> newE3ApiClient.saveUserInfo(studentId) })
+                        .flatMap { newE3ApiClient.saveUserInfo(studentId) })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(

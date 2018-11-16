@@ -4,6 +4,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.AnnItem
+import com.team214.nctue4.model.CourseItem
 import com.team214.nctue4.model.FileItem
 import io.reactivex.Observable
 import okhttp3.*
@@ -231,7 +232,8 @@ class OldE3Client(context: Context) : E3Client() {
                             return@fromCallable AnnItem(
                                 E3Type.OLD,
                                 titleEl.text(),
-                                null, courseName,
+                                annItem.date,
+                                courseName,
                                 null,
                                 content,
                                 fileItems
@@ -241,6 +243,10 @@ class OldE3Client(context: Context) : E3Client() {
                     throw ServiceErrorException()
                 }
             }
+    }
+
+    override fun getCourseList(): Observable<MutableList<CourseItem>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun getCookie(): MutableList<Cookie>? {

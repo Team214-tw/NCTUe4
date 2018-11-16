@@ -17,7 +17,8 @@ import kotlinx.android.synthetic.main.status_empty_compact.*
 import java.io.File
 
 class DownloadFragment : Fragment() {
-
+    private var fromHome: Boolean = false
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,12 +33,13 @@ class DownloadFragment : Fragment() {
     private lateinit var emptyRequest: View
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        emptyRequest = if (arguments?.getBoolean("home") != null) empty_request_compact else empty_request
+        fromHome = fromHome
+        emptyRequest = if (fromHome) empty_request_compact else empty_request
         updateList()
 
     }
 
-    fun updateList(homeActivity: FragmentActivity? = null) {
+    private fun updateList(homeActivity: FragmentActivity? = null) {
         val path = if (homeActivity != null) homeActivity.getExternalFilesDir(null) else
             activity!!.getExternalFilesDir(null)
         val dir = File(path, "Download")
@@ -47,12 +49,12 @@ class DownloadFragment : Fragment() {
             download_recycler.visibility = View.VISIBLE
             emptyRequest.visibility = View.GONE
             fileList.sortByDescending { it.lastModified() }
-            if (arguments?.getBoolean("home") != null) {
+            if (fromHome) {
                 files.addAll(fileList.slice(0..minOf(4, fileList.size)).filter { it != null })
             } else files.addAll(fileList.filter { it != null })
             if (download_recycler.adapter == null) {
                 download_recycler?.layoutManager = LinearLayoutManager(context)
-                if (arguments?.getBoolean("home") != null)
+                if (fromHome)
                     download_recycler?.isNestedScrollingEnabled = false
                 download_recycler?.addItemDecoration(
                     DividerItemDecoration(

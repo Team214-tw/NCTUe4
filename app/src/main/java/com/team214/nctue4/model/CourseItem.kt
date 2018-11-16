@@ -1,11 +1,12 @@
 package com.team214.nctue4.model
 
+import com.team214.nctue4.client.E3Type
+
 class CourseItem(
-    val courseNo: String,
+    val e3Type: E3Type,
     val courseName: String,
-    val teacherName: String,
     val courseId: String,
-    val e3Type: Int,
+    val additionalInfo: String,
     var bookmarked: Int = 0,
     val bookmarkIdx: Int = 10000,
     val id: Int? = null

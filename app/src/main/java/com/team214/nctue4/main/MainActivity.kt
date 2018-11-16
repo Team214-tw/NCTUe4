@@ -14,9 +14,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.BuildConfig
 import com.team214.nctue4.R
-import com.team214.nctue4.client.NewE3ApiClient
-import com.team214.nctue4.client.NewE3WebClient
-import com.team214.nctue4.client.OldE3Client
+import com.team214.nctue4.client.*
 import com.team214.nctue4.login.LogoutActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -112,12 +110,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //                    .setCurrentScreen(this, "OldE3Fragment", OldE3Fragment::class.java.simpleName)
 //                OldE3Fragment()
 //            }
-//            R.id.nav_new_e3 -> {
-//                currentFragment = id
-//                firebaseAnalytics
-//                    .setCurrentScreen(this, "NewE3Fragment", NewE3Fragment::class.java.simpleName)
-//                NewE3Fragment()
-//            }
+            R.id.nav_new_e3 -> {
+                currentFragment = id
+                firebaseAnalytics
+                    .setCurrentScreen(this, "NewE3Fragment", CourseListFragment::class.java.simpleName)
+                val bundle = Bundle()
+                bundle.putSerializable("e3Type", E3Type.NEW)
+                CourseListFragment().apply { this.arguments = bundle }
+            }
             R.id.nav_log_out -> {
                 AlertDialog.Builder(this)
                     .setTitle(R.string.logout)

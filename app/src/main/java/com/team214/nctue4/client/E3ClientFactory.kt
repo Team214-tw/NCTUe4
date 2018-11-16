@@ -13,5 +13,12 @@ interface E3ClientFactory {
                 E3Type.OLD -> OldE3Client(context)
             }
         }
+
+        fun createFromE3Type(context: Context, e3Type: E3Type): E3Client {
+            return when (e3Type) {
+                E3Type.NEW -> NewE3ApiClient(context)
+                E3Type.OLD -> OldE3Client(context)
+            }
+        }
     }
 }

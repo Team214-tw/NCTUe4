@@ -4,6 +4,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.AnnItem
+import com.team214.nctue4.model.CourseItem
 import io.reactivex.Observable
 import okhttp3.Cookie
 import okhttp3.FormBody
@@ -99,6 +100,32 @@ class NewE3ApiClient(context: Context) : E3Client() {
             prefs.edit().putString("studentEmail", email).apply()
             prefs.edit().putString("studentName", name).apply()
             Observable.just(Unit)
+        }
+    }
+
+    override fun getCourseList(): Observable<MutableList<CourseItem>> {
+        return post(
+            hashMapOf(
+                "wsfunction" to "core_enrol_get_users_courses",
+                "userid" to userId
+            )
+        ).flatMap { response ->
+            Observable.fromCallable {
+                val resJson = JSONArray(response)
+                val courseItems = mutableListOf<CourseItem>()
+                (0 until resJson.length()).map { resJson.get(it) as JSONObject }
+                    .forEach {
+                        if (it.getLong("enddate") > System.currentTimeMillis() / 1000) {
+                            val courseName = it.getString("fullname").split(".").run {
+                                if (this.size >= 3) this[2] else this[0]
+                            }.split(" ").first()
+                            val courseId = it.getString("id")
+                            val additionalInfo = it.getString("shortname")
+                            courseItems.add(CourseItem(E3Type.NEW, courseName, courseId, additionalInfo))
+                        }
+                    }
+                courseItems
+            }
         }
     }
 

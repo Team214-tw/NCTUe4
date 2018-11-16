@@ -4,6 +4,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.AnnItem
+import com.team214.nctue4.model.CourseItem
 import com.team214.nctue4.model.FileItem
 import io.reactivex.Observable
 import okhttp3.*
@@ -164,5 +165,9 @@ class NewE3WebClient(context: Context) : E3Client() {
 
     override fun getCookie(): MutableList<Cookie>? {
         return mutableListOf(sessionId!!)
+    }
+
+    override fun getCourseList(): Observable<MutableList<CourseItem>> {
+        throw NotImplementedError()
     }
 }
