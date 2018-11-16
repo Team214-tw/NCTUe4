@@ -14,11 +14,10 @@
         android:fitsSystemWindows="true"
         tools:context="com.team214.nctue4.course.CourseActivity">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            app:layout_behavior="com.team214.nctue4.utility.FixAppBarLayoutBehavior">
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -40,7 +39,7 @@
                 app:tabSelectedTextColor="@android:color/white"
                 app:tabTextColor="@android:color/white" />
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
 
         <FrameLayout

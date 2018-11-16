@@ -7,13 +7,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="com.team214.nctue4.AnnActivity">
+        tools:context="com.team214.nctue4.ann.AnnActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            app:layout_behavior="com.team214.nctue4.utility.FixAppBarLayoutBehavior">
+            android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -24,7 +23,7 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:title="@string/title_ann"/>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/status_error"/>
 
@@ -67,7 +66,7 @@
                         android:paddingTop="4dp">
 
                     <TextView
-                            android:id="@+id/ann_caption"
+                            android:id="@+id/ann_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="公告標題"

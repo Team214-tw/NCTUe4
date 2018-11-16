@@ -5,6 +5,7 @@ import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.AnnItem
 import io.reactivex.Observable
+import okhttp3.Cookie
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -102,5 +103,13 @@ class NewE3ApiClient(context: Context) : E3Client() {
 
     override fun getFrontPageAnn(): Observable<MutableList<AnnItem>> {
         throw NotImplementedError()
+    }
+
+    override fun getAnn(annItem: AnnItem): Observable<AnnItem> {
+        return Observable.just(annItem)
+    }
+
+    override fun getCookie(): MutableList<Cookie>? {
+        return null
     }
 }

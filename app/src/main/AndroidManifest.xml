@@ -3,6 +3,7 @@
           package="com.team214.nctue4">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
             android:icon="@mipmap/ic_launcher_fox"
@@ -38,6 +39,12 @@
 
         <activity android:name="com.team214.nctue4.login.LogoutActivity">
         </activity>
+
+        <activity
+                android:name="com.team214.nctue4.ann.AnnActivity"
+                android:configChanges="orientation|screenSize"
+                android:label="@string/title_activity_ann"
+                android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

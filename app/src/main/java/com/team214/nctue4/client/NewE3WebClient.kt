@@ -4,6 +4,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.AnnItem
+import com.team214.nctue4.model.FileItem
 import io.reactivex.Observable
 import okhttp3.*
 import org.jsoup.Jsoup
@@ -15,9 +16,6 @@ class NewE3WebClient(context: Context) : E3Client() {
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
     class SessionInvalidException : Exception()
-    companion object {
-        const val WEB_URL = "https://e3new.nctu.edu.tw/theme/dcpc"
-    }
 
     private val client = OkHttpClient().newBuilder()
         .cookieJar(object : CookieJar {
@@ -48,7 +46,7 @@ class NewE3WebClient(context: Context) : E3Client() {
                 .build()
             val request = okhttp3.Request
                 .Builder()
-                .url("https://e3new.nctu.edu.tw/login/index.php")
+                .url("https://e3new.nctu.edu.tw/login/index.php?lang=en")
                 .post(formBody)
                 .build()
             client.newCall(request).execute().apply {
@@ -66,7 +64,7 @@ class NewE3WebClient(context: Context) : E3Client() {
             Log.d("NewE3Web", path)
             val request = okhttp3.Request
                 .Builder()
-                .url(WEB_URL + path)
+                .url(path)
                 .get()
                 .build()
             client.newCall(request).execute().apply {
@@ -82,11 +80,11 @@ class NewE3WebClient(context: Context) : E3Client() {
     }
 
     override fun getFrontPageAnn(): Observable<MutableList<AnnItem>> {
-        return get("/news/index.php").flatMap {
+        return get("https://e3new.nctu.edu.tw/theme/dcpc/news/index.php?lang=en").flatMap {
             Observable.fromCallable {
                 val document = Jsoup.parse(it.body()!!.string()).apply {
-                    if (this.selectFirst(".login > a")?.text() == "登入" ||
-                        this.selectFirst("body > div")?.text() == "無效的使用者"
+                    if (this.selectFirst(".login > a")?.text() == "Log in" ||
+                        this.selectFirst("body > div")?.text() == "Invalid user"
                     ) {
                         throw SessionInvalidException()
                     }
@@ -118,7 +116,7 @@ class NewE3WebClient(context: Context) : E3Client() {
                         .split("\\xa0".toRegex())[1].split(" ")[0]
 
                     val title = el.select(".colL-19").text()
-                    annItems.add(AnnItem(E3Type.NEW, title, date, courseName, detailLocationHint))
+                    annItems.add(AnnItem(E3Type.NEW, title, date, courseName, "$detailLocationHint&lang=en"))
                 }
                 annItems
             }
@@ -126,5 +124,43 @@ class NewE3WebClient(context: Context) : E3Client() {
             it.filter { error -> error is SessionInvalidException }
                 .flatMap { _ -> login() }
         }
+    }
+
+    override fun getAnn(annItem: AnnItem): Observable<AnnItem> {
+        return get(annItem.detailLocationHint!!).flatMap {
+            Observable.fromCallable {
+                val document = Jsoup.parse(it.body()!!.string())
+                val df = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.US)
+
+                val attachItems =
+                    document.select(".attachments").map { el ->
+                        FileItem(
+                            el.select("a").last().text(),
+                            el.select("a").last().attr("href")
+                        )
+                    }.toMutableList()
+
+                val title = if (document.select(".name").size > 0) {
+                    document.select(".name").text()
+                } else {
+                    document.select(".subject").text()
+                }.removePrefix("&nbsp").trimStart()
+                val courseName = document.select(".page-header-headings")
+                    .text()
+                    .replace("【.*】\\d*".toRegex(), "")
+                    .replace(" .*".toRegex(), "")
+                val content = document.select(".content").html()
+                val date = df.parse(
+                    document.select(".author")
+                        .text()
+                        .replace(", \\d+:\\d+.*".toRegex(), "")
+                )
+                AnnItem(E3Type.NEW, title, date, courseName, null, content, attachItems)
+            }
+        }
+    }
+
+    override fun getCookie(): MutableList<Cookie>? {
+        return mutableListOf(sessionId!!)
     }
 }

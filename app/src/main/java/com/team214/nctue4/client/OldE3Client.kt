@@ -4,6 +4,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.AnnItem
+import com.team214.nctue4.model.FileItem
 import io.reactivex.Observable
 import okhttp3.*
 import org.jsoup.Jsoup
@@ -56,13 +57,13 @@ class OldE3Client(context: Context) : E3Client() {
                 .url(WEB_URL + path)
                 .build()
             client.newCall(request).execute().apply {
-                if (this.header("Location", "")!!.contains(Regex("(logout|login)"))) {
+                if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx")) {
                     throw SessionInvalidException()
                 }
             }
         }.retryWhen {
             it.filter { error -> error is SessionInvalidException }
-                .flatMap { _ -> login() }
+                .flatMap { login() }
         }
     }
 
@@ -89,9 +90,9 @@ class OldE3Client(context: Context) : E3Client() {
             }
         }.retryWhen {
             it.filter { error -> error is SessionInvalidException }
-                .flatMap { _ -> login() }
+                .flatMap { login() }
                 .take(1)
-                .concatMap { _ -> Observable.error<ServiceErrorException>(ServiceErrorException()) }
+                .concatMap { Observable.error<ServiceErrorException>(ServiceErrorException()) }
         }
     }
 
@@ -109,6 +110,13 @@ class OldE3Client(context: Context) : E3Client() {
             currentPage = "home"
             Observable.just(response)
         }.flatMap { parseHtmlResponse(it) }
+    }
+
+    private fun toCoursePage(courseId: String): Observable<Unit> {
+        return post(
+            "/enter_course_index.aspx",
+            hashMapOf("__EVENTTARGET" to courseIdMap[courseId]!!)
+        ).flatMap { Observable.just(Unit) }
     }
 
     private fun ensureCourseIdMap(): Observable<Unit> {
@@ -184,6 +192,59 @@ class OldE3Client(context: Context) : E3Client() {
                 annItems
             }
         }
+    }
+
+    override fun getAnn(annItem: AnnItem): Observable<AnnItem> {
+        return ensureCourseIdMap()
+            .flatMap { toCoursePage(annItem.detailLocationHint!!) }
+            .flatMap { get("/stu_announcement_online.aspx") }
+            .flatMap { parseHtmlResponse(it) }
+            .flatMap { document ->
+                Observable.fromCallable {
+                    val courseName = document.getElementById("ctl00_lbCurrentCourseName").text()
+                    val targets = arrayOf("tpLatest_rpNew", "tpExpire_rptExpire")
+                    val titleElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbCaption"
+                    val contentElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbContent"
+                    val fileElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl01_hlAttachDesFile"
+                    for (target in targets) {
+                        var idx = 0
+                        while (true) {
+                            val titleEl = document.getElementById(titleElId.format(target, idx))
+                            titleEl ?: break
+                            if (titleEl.text() != annItem.title) {
+                                idx++
+                                continue
+                            }
+                            val fileItems = mutableListOf<FileItem>()
+                            val fileEl = document.getElementById(fileElId.format(target, idx))
+                            if (fileEl != null) {
+                                val fileName = fileEl.text()
+                                val fileUrl = WEB_URL + fileEl.attr("href")
+                                    .replace(
+                                        "common_get_content_media_attach_file.ashx",
+                                        "/common_view_standalone_file.ashx"
+                                    )
+                                Log.d("E3file", fileUrl)
+                                fileItems.add(FileItem(fileName, fileUrl))
+                            }
+                            val content = document.getElementById(contentElId.format(target, idx)).html()
+                            return@fromCallable AnnItem(
+                                E3Type.OLD,
+                                titleEl.text(),
+                                null, courseName,
+                                null,
+                                content,
+                                fileItems
+                            )
+                        }
+                    }
+                    throw ServiceErrorException()
+                }
+            }
+    }
+
+    override fun getCookie(): MutableList<Cookie>? {
+        return null
     }
 
 }

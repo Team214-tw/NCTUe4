@@ -1,6 +1,7 @@
 package com.team214.nctue4.main
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.team214.nctue4.ann.AnnActivity
 import com.team214.nctue4.R
 import com.team214.nctue4.client.NewE3WebClient
 import com.team214.nctue4.client.OldE3Client
@@ -134,7 +136,13 @@ class HomeAnnFragment : Fragment() {
         recyclerView.adapter = HomeAnnAdapter(
             if (fromHome) annItems.subList(0, minOf(4, annItems.size - 1))
             else annItems, context!!
-        ) {}
+        ) {
+            val intent = Intent()
+            intent.setClass(context!!, AnnActivity::class.java)
+            intent.putExtra("fromHome", true)
+            intent.putExtra("annItem", it)
+            startActivity(intent)
+        }
         recyclerView.visibility = View.VISIBLE
     }
 }

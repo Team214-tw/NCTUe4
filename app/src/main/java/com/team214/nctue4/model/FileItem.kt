@@ -1,19 +1,25 @@
 package com.team214.nctue4.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.text.NumberFormat
 import java.util.*
 
-
-class FileItem(
-    var name: String,
-    private val _fileSize: String,
-    var url: String
-) {
-    val fileSize: String = _fileSize
-        get() =
-            try {
-                "${NumberFormat.getNumberInstance(Locale.US).format(field.toInt())} B"
-            } catch (e: NumberFormatException) {
-                "$field B"
-            }
+@Parcelize
+data class FileItem(
+    val name: String,
+    val url: String,
+    val fileSizeInt: Int? = null,
+    var fileSizeStr: String = ""
+    ) : Parcelable {
+    init {
+        fileSizeStr =
+                if (fileSizeInt == null) {
+                    "Unknown Size"
+                } else {
+                    "${NumberFormat
+                        .getNumberInstance(Locale.US)
+                        .format(fileSizeInt.toInt())} B"
+                }
+    }
 }
