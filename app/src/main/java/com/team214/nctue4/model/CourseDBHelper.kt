@@ -62,7 +62,7 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
         val cursor = readableDatabase.query(
             "courses", arrayOf("course_id"),
             "e3_type = ? and bookmarked = ?",
-            arrayOf(e3Type.ordinal.toString(), 1.toString()), null, null, null
+            arrayOf(e3Type.name, 1.toString()), null, null, null
         )
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast) {
@@ -71,7 +71,7 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
             }
         }
         cursor.close()
-        writableDatabase.delete("courses", "e3_type=?", arrayOf(e3Type.toString()))
+        writableDatabase.delete("courses", "e3_type=?", arrayOf(e3Type.name))
         data.forEach {
             val values = ContentValues()
             values.put("e3_type", it.e3Type.name)

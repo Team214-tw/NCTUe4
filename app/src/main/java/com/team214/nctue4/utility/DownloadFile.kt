@@ -57,6 +57,7 @@ fun downloadFile(
         val file = File(dir, fileName)
         if (file.exists()) {
             AlertDialog.Builder(context)
+                .setTitle(R.string.warning)
                 .setMessage(context.getString(R.string.detect_same_file))
                 .setPositiveButton(R.string.download_again) { _, _ ->
                     file.delete()

@@ -16,7 +16,6 @@
     <string name="bookmarked_courses">Bookmarked</string>
     <string name="old_e3">Old e3</string>
     <string name="new_e3">New e3</string>
-    <string name="timetable">Timetable</string>
     <string name="switch_account">Switch Account</string>
     <string name="settings">Settings</string>
     <string name="license">License</string>
@@ -116,14 +115,6 @@
     <string name="action_download_assign">Submitted Files</string>
     <string name="no_submitted_assign">No submitted files</string>
 
-    <string name="mon">Mon</string>
-    <string name="tue">Tue</string>
-    <string name="wed">Wed</string>
-    <string name="thu">Thu</string>
-    <string name="fri">Fri</string>
-    <string name="sat">Sat</string>
-    <string name="sun">Sun</string>
-
     <string name="new_e3_ann_error">Can\'t display new e3 announcements at the moment.\nPull to retry.</string>
     <string name="old_e3_ann_error">Can\'t display old e3 announcements at the moment.\nPull to retry.</string>
     <string name="new_e3_not_init">You haven\'t activate new e3 yet, please go to new e3\'s website and activate.
@@ -140,9 +131,6 @@
         below)\nURL: https://portal.nctu.edu.tw
     </string>
 
-    <string name="old_e3_broken">Other Old e3 functionalities are currently broken QQ</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="warning">Warning</string>
 
 </resources>

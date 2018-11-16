@@ -74,7 +74,6 @@ class CourseListFragment : Fragment() {
     }
 
     private fun getData() {
-        courseItems.clear()
         progress_bar.visibility = View.VISIBLE
         error_request.visibility = View.GONE
         val client = when (e3Type) {
@@ -86,8 +85,9 @@ class CourseListFragment : Fragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = {
-                    courseItems.addAll(it)
                     courseDBHelper.refreshCourses(courseItems, e3Type)
+                    courseItems.clear()
+                    courseItems.addAll(courseDBHelper.readCourses(e3Type))
                     displayData()
                     Snackbar.make(course_list_root, getString(R.string.refresh_success), Snackbar.LENGTH_SHORT).show()
                 },
@@ -123,7 +123,12 @@ class CourseListFragment : Fragment() {
                     } else {
                         courseDBHelper.bookmarkCourse(course.courseId, 1)
                         course.toggleBookmark()
-                        view.course_star.setColorFilter(ContextCompat.getColor(context!!, R.color.new_e3))
+                        view.course_star.setColorFilter(
+                            ContextCompat.getColor(
+                                context!!,
+                                if (course.e3Type == E3Type.NEW) R.color.new_e3 else R.color.old_e3
+                            )
+                        )
                     }
                 }, {
                     //TODO Course Activity
