@@ -48,6 +48,8 @@ class AnnActivity : AppCompatActivity() {
     }
 
     private fun getData() {
+        error_request.visibility = View.GONE
+        progress_bar?.visibility = View.VISIBLE
         val annItem = intent?.extras?.getParcelable<AnnItem>("annItem")
         client = E3ClientFactory.createFromAnn(this, annItem!!)
         disposable = client.getAnn(annItem)

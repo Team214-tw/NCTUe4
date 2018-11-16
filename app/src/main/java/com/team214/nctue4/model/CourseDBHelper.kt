@@ -57,7 +57,7 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
         writableDatabase.delete("courses", null, null)
     }
 
-    fun refreshCourses(data: ArrayList<CourseItem>, e3Type: E3Type) {
+    fun refreshCourses(data: MutableList<CourseItem>, e3Type: E3Type) {
         val hashSet = HashSet<String>()
         val cursor = readableDatabase.query(
             "courses", arrayOf("course_id"),

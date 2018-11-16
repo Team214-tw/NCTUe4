@@ -117,8 +117,8 @@ class NewE3ApiClient(context: Context) : E3Client() {
                     .forEach {
                         if (it.getLong("enddate") > System.currentTimeMillis() / 1000) {
                             val courseName = it.getString("fullname").split(".").run {
-                                if (this.size >= 3) this[2] else this[0]
-                            }.split(" ").first()
+                                if (this.size >= 3) this[2].split(" ").first() else this[0]
+                            }
                             val courseId = it.getString("id")
                             val additionalInfo = it.getString("shortname")
                             courseItems.add(CourseItem(E3Type.NEW, courseName, courseId, additionalInfo))
