@@ -42,6 +42,7 @@ class CourseListFragment : Fragment() {
             .subscribeBy {
                 it.forEach {
                     Log.d("E3Course", it.courseName)
+                    Log.d("E3Course", it.additionalInfo)
                 }
             }
     }

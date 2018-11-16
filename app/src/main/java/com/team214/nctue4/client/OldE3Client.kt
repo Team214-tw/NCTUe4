@@ -137,7 +137,6 @@ class OldE3Client(context: Context) : E3Client() {
             courseIdMap[it.attr("courseid")] =
                     it.attr("id").replace('_', '$')
         }
-        Log.d("E3Map", courseIdMap.toString())
     }
 
     override fun login(
@@ -246,7 +245,24 @@ class OldE3Client(context: Context) : E3Client() {
     }
 
     override fun getCourseList(): Observable<MutableList<CourseItem>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return toHomePage().flatMap { document ->
+            Observable.fromCallable {
+                buildCourseIdMap(document)
+                val courseItems = mutableListOf<CourseItem>()
+                val courseEls = document
+                    .getElementById("ctl00_ContentPlaceHolder1_gvCourse")
+                    .getElementsByTag("a")
+                courseEls.forEach {
+                    val courseName = it.text()
+                    val courseId = it.attr("courseid")
+                    val additionalInfo = it.parent().parent()
+                        .getElementsByTag("td")
+                        .run { this[0].text() + this[1].text() }
+                    courseItems.add(CourseItem(E3Type.OLD, courseName, courseId, additionalInfo))
+                }
+                courseItems
+            }
+        }
     }
 
     override fun getCookie(): MutableList<Cookie>? {

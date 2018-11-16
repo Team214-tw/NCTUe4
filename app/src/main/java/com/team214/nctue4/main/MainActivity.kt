@@ -104,19 +104,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .setCurrentScreen(this, "DownloadFragment", DownloadFragment::class.java.simpleName)
                 DownloadFragment()
             }
-//            R.id.nav_old_e3 -> {
-//                currentFragment = id
-//                firebaseAnalytics
-//                    .setCurrentScreen(this, "OldE3Fragment", OldE3Fragment::class.java.simpleName)
-//                OldE3Fragment()
-//            }
+            R.id.nav_old_e3 -> {
+                currentFragment = id
+                firebaseAnalytics
+                    .setCurrentScreen(this, "OldE3Fragment", CourseListFragment::class.java.simpleName)
+                CourseListFragment().apply {
+                    val bundle = Bundle()
+                    bundle.putSerializable("e3Type", E3Type.OLD)
+                    this.arguments = bundle
+                }
+            }
             R.id.nav_new_e3 -> {
                 currentFragment = id
                 firebaseAnalytics
                     .setCurrentScreen(this, "NewE3Fragment", CourseListFragment::class.java.simpleName)
-                val bundle = Bundle()
-                bundle.putSerializable("e3Type", E3Type.NEW)
-                CourseListFragment().apply { this.arguments = bundle }
+                CourseListFragment().apply {
+                    val bundle = Bundle()
+                    bundle.putSerializable("e3Type", E3Type.NEW)
+                    this.arguments = bundle
+                }
             }
             R.id.nav_log_out -> {
                 AlertDialog.Builder(this)
