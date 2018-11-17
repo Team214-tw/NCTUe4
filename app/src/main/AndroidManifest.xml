@@ -12,7 +12,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <provider
-                android:name="com.team214.nctue4.utility.GenericFileProvider"
+                android:name=".utility.GenericFileProvider"
                 android:authorities="${applicationId}.com.team214"
                 android:exported="false"
                 android:grantUriPermissions="true">
@@ -21,52 +21,48 @@
                     android:resource="@xml/provider_paths"/>
         </provider>
 
-
         <activity
-                android:name="com.team214.nctue4.main.MainActivity"
+                android:name=".main.MainActivity"
                 android:configChanges="orientation|screenSize"
                 android:label="@string/app_name"
                 android:launchMode="singleTask"
                 android:theme="@style/AppTheme.Main">
         </activity>
-
         <activity
-                android:name="com.team214.nctue4.LandingActivity"
+                android:name=".LandingActivity"
                 android:theme="@style/splashScreenTheme"
                 android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
-                android:name="com.team214.nctue4.login.LoginActivity"
-                android:theme="@style/AppTheme.NoActionBar"
+                android:name=".login.LoginActivity"
                 android:configChanges="orientation|screenSize"
+                android:theme="@style/AppTheme.NoActionBar"
                 android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>
-
-        <activity android:name="com.team214.nctue4.login.LogoutActivity">
+        <activity android:name=".login.LogoutActivity">
         </activity>
-
         <activity
-                android:name="com.team214.nctue4.ann.AnnActivity"
+                android:name=".ann.AnnActivity"
                 android:configChanges="orientation|screenSize"
                 android:label="@string/title_activity_ann"
                 android:theme="@style/AppTheme.NoActionBar"/>
-
         <activity
-                android:name="com.team214.nctue4.course.CourseActivity"
+                android:name=".course.CourseActivity"
                 android:configChanges="orientation|screenSize"
                 android:label="@string/title_activity_course"
-                android:parentActivityName="com.team214.nctue4.main.MainActivity"
+                android:parentActivityName=".main.MainActivity"
                 android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="com.team214.nctue4.main.MainActivity"/>
         </activity>
-
+        <activity android:name=".course.HwkActivity">
+        </activity>
     </application>
 
 </manifest>

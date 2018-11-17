@@ -92,7 +92,11 @@ class MembersFragment : Fragment() {
             .collectInto(memberItems) { memberItems, memberItem -> memberItems.add(memberItem) }
             .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
-                onSuccess = { displayData() }
+                onSuccess = { displayData() },
+                onError = {
+                    error_request.visibility = View.VISIBLE
+                    error_request_retry.setOnClickListener { getData() }
+                }
             )
     }
 

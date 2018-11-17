@@ -1,18 +1,18 @@
 package com.team214.nctue4.model
 
 import android.os.Parcelable
+import com.team214.nctue4.client.E3Type
 import kotlinx.android.parcel.Parcelize
-import java.io.File
 import java.util.*
 
 @Parcelize
-class HwkItem(
-    var name: String,
-    var assignId: String,
-    val submitId: String,
-    var startDate: Date,
-    var endDate: Date,
-    var content: String,
-    var attachItem: MutableList<File> = ArrayList(),
-    var sentItem: MutableList<File> = ArrayList()
+data class HwkItem(
+    val e3Type: E3Type,
+    val name: String,
+    val hwkId: String,
+    val startDate: Date,
+    val endDate: Date,
+    val content: String? = null,
+    val attachItem: MutableList<FileItem> = mutableListOf(),
+    val sentItem: MutableList<FileItem> = mutableListOf()
 ) : Parcelable

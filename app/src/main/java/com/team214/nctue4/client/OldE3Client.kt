@@ -517,7 +517,7 @@ class OldE3Client(context: Context) : E3Client() {
                                 MemberItem(
                                     tdEls[0].text(),
                                     tdEls[1].text(),
-                                    "",
+                                    tdEls[4].text(),
                                     MemberItem.Type.Student
                                 )
                             )
@@ -531,11 +531,47 @@ class OldE3Client(context: Context) : E3Client() {
                                 MemberItem(
                                     tdEls[0].text(),
                                     tdEls[1].text(),
-                                    "",
+                                    tdEls[4].text(),
                                     MemberItem.Type.Audit
                                 )
                             )
                         }
+                    emitter.onComplete()
+                }
+            }
+    }
+
+    override fun getCourseHwk(courseItem: CourseItem): Observable<HwkItem> {
+        return ensureCourseIdMap()
+            .flatMap { toCoursePage(courseItem.courseId) }
+            .flatMap { get("/stu_materials_homework_list.aspx") }
+            .flatMap { parseHtmlResponse(it) }
+            .flatMap { document ->
+                Observable.create<HwkItem> { emitter ->
+                    val df = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US)
+                    listOf(
+                        "ctl00_ContentPlaceHolder1_dgHandin",
+                        "ctl00_ContentPlaceHolder1_dgJudge",
+                        "ctl00_ContentPlaceHolder1_dgLate",
+                        "ctl00_ContentPlaceHolder1_dgAlready"
+                    ).forEach { id ->
+                        document.getElementById(id)
+                            ?.getElementsByTag("tr")
+                            ?.drop(1)
+                            ?.forEach { el ->
+                                val tdEls = el.getElementsByTag("td")
+                                val name = tdEls.first().text()
+                                val hwkId = Regex("crsHwkId=([^;,']*)").find(
+                                    tdEls.last()
+                                        .getElementsByTag("a")
+                                        .first()
+                                        .attr("onclick")
+                                )!!.groups[1]!!.value
+                                val startDate = df.parse(tdEls.asReversed()[2].text())
+                                val endDate = df.parse(tdEls.asReversed()[3].text())
+                                emitter.onNext(HwkItem(E3Type.OLD, name, hwkId, startDate, endDate, null))
+                            }
+                    }
                     emitter.onComplete()
                 }
             }

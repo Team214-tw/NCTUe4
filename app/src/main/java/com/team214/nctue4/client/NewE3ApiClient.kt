@@ -306,6 +306,48 @@ class NewE3ApiClient(context: Context) : E3Client() {
         }
     }
 
+
+    override fun getCourseHwk(courseItem: CourseItem): Observable<HwkItem> {
+        return post(
+            hashMapOf(
+                "courseids[0]" to courseItem.courseId,
+                "wsfunction" to "mod_assign_get_assignments"
+            )
+        ).flatMap { response ->
+            Observable.create<HwkItem> { emitter ->
+                val resJson = JSONObject(response)
+                    .getJSONArray("courses")
+                    .getJSONObject(0)
+                    .getJSONArray("assignments")
+                (0 until resJson.length()).map { resJson.get(it) as JSONObject }.forEach {
+                    val attachItems = mutableListOf<FileItem>()
+                    val attachItemJson = it.getJSONArray("introattachments")
+                    (0 until attachItemJson.length()).map { attachItemJson.get(it) as JSONObject }
+                        .forEach {
+                            attachItems.add(
+                                FileItem(
+                                    it.getString("filename"),
+                                    it.getString("fileurl") + "?token=$token"
+                                )
+                            )
+                        }
+                    emitter.onNext(
+                        HwkItem(
+                            E3Type.NEW,
+                            it.getString("name"),
+                            it.getString("id"),
+                            Date(it.getLong("allowsubmissionsfromdate") * 1000),
+                            Date(it.getLong("duedate") * 1000),
+                            it.getString("intro"),
+                            attachItems
+                        )
+                    )
+                }
+                emitter.onComplete()
+            }
+        }
+    }
+
     override fun getFrontPageAnns(): Observable<AnnItem> {
         throw NotImplementedError()
     }

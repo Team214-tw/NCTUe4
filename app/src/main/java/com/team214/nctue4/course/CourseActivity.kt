@@ -52,10 +52,10 @@ class CourseActivity : AppCompatActivity() {
                 )
                 FolderFragment()
             }
-//            R.id.course_nav_assignment -> {
-//                firebaseAnalytics!!.setCurrentScreen(this, "AssignFragment", AssignFragment::class.java.simpleName)
-//                AssignFragment()
-//            }
+            R.id.course_nav_assignment -> {
+                firebaseAnalytics!!.setCurrentScreen(this, "HwkFragment", HwkFragment::class.java.simpleName)
+                HwkFragment()
+            }
             R.id.course_nav_score -> {
                 firebaseAnalytics!!.setCurrentScreen(this, "ScoreFragment", ScoreFragment::class.java.simpleName)
                 ScoreFragment()

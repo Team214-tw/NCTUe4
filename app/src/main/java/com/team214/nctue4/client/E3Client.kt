@@ -28,4 +28,6 @@ abstract class E3Client {
     abstract fun getScore(courseItem: CourseItem): Observable<ScoreItem>
 
     abstract fun getMembers(courseItem: CourseItem): Observable<MemberItem>
+
+    abstract fun getCourseHwk(courseItem: CourseItem): Observable<HwkItem>
 }
