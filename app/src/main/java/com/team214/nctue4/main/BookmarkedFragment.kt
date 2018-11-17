@@ -16,6 +16,7 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Type
+import com.team214.nctue4.course.CourseActivity
 import com.team214.nctue4.model.CourseDBHelper
 import com.team214.nctue4.model.CourseItem
 import kotlinx.android.synthetic.main.fragment_couse_list.*
@@ -77,7 +78,10 @@ class BookmarkedFragment : Fragment() {
                         }
                     }
                 }, {
-                    //TODO Course Activity
+                    val intent = Intent()
+                    intent.setClass(activity!!, CourseActivity::class.java)
+                    intent.putExtra("courseItem", it)
+                    startActivity(intent)
                 }, courseDBHelper
             )
             val wrappedAdapter = dragDropManager.createWrappedAdapter(courseAdapter)

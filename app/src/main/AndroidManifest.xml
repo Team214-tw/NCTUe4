@@ -55,6 +55,18 @@
                 android:configChanges="orientation|screenSize"
                 android:label="@string/title_activity_ann"
                 android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+                android:name="com.team214.nctue4.course.CourseActivity"
+                android:configChanges="orientation|screenSize"
+                android:label="@string/title_activity_course"
+                android:parentActivityName="com.team214.nctue4.main.MainActivity"
+                android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="com.team214.nctue4.main.MainActivity"/>
+        </activity>
+
     </application>
 
 </manifest>

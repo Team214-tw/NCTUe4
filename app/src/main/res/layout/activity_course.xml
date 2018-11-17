@@ -1,76 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fitsSystemWindows="true"
-        tools:context="com.team214.nctue4.course.CourseActivity">
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fitsSystemWindows="true"
+            tools:context="com.team214.nctue4.course.CourseActivity">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/course_doc_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:visibility="gone"
-                app:tabGravity="fill"
-                app:tabIndicatorHeight="2dp"
-                app:tabMode="fixed"
-                app:tabSelectedTextColor="@android:color/white"
-                app:tabTextColor="@android:color/white" />
+                android:theme="@style/AppTheme.AppBarOverlay">
+
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    app:layout_scrollFlags="scroll|enterAlways|snap"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
 
         <FrameLayout
-            android:id="@+id/course_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                android:id="@+id/course_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/course_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="end|bottom"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:visibility="invisible" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/course_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="end|bottom"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:visibility="invisible"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/course_bottom_nav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        android:elevation="8dp"
-        app:menu="@menu/navigation" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/course_bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="?android:attr/windowBackground"
+            android:elevation="8dp"
+            app:menu="@menu/navigation"
+            app:labelVisibilityMode="labeled"
+    />
 
 
 </LinearLayout>

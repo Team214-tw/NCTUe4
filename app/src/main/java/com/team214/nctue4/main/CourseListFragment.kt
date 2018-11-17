@@ -1,5 +1,6 @@
 package com.team214.nctue4.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.core.content.ContextCompat
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Type
+import com.team214.nctue4.course.CourseActivity
 import com.team214.nctue4.model.CourseDBHelper
 import com.team214.nctue4.model.CourseItem
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -85,7 +87,7 @@ class CourseListFragment : Fragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = {
-                    courseDBHelper.refreshCourses(courseItems, e3Type)
+                    courseDBHelper.refreshCourses(it, e3Type)
                     courseItems.clear()
                     courseItems.addAll(courseDBHelper.readCourses(e3Type))
                     displayData()
@@ -131,7 +133,10 @@ class CourseListFragment : Fragment() {
                         )
                     }
                 }, {
-                    //TODO Course Activity
+                    val intent = Intent()
+                    intent.setClass(activity!!, CourseActivity::class.java)
+                    intent.putExtra("courseItem", it)
+                    startActivity(intent)
                 })
 
         }
