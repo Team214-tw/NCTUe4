@@ -78,8 +78,9 @@ class HomeAnnFragment : Fragment() {
     }
 
     private fun getData() {
-        error_request?.visibility = View.GONE
-        error_wrong_credential?.visibility = View.GONE
+        error_request.visibility = View.GONE
+        error_wrong_credential.visibility = View.GONE
+        progress_bar.visibility = View.VISIBLE
         annItems.clear()
         disposable = mutableListOf(
             oldE3Client.getFrontPageAnns()
@@ -90,6 +91,7 @@ class HomeAnnFragment : Fragment() {
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(annItems) { annItems, annItem -> annItems.add(annItem) }
+            .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
                 onSuccess = {
                     annItems.sortByDescending { annItem -> annItem.date }
@@ -115,7 +117,6 @@ class HomeAnnFragment : Fragment() {
 
     private fun displayWrongCredentialsError() {
         error_wrong_credential.visibility = View.VISIBLE
-        progress_bar.visibility = View.GONE
         login_again_button?.setOnClickListener {
             val intent = Intent()
             intent.setClass(context!!, LoginActivity::class.java)
@@ -135,10 +136,8 @@ class HomeAnnFragment : Fragment() {
 
     private fun displayError() {
         error_request.visibility = View.VISIBLE
-        progress_bar.visibility = View.GONE
         ann_swipe_refresh_layout.visibility = View.GONE
         error_request_retry.setOnClickListener {
-            progress_bar.visibility = View.VISIBLE
             getData()
         }
     }
@@ -146,7 +145,6 @@ class HomeAnnFragment : Fragment() {
     private fun displayData() {
         val emptyRequestView = if (arguments?.getBoolean("home") != null) empty_request_compact else empty_request
         ann_swipe_refresh_layout?.visibility = View.VISIBLE
-        progress_bar.visibility = View.GONE
         ann_swipe_refresh_layout.isEnabled = !fromHome
         if (annItems.isEmpty()) {
             recyclerView.visibility = View.GONE

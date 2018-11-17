@@ -86,6 +86,7 @@ class CourseListFragment : Fragment() {
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<CourseItem>()) { courseItems, courseItem -> courseItems.add(courseItem) }
+            .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
                 onSuccess = {
                     courseDBHelper.refreshCourses(it, e3Type)
@@ -96,13 +97,11 @@ class CourseListFragment : Fragment() {
                 },
                 onError = {
                     Snackbar.make(course_list_root, getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show()
-                    progress_bar.visibility = View.INVISIBLE
                 }
             )
     }
 
     private fun displayData() {
-        progress_bar.visibility = View.INVISIBLE
         if (course_list_recycler_view.adapter != null) {
             course_list_recycler_view.adapter?.notifyDataSetChanged()
             return

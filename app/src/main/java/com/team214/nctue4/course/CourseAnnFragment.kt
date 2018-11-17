@@ -52,15 +52,14 @@ class CourseAnnFragment : Fragment() {
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<AnnItem>()) { annItems, annItem -> annItems.add(annItem) }
+            .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
                 onSuccess = {
                     displayData(it)
-                    progress_bar.visibility = View.GONE
                 },
                 onError = {
                     error_request.visibility = View.VISIBLE
                     error_request_retry.setOnClickListener { getData() }
-                    progress_bar.visibility = View.GONE
                 }
             )
     }
