@@ -444,7 +444,8 @@ class OldE3Client(context: Context) : E3Client() {
                             val match = Regex("AttachMediaId=([^;,']*).*CourseId=([^;,']*)")
                                 .find(tdEls[5].selectFirst("a").attr("onclick"))
                             val url =
-                                "$WEB_URL/common_get_content_media_attach_file.ashx?AttachMediaId=${match!!.groups[1]!!.value}&CourseId=${match.groups[2]!!.value}"
+                                "$WEB_URL/common_view_standalone_file.ashx?AttachMediaId=${match!!.groups[1]!!.value}&CourseId=${match.groups[2]!!.value}"
+                            Log.d("E3", url)
                             emitter.onNext(FileItem(name, url))
                         }
                     emitter.onComplete()
