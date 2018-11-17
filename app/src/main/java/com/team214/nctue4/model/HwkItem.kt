@@ -13,6 +13,6 @@ data class HwkItem(
     val startDate: Date,
     val endDate: Date,
     val content: String? = null,
-    val attachItem: MutableList<FileItem> = mutableListOf(),
-    val sentItem: MutableList<FileItem> = mutableListOf()
+    val attachItems: MutableList<FileItem> = mutableListOf(),
+    val submitItems: MutableList<FileItem> = mutableListOf()
 ) : Parcelable

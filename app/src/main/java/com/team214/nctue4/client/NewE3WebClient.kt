@@ -192,4 +192,12 @@ class NewE3WebClient(context: Context) : E3Client() {
     override fun getCourseHwk(courseItem: CourseItem): Observable<HwkItem> {
         throw NotImplementedError()
     }
+
+    override fun getHwkSubmitFiles(hwkItem: HwkItem): Observable<FileItem> {
+        throw NotImplementedError()
+    }
+
+    override fun getHwkDetail(hwkItem: HwkItem, courseItem: CourseItem?): Observable<HwkItem> {
+        throw NotImplementedError()
+    }
 }

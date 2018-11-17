@@ -44,7 +44,7 @@ class FolderFragment : Fragment() {
     }
 
     private fun getData() {
-        client.getCourseFolders(courseItem)
+        disposable = client.getCourseFolders(courseItem)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<FolderItem>()) { folderItems, folderItem -> folderItems.add(folderItem) }

@@ -30,4 +30,8 @@ abstract class E3Client {
     abstract fun getMembers(courseItem: CourseItem): Observable<MemberItem>
 
     abstract fun getCourseHwk(courseItem: CourseItem): Observable<HwkItem>
+
+    abstract fun getHwkDetail(hwkItem: HwkItem, courseItem: CourseItem?): Observable<HwkItem>
+
+    abstract fun getHwkSubmitFiles(hwkItem: HwkItem): Observable<FileItem>
 }

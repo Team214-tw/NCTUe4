@@ -1,5 +1,6 @@
 package com.team214.nctue4.course
 
+
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
@@ -14,62 +15,72 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
+import com.team214.nctue4.model.CourseItem
 import com.team214.nctue4.model.FileItem
-import com.team214.nctue4.model.FolderItem
+import com.team214.nctue4.model.HwkItem
 import com.team214.nctue4.utility.downloadFile
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.dialog_course_folder.*
+import kotlinx.android.synthetic.main.dialog_assign.*
 
-class FileDialog : DialogFragment() {
-    private lateinit var client: E3Client
-    private lateinit var folderItem: FolderItem
+
+class HwkDialog : DialogFragment() {
+    lateinit var client: E3Client
+    lateinit var hwkItem: HwkItem
+    lateinit var courseItem: CourseItem
+    private var disposable: Disposable? = null
     private lateinit var url: String
     private lateinit var fileName: String
-    private var disposable: Disposable? = null
+
+    override fun onDestroy() {
+        disposable?.dispose()
+        super.onDestroy()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        client = (activity as CourseActivity).client
-        folderItem = arguments!!.getParcelable("folderItem")!!
-        return inflater.inflate(R.layout.dialog_course_folder, container, false)
-    }
-
-    override fun onStop() {
-        disposable?.dispose()
-        super.onStop()
+        return inflater.inflate(R.layout.dialog_assign, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        hwkItem = (activity as HwkActivity).hwkItem
+        client = (activity as HwkActivity).client
         dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
         getData()
     }
 
     private fun getData() {
-        disposable = client.getFiles(folderItem)
+        disposable = client.getHwkSubmitFiles(hwkItem)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<FileItem>()) { fileItems, fileItem -> fileItems.add(fileItem) }
             .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
-                onSuccess = { displayData(it) },
-                onError = {
-                    if (!(context as Activity).isFinishing) {
-                        Toast.makeText(context, getString(R.string.generic_error), Toast.LENGTH_SHORT).show()
-                    }
-                    dismissAllowingStateLoss()
-                }
+                onSuccess = { displayData(it) }
+//                onError = {
+//                    if (!(context as Activity).isFinishing) {
+//                        Toast.makeText(context, getString(R.string.generic_error), Toast.LENGTH_SHORT).show()
+//                    }
+//                    dismissAllowingStateLoss()
+//                }
             )
     }
 
     private fun displayData(fileItems: MutableList<FileItem>) {
-        course_doc_dialog_recycler_view.layoutManager = LinearLayoutManager(context)
-        course_doc_dialog_recycler_view.adapter = FileAdapter(context!!, fileItems) {
+        if (fileItems.isEmpty()) {
+            if (!(context as Activity).isFinishing) {
+                Toast.makeText(context!!, getString(R.string.no_submitted_assign), Toast.LENGTH_SHORT).show()
+            }
+            dismissAllowingStateLoss()
+            return
+        }
+        assign_dialog_recycler_view.layoutManager = LinearLayoutManager(context)
+        assign_dialog_recycler_view.adapter = FileAdapter(context!!, fileItems) {
             url = it.url
             fileName = it.name
             downloadFile(fileName, url, context!!, activity!!, activity!!.findViewById(R.id.container)) {
@@ -85,6 +96,7 @@ class FileDialog : DialogFragment() {
             }
         }
     }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -111,3 +123,4 @@ class FileDialog : DialogFragment() {
         }
     }
 }
+

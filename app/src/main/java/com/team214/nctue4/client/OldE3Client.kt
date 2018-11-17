@@ -4,16 +4,13 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.*
-import io.reactivex.Emitter
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.rxkotlin.toObservable
 import okhttp3.*
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import java.lang.reflect.Member
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -76,7 +73,8 @@ class OldE3Client(context: Context) : E3Client() {
 
     private fun post(
         path: String,
-        data: HashMap<String, String>
+        data: HashMap<String, String>,
+        headers: HashMap<String, String>? = null
     ): Observable<Response> {
         return Observable.fromCallable {
             if (path != "/login.aspx" && (sessionId == null || aspXAuth == null)) throw SessionInvalidException()
@@ -85,10 +83,11 @@ class OldE3Client(context: Context) : E3Client() {
             data.forEach { entry -> formBodyBuilder.add(entry.key, entry.value) }
             formBodyBuilder.add("__VIEWSTATE", viewState)
             val formBody = formBodyBuilder.build()
-            val request = okhttp3.Request.Builder()
+            val requestBuilder = okhttp3.Request.Builder()
                 .url(WEB_URL + path)
                 .post(formBody)
-                .build()
+            headers?.forEach { entry -> requestBuilder.addHeader(entry.key, entry.value) }
+            val request = requestBuilder.build()
             client.newCall(request).execute().apply {
                 if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx")) {
                     throw SessionInvalidException()
@@ -575,6 +574,75 @@ class OldE3Client(context: Context) : E3Client() {
                     emitter.onComplete()
                 }
             }
+    }
+
+    override fun getHwkDetail(hwkItem: HwkItem, courseItem: CourseItem?): Observable<HwkItem> {
+        return ensureCourseIdMap()
+            .flatMap { toCoursePage(courseItem!!.courseId) }
+            .flatMap {
+                post(
+                    "/ajaxpro/WebPageBase,App_Code.ashx",
+                    hashMapOf(),
+                    hashMapOf("X-AjaxPro-Method" to "setToken")
+                )
+            }
+            .flatMap {
+                val token = JSONObject(it.body()!!.string()).getString("value")
+                get("/dialog_stu_homework_view.aspx?crsHwkId=${hwkItem.hwkId}&TokenId=$token")
+            }
+            .flatMap { parseHtmlResponse(it) }
+            .flatMap { document ->
+                Observable.fromCallable {
+                    val content = document.getElementById("ctl00_ContentPlaceHolder1_HwkInfo1_lbContent").html()
+                    val attachItems = mutableListOf<FileItem>()
+                    val submitItems = mutableListOf<FileItem>()
+                    document.getElementById("Anthem_ctl00_ContentPlaceHolder1_HwkInfo1_fileAttachManageLite_rpFileList__")
+                        ?.getElementsByTag("a")
+                        ?.forEach { el ->
+                            attachItems.add(
+                                FileItem(
+                                    el.text(),
+                                    WEB_URL + el.attr("href").replace(
+                                        "common_get_content_media_attach_file.ashx",
+                                        "/common_view_standalone_file.ashx"
+                                    )
+                                )
+                            )
+                        }
+                    document.getElementById("Anthem_ctl00_ContentPlaceHolder1_fileAttachManageLite_rpFileList__")
+                        ?.getElementsByTag("a")
+                        ?.forEach { el ->
+                            submitItems.add(
+                                FileItem(
+                                    el.text(),
+                                    WEB_URL + el.attr("href").replace(
+                                        "common_get_content_media_attach_file.ashx",
+                                        "/common_view_standalone_file.ashx"
+                                    )
+                                )
+                            )
+                        }
+                    HwkItem(
+                        E3Type.OLD,
+                        hwkItem.name,
+                        hwkItem.hwkId,
+                        hwkItem.startDate,
+                        hwkItem.endDate,
+                        content,
+                        attachItems,
+                        submitItems
+                    )
+                }
+            }
+    }
+
+    override fun getHwkSubmitFiles(hwkItem: HwkItem): Observable<FileItem> {
+        return Observable.create<FileItem> { emitter ->
+            hwkItem.submitItems.map {
+                emitter.onNext(it)
+            }
+            emitter.onComplete()
+        }
     }
 
     override fun getCookie(): MutableList<Cookie>? {

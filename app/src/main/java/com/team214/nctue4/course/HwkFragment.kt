@@ -45,7 +45,7 @@ class HwkFragment : Fragment() {
     }
 
     private fun getData() {
-        client.getCourseHwk(courseItem)
+        disposable = client.getCourseHwk(courseItem)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { progress_bar?.visibility = View.GONE }
@@ -74,7 +74,7 @@ class HwkFragment : Fragment() {
         assign_recycler_view?.adapter = HwkAdapter(hwkItems) {
             val intent = Intent()
             intent.setClass(activity!!, HwkActivity::class.java)
-            intent.putExtra("courseName", courseItem.courseName)
+            intent.putExtra("courseItem", courseItem)
             intent.putExtra("hwkItem", it)
             startActivity(intent)
         }

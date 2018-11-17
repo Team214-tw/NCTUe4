@@ -61,8 +61,12 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="com.team214.nctue4.main.MainActivity"/>
         </activity>
-        <activity android:name=".course.HwkActivity">
-        </activity>
+
+        <activity
+                android:name="com.team214.nctue4.course.HwkActivity"
+                android:configChanges="orientation|screenSize"
+                android:label="@string/title_activity_assign"
+                android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
