@@ -10,20 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.model.CourseItem
-import com.team214.nctue4.model.FolderItem
+import com.team214.nctue4.model.ScoreItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_course_folder.*
+import kotlinx.android.synthetic.main.fragment_score.*
 import kotlinx.android.synthetic.main.status_empty.*
 import kotlinx.android.synthetic.main.status_error.*
 
-class CourseFolderFragment : Fragment() {
+class ScoreFragment : Fragment() {
     lateinit var client: E3Client
     lateinit var courseItem: CourseItem
     private var disposable: Disposable? = null
-
     override fun onDestroy() {
         disposable?.dispose()
         super.onDestroy()
@@ -33,7 +32,7 @@ class CourseFolderFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_course_folder, container, false)
+        return inflater.inflate(R.layout.fragment_score, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,10 +43,10 @@ class CourseFolderFragment : Fragment() {
     }
 
     private fun getData() {
-        client.getCourseFolders(courseItem)
+        disposable = client.getScore(courseItem)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .collectInto(mutableListOf<FolderItem>()) { folderItems, folderItem -> folderItems.add(folderItem) }
+            .collectInto(mutableListOf<ScoreItem>()) { scoreItems, scoreItem -> scoreItems.add(scoreItem) }
             .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
                 onSuccess = { displayData(it) },
@@ -58,25 +57,19 @@ class CourseFolderFragment : Fragment() {
             )
     }
 
-    private fun displayData(folderItems: MutableList<FolderItem>) {
-        if (folderItems.size == 0) {
+    private fun displayData(scoreItems: MutableList<ScoreItem>) {
+        if (scoreItems.isEmpty()) {
             empty_request.visibility = View.VISIBLE
-            return
-        }
-        course_doc_list_recycler_view?.layoutManager = LinearLayoutManager(context)
-        course_doc_list_recycler_view?.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                LinearLayoutManager.VERTICAL
+        } else {
+            course_score_recycler_view?.layoutManager = LinearLayoutManager(context)
+            course_score_recycler_view?.addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    LinearLayoutManager.VERTICAL
+                )
             )
-        )
-        course_doc_list_recycler_view?.adapter = FolderAdapter(context!!, folderItems) {
-            val dialog = CourseFolderDialog()
-            dialog.arguments = Bundle().apply {
-                this.putParcelable("folderItem", it)
-            }
-            dialog.show(fragmentManager, "CourseFolderDialog")
+            course_score_recycler_view?.adapter = ScoreAdapter(scoreItems)
         }
-        course_doc_list_recycler_view?.visibility = View.VISIBLE
     }
+
 }

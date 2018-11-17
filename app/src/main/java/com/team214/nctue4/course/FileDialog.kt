@@ -24,7 +24,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.dialog_course_folder.*
 
-class CourseFolderDialog : DialogFragment() {
+class FileDialog : DialogFragment() {
     private lateinit var client: E3Client
     private lateinit var folderItem: FolderItem
     private lateinit var url: String

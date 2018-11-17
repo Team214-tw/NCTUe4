@@ -3,10 +3,7 @@ package com.team214.nctue4.client
 import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
-import com.team214.nctue4.model.AnnItem
-import com.team214.nctue4.model.CourseItem
-import com.team214.nctue4.model.FileItem
-import com.team214.nctue4.model.FolderItem
+import com.team214.nctue4.model.*
 import io.reactivex.Observable
 import okhttp3.Cookie
 import okhttp3.FormBody
@@ -150,7 +147,6 @@ class NewE3ApiClient(context: Context) : E3Client() {
         }.flatMap { response ->
             Observable.create<AnnItem> { emitter ->
                 val resJson = JSONObject(response).getJSONArray("discussions")
-                val courseAnnItems = mutableListOf<AnnItem>()
                 (0 until resJson.length()).map { resJson.get(it) as JSONObject }.forEach { ann ->
                     val title = ann.getString("name")
                     val content = ann.getString("message")
@@ -232,6 +228,39 @@ class NewE3ApiClient(context: Context) : E3Client() {
                             )
                         }
                     }
+                emitter.onComplete()
+            }
+        }
+    }
+
+    override fun getScore(courseItem: CourseItem): Observable<ScoreItem> {
+        return post(
+            hashMapOf(
+                "courseid" to courseItem.courseId,
+                "userid" to userId,
+                "wsfunction" to "gradereport_user_get_grades_table"
+            )
+        ).flatMap { response ->
+            Observable.create<ScoreItem> { emitter ->
+                val resJson = JSONObject(response)
+                    .getJSONArray("tables")
+                    .getJSONObject(0)
+                    .getJSONArray("tabledata")
+                for (i in 1 until resJson.length()) {
+                    val tmp =
+                        try {
+                            resJson.getJSONObject(i)
+                        } catch (e: JSONException) {
+                            continue
+                        }
+                    emitter.onNext(
+                        ScoreItem(
+                            Regex("/<([^>]*)").find(tmp.getJSONObject("itemname").getString("content").reversed())
+                            !!.groupValues.last().reversed(),
+                            tmp.getJSONObject("grade").getString("content")
+                        )
+                    )
+                }
                 emitter.onComplete()
             }
         }

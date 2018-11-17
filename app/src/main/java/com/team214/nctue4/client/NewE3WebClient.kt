@@ -3,10 +3,7 @@ package com.team214.nctue4.client
 import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
-import com.team214.nctue4.model.AnnItem
-import com.team214.nctue4.model.CourseItem
-import com.team214.nctue4.model.FileItem
-import com.team214.nctue4.model.FolderItem
+import com.team214.nctue4.model.*
 import io.reactivex.Observable
 import okhttp3.*
 import org.jsoup.Jsoup
@@ -181,6 +178,10 @@ class NewE3WebClient(context: Context) : E3Client() {
     }
 
     override fun getFiles(folderItem: FolderItem): Observable<FileItem> {
+        throw NotImplementedError()
+    }
+
+    override fun getScore(courseItem: CourseItem): Observable<ScoreItem> {
         throw NotImplementedError()
     }
 }

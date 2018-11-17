@@ -3,7 +3,6 @@ package com.team214.nctue4.course
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
@@ -49,18 +48,18 @@ class CourseActivity : AppCompatActivity() {
                 firebaseAnalytics!!.setCurrentScreen(
                     this,
                     "CourseDocListFragment",
-                    CourseFolderFragment::class.java.simpleName
+                    FolderFragment::class.java.simpleName
                 )
-                CourseFolderFragment()
+                FolderFragment()
             }
 //            R.id.course_nav_assignment -> {
 //                firebaseAnalytics!!.setCurrentScreen(this, "AssignFragment", AssignFragment::class.java.simpleName)
 //                AssignFragment()
 //            }
-//            R.id.course_nav_score -> {
-//                firebaseAnalytics!!.setCurrentScreen(this, "ScoreFragment", ScoreFragment::class.java.simpleName)
-//                ScoreFragment()
-//            }
+            R.id.course_nav_score -> {
+                firebaseAnalytics!!.setCurrentScreen(this, "ScoreFragment", ScoreFragment::class.java.simpleName)
+                ScoreFragment()
+            }
 //            R.id.course_nav_members -> {
 //                firebaseAnalytics!!.setCurrentScreen(this, "MembersFragment", MembersFragment::class.java.simpleName)
 //                MembersFragment()

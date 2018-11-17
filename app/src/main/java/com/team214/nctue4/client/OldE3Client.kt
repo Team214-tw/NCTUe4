@@ -3,10 +3,7 @@ package com.team214.nctue4.client
 import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
-import com.team214.nctue4.model.AnnItem
-import com.team214.nctue4.model.CourseItem
-import com.team214.nctue4.model.FileItem
-import com.team214.nctue4.model.FolderItem
+import com.team214.nctue4.model.*
 import io.reactivex.Emitter
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -264,7 +261,6 @@ class OldE3Client(context: Context) : E3Client() {
         return toHomePage().flatMap { document ->
             Observable.create<CourseItem> { emitter ->
                 buildCourseIdMap(document)
-                val courseItems = mutableListOf<CourseItem>()
                 val courseEls = document
                     .getElementById("ctl00_ContentPlaceHolder1_gvCourse")
                     .getElementsByTag("a")
@@ -293,7 +289,6 @@ class OldE3Client(context: Context) : E3Client() {
                     val titleElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbCaption"
                     val contentElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbContent"
                     val fileElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl01_hlAttachDesFile"
-                    val courseAnnItems = mutableListOf<AnnItem>()
                     for (target in targets) {
                         var idx = 0
                         while (true) {
@@ -454,6 +449,38 @@ class OldE3Client(context: Context) : E3Client() {
                                 "$WEB_URL/common_get_content_media_attach_file.ashx?AttachMediaId=${match!!.groups[1]!!.value}&CourseId=${match.groups[2]!!.value}"
                             emitter.onNext(FileItem(name, url))
                         }
+                    emitter.onComplete()
+                }
+            }
+    }
+
+    override fun getScore(courseItem: CourseItem): Observable<ScoreItem> {
+        return ensureCourseIdMap()
+            .flatMap { toCoursePage(courseItem.courseId) }
+            .flatMap { get("/stu_scores_list.aspx") }
+            .flatMap { parseHtmlResponse(it) }
+            .flatMap { document ->
+                Observable.create<ScoreItem> { emitter ->
+                    val trEls = document.selectFirst("#ctl00_tdContent > table > tbody")
+                        .getElementsByTag("table")
+                        .first()
+                        .getElementsByTag("tr")
+                        .drop(1)
+                    trEls.subList(0, trEls.size - 2)
+                        .forEach { el ->
+                            val tdEls = el.getElementsByTag("td")
+                            if (tdEls.size == 6) {
+                                if (tdEls[1].text() != "-") {
+                                    emitter.onNext(ScoreItem(tdEls[1].text(), tdEls[4].text()))
+                                } else {
+                                    emitter.onNext(ScoreItem(tdEls[0].text(), tdEls[4].text()))
+                                }
+                            } else if (tdEls.size == 5) {
+                                emitter.onNext(ScoreItem(tdEls[0].text(), tdEls[4].text()))
+                            }
+                        }
+                    val tdEls = trEls.last().getElementsByTag("td")
+                    emitter.onNext(ScoreItem(tdEls[1].text(), tdEls[2].text()))
                     emitter.onComplete()
                 }
             }
