@@ -1,12 +1,16 @@
 package com.team214.nctue4.ann
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.webkit.WebSettings
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -14,7 +18,9 @@ import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.client.E3ClientFactory
 import com.team214.nctue4.client.E3Type
+import com.team214.nctue4.course.CourseActivity
 import com.team214.nctue4.model.AnnItem
+import com.team214.nctue4.model.CourseDBHelper
 import com.team214.nctue4.utility.downloadFile
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -32,6 +38,7 @@ class AnnActivity : AppCompatActivity() {
     private lateinit var fileName: String
     private lateinit var client: E3Client
     private var disposable: Disposable? = null
+    private lateinit var annItem: AnnItem
 
     override fun onDestroy() {
         disposable?.dispose()
@@ -50,21 +57,49 @@ class AnnActivity : AppCompatActivity() {
     private fun getData() {
         error_request.visibility = View.GONE
         progress_bar?.visibility = View.VISIBLE
-        val annItem = intent?.extras?.getParcelable<AnnItem>("annItem")
-        client = E3ClientFactory.createFromAnn(this, annItem!!)
+        annItem = intent?.extras?.getParcelable("annItem")!!
+        client = E3ClientFactory.createFromAnn(this, annItem)
         disposable = client.getAnn(annItem)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
+            .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
                 onNext = { showData(it) },
                 onError = { showError() }
             )
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        if (intent.extras!!.getBoolean("fromHome", false))
+            menuInflater.inflate(R.menu.goto_course, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+            R.id.action_goto_course -> {
+                val courseItem = CourseDBHelper(this).getCourseFromName(annItem.courseName, annItem.e3Type)
+                if (courseItem != null) {
+                    val intent = Intent()
+                    intent.setClass(this, CourseActivity::class.java)
+                    intent.putExtra("courseItem", courseItem)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, getString(R.string.course_not_found_in_db), Toast.LENGTH_LONG).show()
+                }
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun showError() {
         error_request?.visibility = View.VISIBLE
         error_request_retry?.setOnClickListener { getData() }
-        progress_bar?.visibility = View.GONE
     }
 
     private fun showData(annItem: AnnItem) {
@@ -81,9 +116,9 @@ class AnnActivity : AppCompatActivity() {
             } else annItem.content
         ann_title.text = annItem.title
         ann_courseName.text = annItem.courseName
-        if (annItem.date != null) {
-            ann_date.text = SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN).format(annItem.date)
-        }
+        ann_date.text = if (annItem.date != null) {
+            SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN).format(annItem.date)
+        } else ""
         ann_content_web_view.settings.defaultTextEncodingName = "utf-8"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ann_content_web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
@@ -102,7 +137,6 @@ class AnnActivity : AppCompatActivity() {
 
         }
         ann_container?.visibility = View.VISIBLE
-        progress_bar?.visibility = View.GONE
     }
 
     override fun onRequestPermissionsResult(

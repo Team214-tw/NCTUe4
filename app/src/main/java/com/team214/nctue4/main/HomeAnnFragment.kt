@@ -81,6 +81,7 @@ class HomeAnnFragment : Fragment() {
         error_request.visibility = View.GONE
         error_wrong_credential.visibility = View.GONE
         progress_bar.visibility = View.VISIBLE
+        disposable?.dispose()
         annItems.clear()
         disposable = mutableListOf(
             oldE3Client.getFrontPageAnns()

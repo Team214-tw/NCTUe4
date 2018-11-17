@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_members.*
 import kotlinx.android.synthetic.main.item_member.view.*
 import kotlinx.android.synthetic.main.status_empty.*
 import kotlinx.android.synthetic.main.status_error.*
-import java.lang.reflect.Member
 
 class MembersFragment : Fragment() {
     lateinit var client: E3Client
@@ -85,8 +84,11 @@ class MembersFragment : Fragment() {
     }
 
     private fun getData() {
+        disposable?.dispose()
+        error_request.visibility = View.GONE
+        progress_bar.visibility = View.VISIBLE
         memberItems.clear()
-        client.getMembers(courseItem)
+        disposable = client.getMembers(courseItem)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(memberItems) { memberItems, memberItem -> memberItems.add(memberItem) }

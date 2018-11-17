@@ -45,6 +45,9 @@ class HwkFragment : Fragment() {
     }
 
     private fun getData() {
+        disposable?.dispose()
+        error_request.visibility = View.GONE
+        progress_bar.visibility = View.VISIBLE
         disposable = client.getCourseHwk(courseItem)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())

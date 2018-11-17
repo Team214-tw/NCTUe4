@@ -48,8 +48,8 @@ class HwkDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        hwkItem = (activity as HwkActivity).hwkItem
         client = (activity as HwkActivity).client
+        hwkItem = arguments!!.getParcelable("hwkItem")!!
         dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
         getData()
     }
@@ -61,13 +61,13 @@ class HwkDialog : DialogFragment() {
             .collectInto(mutableListOf<FileItem>()) { fileItems, fileItem -> fileItems.add(fileItem) }
             .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
-                onSuccess = { displayData(it) }
-//                onError = {
-//                    if (!(context as Activity).isFinishing) {
-//                        Toast.makeText(context, getString(R.string.generic_error), Toast.LENGTH_SHORT).show()
-//                    }
-//                    dismissAllowingStateLoss()
-//                }
+                onSuccess = { displayData(it) },
+                onError = {
+                    if (!(context as Activity).isFinishing) {
+                        Toast.makeText(context, getString(R.string.generic_error), Toast.LENGTH_SHORT).show()
+                    }
+                    dismissAllowingStateLoss()
+                }
             )
     }
 
@@ -83,7 +83,7 @@ class HwkDialog : DialogFragment() {
         assign_dialog_recycler_view.adapter = FileAdapter(context!!, fileItems) {
             url = it.url
             fileName = it.name
-            downloadFile(fileName, url, context!!, activity!!, activity!!.findViewById(R.id.container)) {
+            downloadFile(fileName, url, context!!, activity!!, activity!!.findViewById(R.id.assign_root)) {
                 requestPermissions(
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     0
@@ -112,7 +112,7 @@ class HwkDialog : DialogFragment() {
                         url,
                         context!!,
                         activity!!,
-                        activity!!.findViewById(R.id.container),
+                        activity!!.findViewById(R.id.assign_root),
                         null,
                         null
                     )

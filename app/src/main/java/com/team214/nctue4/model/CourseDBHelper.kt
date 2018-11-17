@@ -38,6 +38,15 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
         return data
     }
 
+    fun getCourseFromName(courseName: String, e3Type: E3Type): CourseItem? {
+        val cursor = readableDatabase.query(
+            "courses", null, "course_name = ? and e3_type = ?",
+            arrayOf(courseName, e3Type.name), null, null, null
+        )
+        cursor.moveToFirst()
+        return if (cursor.isAfterLast) null else return cursorToItem(cursor)
+    }
+
     fun bookmarkCourse(courseId: String, bookmarked: Int) {
         val values = ContentValues()
         values.put("bookmarked", bookmarked)

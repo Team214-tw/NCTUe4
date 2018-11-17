@@ -53,7 +53,7 @@ class HwkActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         courseItem = intent?.extras?.getParcelable("courseItem")!!
         hwkItem = intent?.extras?.getParcelable("hwkItem")!!
-        title = courseItem.courseName
+        toolbar.title = courseItem.courseName
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         getData()
     }
@@ -75,6 +75,9 @@ class HwkActivity : AppCompatActivity() {
                     Toast.makeText(this, getString(R.string.wait), Toast.LENGTH_SHORT).show()
                 } else {
                     val dialog = HwkDialog()
+                    val bundle = Bundle()
+                    bundle.putParcelable("hwkItem", hwkItem)
+                    dialog.arguments = bundle
                     dialog.show(supportFragmentManager, "TAG")
                 }
             }
@@ -90,6 +93,7 @@ class HwkActivity : AppCompatActivity() {
         disposable = client.getHwkDetail(hwkItem, courseItem)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
+            .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
                 onNext = {
                     hwkItem = it
@@ -138,7 +142,6 @@ class HwkActivity : AppCompatActivity() {
 
         }
         ann_container?.visibility = View.VISIBLE
-        progress_bar?.visibility = View.GONE
     }
 
     override fun onRequestPermissionsResult(

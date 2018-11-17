@@ -44,6 +44,9 @@ class FolderFragment : Fragment() {
     }
 
     private fun getData() {
+        disposable?.dispose()
+        error_request.visibility = View.GONE
+        progress_bar.visibility = View.VISIBLE
         disposable = client.getCourseFolders(courseItem)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())

@@ -288,7 +288,7 @@ class OldE3Client(context: Context) : E3Client() {
                     val targets = arrayOf("tpLatest_rpNew", "tpExpire_rptExpire")
                     val titleElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbCaption"
                     val contentElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbContent"
-                    val fileElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl01_hlAttachDesFile"
+                    val fileElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_hlAttachDesFile"
                     for (target in targets) {
                         var idx = 0
                         while (true) {
@@ -566,8 +566,8 @@ class OldE3Client(context: Context) : E3Client() {
                                         .first()
                                         .attr("onclick")
                                 )!!.groups[1]!!.value
-                                val startDate = df.parse(tdEls.asReversed()[2].text())
-                                val endDate = df.parse(tdEls.asReversed()[3].text())
+                                val endDate = df.parse(tdEls.asReversed()[2].text())
+                                val startDate = df.parse(tdEls.asReversed()[3].text())
                                 emitter.onNext(HwkItem(E3Type.OLD, name, hwkId, startDate, endDate, null))
                             }
                     }

@@ -46,6 +46,7 @@ class CourseAnnFragment : Fragment() {
     }
 
     private fun getData() {
+        disposable?.dispose()
         error_request.visibility = View.GONE
         progress_bar.visibility = View.VISIBLE
         disposable = client.getCourseAnns(courseItem)
