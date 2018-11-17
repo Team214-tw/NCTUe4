@@ -60,7 +60,7 @@ class NewE3WebClient(context: Context) : E3Client() {
     fun get(path: String): Observable<Response> {
         return Observable.fromCallable {
             if (sessionId == null) throw SessionInvalidException()
-            Log.d("NewE3Web", path)
+            Log.d("NewE3WebGet", path)
             val request = okhttp3.Request
                 .Builder()
                 .url(path)

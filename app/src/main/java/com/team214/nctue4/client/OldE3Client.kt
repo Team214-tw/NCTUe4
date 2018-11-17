@@ -236,7 +236,6 @@ class OldE3Client(context: Context) : E3Client() {
                                             "common_get_content_media_attach_file.ashx",
                                             "/common_view_standalone_file.ashx"
                                         )
-                                    Log.d("E3file", fileUrl)
                                     fileItems.add(FileItem(fileName, fileUrl))
                                 }
                                 val content = document.getElementById(contentElId.format(target, idx)).html()
@@ -303,7 +302,6 @@ class OldE3Client(context: Context) : E3Client() {
                                         "common_get_content_media_attach_file.ashx",
                                         "/common_view_standalone_file.ashx"
                                     )
-                                Log.d("E3file", fileUrl)
                                 fileItems.add(FileItem(fileName, fileUrl))
                             }
                             val content = document.getElementById(contentElId.format(target, idx)).html()
