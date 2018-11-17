@@ -184,4 +184,8 @@ class NewE3WebClient(context: Context) : E3Client() {
     override fun getScore(courseItem: CourseItem): Observable<ScoreItem> {
         throw NotImplementedError()
     }
+
+    override fun getMembers(courseItem: CourseItem): Observable<MemberItem> {
+        throw NotImplementedError()
+    }
 }

@@ -13,6 +13,7 @@ import okhttp3.*
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import java.lang.reflect.Member
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -481,6 +482,60 @@ class OldE3Client(context: Context) : E3Client() {
                         }
                     val tdEls = trEls.last().getElementsByTag("td")
                     emitter.onNext(ScoreItem(tdEls[1].text(), tdEls[2].text()))
+                    emitter.onComplete()
+                }
+            }
+    }
+
+    override fun getMembers(courseItem: CourseItem): Observable<MemberItem> {
+        return ensureCourseIdMap()
+            .flatMap { toCoursePage(courseItem.courseId) }
+            .flatMap { get("/stu_classintro_teacher.aspx") }
+            .flatMap { parseHtmlResponse(it) }
+            .flatMap { document ->
+                Observable.create<MemberItem> { emitter ->
+                    document.getElementById("ctl00_ContentPlaceHolder1_tabMember_tpTeacher_dg")
+                        ?.getElementsByTag("tr")
+                        ?.drop(1)
+                        ?.forEach { el ->
+                            val tdEls = el.getElementsByTag("td")
+                            emitter.onNext(
+                                MemberItem(
+                                    tdEls[0].text(),
+                                    "",
+                                    "",
+                                    if (tdEls[1].text().contains("教師")) MemberItem.Type.Teacher else MemberItem.Type.TA
+                                )
+                            )
+                        }
+                    document.getElementById("ctl00_ContentPlaceHolder1_tabMember_tpStudent_dg3")
+                        ?.getElementsByTag("tr")
+                        ?.drop(1)
+                        ?.forEach { el ->
+                            val tdEls = el.getElementsByTag("td")
+                            emitter.onNext(
+                                MemberItem(
+                                    tdEls[0].text(),
+                                    tdEls[1].text(),
+                                    "",
+                                    MemberItem.Type.Student
+                                )
+                            )
+                        }
+                    document.getElementById("ctl00_ContentPlaceHolder1_tabMember_tpAuditor_dg2")
+                        ?.getElementsByTag("tr")
+                        ?.drop(1)
+                        ?.forEach { el ->
+                            val tdEls = el.getElementsByTag("td")
+                            emitter.onNext(
+                                MemberItem(
+                                    tdEls[0].text(),
+                                    tdEls[1].text(),
+                                    "",
+                                    MemberItem.Type.Audit
+                                )
+                            )
+                        }
                     emitter.onComplete()
                 }
             }

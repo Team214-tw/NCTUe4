@@ -60,10 +60,10 @@ class CourseActivity : AppCompatActivity() {
                 firebaseAnalytics!!.setCurrentScreen(this, "ScoreFragment", ScoreFragment::class.java.simpleName)
                 ScoreFragment()
             }
-//            R.id.course_nav_members -> {
-//                firebaseAnalytics!!.setCurrentScreen(this, "MembersFragment", MembersFragment::class.java.simpleName)
-//                MembersFragment()
-//            }
+            R.id.course_nav_members -> {
+                firebaseAnalytics!!.setCurrentScreen(this, "MembersFragment", MembersFragment::class.java.simpleName)
+                MembersFragment()
+            }
             else -> {
                 firebaseAnalytics!!.setCurrentScreen(
                     this,

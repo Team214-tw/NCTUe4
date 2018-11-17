@@ -266,6 +266,46 @@ class NewE3ApiClient(context: Context) : E3Client() {
         }
     }
 
+    override fun getMembers(courseItem: CourseItem): Observable<MemberItem> {
+        return post(
+            hashMapOf(
+                "courseid" to courseItem.courseId,
+                "wsfunction" to "core_enrol_get_enrolled_users"
+            )
+        ).flatMap { response ->
+            Observable.create<MemberItem> { emitter ->
+                val respJson = JSONArray(response)
+                (0 until respJson.length()).map { respJson.get(it) as JSONObject }
+                    .forEach {
+                        val roles = it.getJSONArray("roles")
+                        val type =
+                        //They don't provide role information sometimes, let's just assume it's student
+                            if (roles.length() > 0) {
+                                when (it.getJSONArray("roles").getJSONObject(0).getInt("roleid")) {
+                                    5 -> MemberItem.Type.Student
+                                    4, 9 -> MemberItem.Type.TA
+                                    3 -> MemberItem.Type.Teacher
+                                    else -> MemberItem.Type.Student
+                                }
+                            } else MemberItem.Type.Student
+                        emitter.onNext(
+                            MemberItem(
+                                it.getString("fullname").split(" ").first(),
+                                it.getString("fullname").split(" ").last(),
+                                if (it.has("email")) {
+                                    it.getString("email")
+                                } else {
+                                    ""
+                                },
+                                type
+                            )
+                        )
+                    }
+                emitter.onComplete()
+            }
+        }
+    }
+
     override fun getFrontPageAnns(): Observable<AnnItem> {
         throw NotImplementedError()
     }

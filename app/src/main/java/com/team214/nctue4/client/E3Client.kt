@@ -26,4 +26,6 @@ abstract class E3Client {
     abstract fun getFiles(folderItem: FolderItem): Observable<FileItem>
 
     abstract fun getScore(courseItem: CourseItem): Observable<ScoreItem>
+
+    abstract fun getMembers(courseItem: CourseItem): Observable<MemberItem>
 }
