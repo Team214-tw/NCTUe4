@@ -64,7 +64,7 @@ class OldE3Client(context: Context) : E3Client() {
             }
         }.retryWhen {
             it.flatMap { error ->
-                return@flatMap if (error is SessionInvalidException) login() else Observable.error(error)
+                if (error is SessionInvalidException) login() else Observable.error(error)
             }
         }
     }
@@ -92,7 +92,7 @@ class OldE3Client(context: Context) : E3Client() {
             }
         }.retryWhen {
             it.flatMap { error ->
-                return@flatMap if (error is SessionInvalidException) login() else Observable.error(error)
+                if (error is SessionInvalidException) login() else Observable.error(error)
             }
         }
     }
@@ -114,10 +114,17 @@ class OldE3Client(context: Context) : E3Client() {
     }
 
     private fun toCoursePage(courseId: String): Observable<Unit> {
-        return post(
-            "/enter_course_index.aspx",
-            hashMapOf("__EVENTTARGET" to courseIdMap[courseId]!!)
-        ).flatMap { Observable.just(Unit) }
+        return if (currentPage == courseId) {
+            Observable.just(Unit)
+        } else {
+            post(
+                "/enter_course_index.aspx",
+                hashMapOf("__EVENTTARGET" to courseIdMap[courseId]!!)
+            ).flatMap {
+                currentPage = courseId
+                Observable.just(Unit)
+            }
+        }
     }
 
     private fun ensureCourseIdMap(): Observable<Unit> {
@@ -195,53 +202,57 @@ class OldE3Client(context: Context) : E3Client() {
     }
 
     override fun getAnn(annItem: AnnItem): Observable<AnnItem> {
-        return ensureCourseIdMap()
-            .flatMap { toCoursePage(annItem.detailLocationHint!!) }
-            .flatMap { get("/stu_announcement_online.aspx") }
-            .flatMap { parseHtmlResponse(it) }
-            .flatMap { document ->
-                Observable.fromCallable {
-                    val courseName = document.getElementById("ctl00_lbCurrentCourseName").text()
-                    val targets = arrayOf("tpLatest_rpNew", "tpExpire_rptExpire")
-                    val titleElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbCaption"
-                    val contentElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbContent"
-                    val fileElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl01_hlAttachDesFile"
-                    for (target in targets) {
-                        var idx = 0
-                        while (true) {
-                            val titleEl = document.getElementById(titleElId.format(target, idx))
-                            titleEl ?: break
-                            if (titleEl.text() != annItem.title) {
-                                idx++
-                                continue
+        return if (annItem.detailLocationHint == null) {
+            Observable.just(annItem)
+        } else {
+            ensureCourseIdMap()
+                .flatMap { toCoursePage(annItem.detailLocationHint) }
+                .flatMap { get("/stu_announcement_online.aspx") }
+                .flatMap { parseHtmlResponse(it) }
+                .flatMap { document ->
+                    Observable.fromCallable {
+                        val courseName = document.getElementById("ctl00_lbCurrentCourseName").text()
+                        val targets = arrayOf("tpLatest_rpNew", "tpExpire_rptExpire")
+                        val titleElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbCaption"
+                        val contentElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbContent"
+                        val fileElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl01_hlAttachDesFile"
+                        for (target in targets) {
+                            var idx = 0
+                            while (true) {
+                                val titleEl = document.getElementById(titleElId.format(target, idx))
+                                titleEl ?: break
+                                if (titleEl.text() != annItem.title) {
+                                    idx++
+                                    continue
+                                }
+                                val fileItems = mutableListOf<FileItem>()
+                                val fileEl = document.getElementById(fileElId.format(target, idx))
+                                if (fileEl != null) {
+                                    val fileName = fileEl.text()
+                                    val fileUrl = WEB_URL + fileEl.attr("href")
+                                        .replace(
+                                            "common_get_content_media_attach_file.ashx",
+                                            "/common_view_standalone_file.ashx"
+                                        )
+                                    Log.d("E3file", fileUrl)
+                                    fileItems.add(FileItem(fileName, fileUrl))
+                                }
+                                val content = document.getElementById(contentElId.format(target, idx)).html()
+                                return@fromCallable AnnItem(
+                                    E3Type.OLD,
+                                    titleEl.text(),
+                                    annItem.date,
+                                    courseName,
+                                    null,
+                                    content,
+                                    fileItems
+                                )
                             }
-                            val fileItems = mutableListOf<FileItem>()
-                            val fileEl = document.getElementById(fileElId.format(target, idx))
-                            if (fileEl != null) {
-                                val fileName = fileEl.text()
-                                val fileUrl = WEB_URL + fileEl.attr("href")
-                                    .replace(
-                                        "common_get_content_media_attach_file.ashx",
-                                        "/common_view_standalone_file.ashx"
-                                    )
-                                Log.d("E3file", fileUrl)
-                                fileItems.add(FileItem(fileName, fileUrl))
-                            }
-                            val content = document.getElementById(contentElId.format(target, idx)).html()
-                            return@fromCallable AnnItem(
-                                E3Type.OLD,
-                                titleEl.text(),
-                                annItem.date,
-                                courseName,
-                                null,
-                                content,
-                                fileItems
-                            )
                         }
+                        throw ServiceErrorException()
                     }
-                    throw ServiceErrorException()
                 }
-            }
+        }
     }
 
     override fun getCourseList(): Observable<MutableList<CourseItem>> {
@@ -266,7 +277,53 @@ class OldE3Client(context: Context) : E3Client() {
     }
 
     override fun getCourseAnn(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return ensureCourseIdMap()
+            .flatMap { toCoursePage(courseItem.courseId) }
+            .flatMap { get("/stu_announcement_online.aspx") }
+            .flatMap { parseHtmlResponse(it) }
+            .flatMap { document ->
+                Observable.fromCallable {
+                    val courseName = document.getElementById("ctl00_lbCurrentCourseName").text()
+                    val targets = arrayOf("tpLatest_rpNew", "tpExpire_rptExpire")
+                    val titleElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbCaption"
+                    val contentElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbContent"
+                    val fileElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl01_hlAttachDesFile"
+                    val courseAnnItems = mutableListOf<AnnItem>()
+                    for (target in targets) {
+                        var idx = 0
+                        while (true) {
+                            val titleEl = document.getElementById(titleElId.format(target, idx))
+                            titleEl ?: break
+                            val fileItems = mutableListOf<FileItem>()
+                            val fileEl = document.getElementById(fileElId.format(target, idx))
+                            if (fileEl != null) {
+                                val fileName = fileEl.text()
+                                val fileUrl = WEB_URL + fileEl.attr("href")
+                                    .replace(
+                                        "common_get_content_media_attach_file.ashx",
+                                        "/common_view_standalone_file.ashx"
+                                    )
+                                Log.d("E3file", fileUrl)
+                                fileItems.add(FileItem(fileName, fileUrl))
+                            }
+                            val content = document.getElementById(contentElId.format(target, idx)).html()
+                            courseAnnItems.add(
+                                AnnItem(
+                                    E3Type.OLD,
+                                    titleEl.text(),
+                                    null,
+                                    courseName,
+                                    null,
+                                    content,
+                                    fileItems
+                                )
+                            )
+                            idx++
+                        }
+                    }
+                    courseAnnItems
+                }
+            }
     }
 
     override fun getCookie(): MutableList<Cookie>? {

@@ -76,7 +76,7 @@ class NewE3WebClient(context: Context) : E3Client() {
             }
         }.retryWhen {
             it.flatMap { error ->
-                return@flatMap if (error is SessionInvalidException) login() else Observable.error(error)
+                if (error is SessionInvalidException) login() else Observable.error(error)
             }
         }
     }
@@ -124,7 +124,7 @@ class NewE3WebClient(context: Context) : E3Client() {
             }
         }.retryWhen {
             it.flatMap { error ->
-                return@flatMap if (error is SessionInvalidException) login() else Observable.error(error)
+                if (error is SessionInvalidException) login() else Observable.error(error)
             }
         }
     }
