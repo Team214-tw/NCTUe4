@@ -436,6 +436,29 @@ class OldE3Client(context: Context) : E3Client() {
         }
     }
 
+    override fun getFiles(folderItem: FolderItem): Observable<FileItem> {
+        return ensureCourseIdMap()
+            .flatMap { toCoursePage(folderItem.courseId) }
+            .flatMap { get("/dialog_common_view_attach_media_list.aspx?ReferenceSourceId=${folderItem.folderId}&CurrentCourseId=${folderItem.courseId}") }
+            .flatMap { response ->
+                Observable.create<FileItem> { emitter ->
+                    val document = Jsoup.parse(response.body()!!.string())
+                    document.getElementById("ctl00_ContentPlaceHolder1_fileList2_dgFileList")
+                        .getElementsByTag("tr")
+                        .drop(1).forEach { el ->
+                            val tdEls = el.getElementsByTag("td")
+                            val name = tdEls[1].text()
+                            val match = Regex("AttachMediaId=([^;,']*).*CourseId=([^;,']*)")
+                                .find(tdEls[5].selectFirst("a").attr("onclick"))
+                            val url =
+                                "$WEB_URL/common_get_content_media_attach_file.ashx?AttachMediaId=${match!!.groups[1]!!.value}&CourseId=${match.groups[2]!!.value}"
+                            emitter.onNext(FileItem(name, url))
+                        }
+                    emitter.onComplete()
+                }
+            }
+    }
+
     override fun getCookie(): MutableList<Cookie>? {
         return null
     }

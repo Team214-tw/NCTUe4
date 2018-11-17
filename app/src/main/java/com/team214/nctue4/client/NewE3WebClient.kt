@@ -179,4 +179,8 @@ class NewE3WebClient(context: Context) : E3Client() {
     override fun getCourseFolders(courseItem: CourseItem): Observable<FolderItem> {
         throw NotImplementedError()
     }
+
+    override fun getFiles(folderItem: FolderItem): Observable<FileItem> {
+        throw NotImplementedError()
+    }
 }

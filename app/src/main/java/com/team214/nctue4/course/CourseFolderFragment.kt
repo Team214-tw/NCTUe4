@@ -71,7 +71,11 @@ class CourseFolderFragment : Fragment() {
             )
         )
         course_doc_list_recycler_view?.adapter = FolderAdapter(context!!, folderItems) {
-            //TODO folderDialog
+            val dialog = CourseFolderDialog()
+            dialog.arguments = Bundle().apply {
+                this.putParcelable("folderItem", it)
+            }
+            dialog.show(fragmentManager, "CourseFolderDialog")
         }
         course_doc_list_recycler_view?.visibility = View.VISIBLE
     }

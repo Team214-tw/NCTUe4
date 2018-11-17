@@ -5,6 +5,7 @@ import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.AnnItem
 import com.team214.nctue4.model.CourseItem
+import com.team214.nctue4.model.FileItem
 import com.team214.nctue4.model.FolderItem
 import io.reactivex.Observable
 import okhttp3.Cookie
@@ -200,6 +201,37 @@ class NewE3ApiClient(context: Context) : E3Client() {
                         )
                     )
                 }
+                emitter.onComplete()
+            }
+        }
+    }
+
+    override fun getFiles(folderItem: FolderItem): Observable<FileItem> {
+        return post(
+            hashMapOf(
+                "courseid" to folderItem.courseId,
+                "options[0][name]" to "cmid",
+                "options[0][value]" to folderItem.folderId,
+                "wsfunction" to "core_course_get_contents"
+            )
+        ).flatMap { response ->
+            Observable.create<FileItem> { emitter ->
+                val resJson = JSONArray(response)
+                (0 until resJson.length()).map { resJson.get(it) as JSONObject }
+                    .filter { it.getJSONArray("modules").length() > 0 }
+                    .forEach {
+                        val data = it.getJSONArray("modules")
+                            .getJSONObject(0)
+                            .getJSONArray("contents")
+                        (0 until data.length()).map { data.get(it) as JSONObject }.forEach {
+                            emitter.onNext(
+                                FileItem(
+                                    it.getString("filename"),
+                                    it.getString("fileurl") + "&token=$token"
+                                )
+                            )
+                        }
+                    }
                 emitter.onComplete()
             }
         }

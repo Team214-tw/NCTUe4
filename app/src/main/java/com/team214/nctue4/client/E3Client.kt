@@ -2,6 +2,7 @@ package com.team214.nctue4.client
 
 import com.team214.nctue4.model.AnnItem
 import com.team214.nctue4.model.CourseItem
+import com.team214.nctue4.model.FileItem
 import com.team214.nctue4.model.FolderItem
 import io.reactivex.Observable
 import okhttp3.Cookie
@@ -24,4 +25,6 @@ abstract class E3Client {
     abstract fun getCourseAnns(courseItem: CourseItem): Observable<AnnItem>
 
     abstract fun getCourseFolders(courseItem: CourseItem): Observable<FolderItem>
+
+    abstract fun getFiles(folderItem: FolderItem): Observable<FileItem>
 }
