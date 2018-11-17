@@ -16,7 +16,6 @@
     <string name="bookmarked_courses">Bookmarked</string>
     <string name="old_e3">Old e3</string>
     <string name="new_e3">New e3</string>
-    <string name="switch_account">Switch Account</string>
     <string name="settings">Settings</string>
     <string name="license">License</string>
 
@@ -42,9 +41,8 @@
     <string name="title_activity_course">CourseActivity</string>
     <string name="course_nav_ann">Ann</string>
     <string name="course_nav_doc">Doc</string>
-    <string name="course_nav_assignment">Hwk</string>
+    <string name="course_nav_assignment">Task</string>
     <string name="course_nav_score">Score</string>
-    <string name="course_nav_other">Others</string>
     <string name="course_nav_members">Members</string>
     <string name="course_doc_type_handout">Handout</string>
     <string name="course_doc_type_reference">Reference</string>
@@ -75,7 +73,6 @@
     <string name="title_ann">Announcement</string>
 
     <!--Home Fragment-->
-    <string name="more">More&#8230;</string>
     <string name="more_ann">More announcement</string>
     <string name="more_download_history">More history</string>
     <string name="more_bookmarked_course">More bookmarked</string>
@@ -92,9 +89,6 @@
     <string name="no_compatible_app">No app can handle this kind of file</string>
 
     <!--identifier-->
-    <string name="ann_e3_identifier">Old</string>
-    <string name="ann_new_e3_identifier">New</string>
-
     <string name="action_refresh">Refresh</string>
     <string name="refresh_success">Refresh Success</string>
     <string name="action_goto_course">Goto Course Page</string>
@@ -117,9 +111,6 @@
 
     <string name="new_e3_ann_error">Can\'t display new e3 announcements at the moment.\nPull to retry.</string>
     <string name="old_e3_ann_error">Can\'t display old e3 announcements at the moment.\nPull to retry.</string>
-    <string name="new_e3_not_init">You haven\'t activate new e3 yet, please go to new e3\'s website and activate.
-    </string>
-
 
     <string name="login_help_student_id">Student ID: Your Student ID (Ex: 0612345)</string>
     <string name="login_help_old_e3">Old E3 password: The password you use when logging in ecampus (as figure

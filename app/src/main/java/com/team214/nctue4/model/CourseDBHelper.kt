@@ -19,12 +19,14 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         if (oldVersion <= 1) {
             db!!.execSQL("DROP TABLE IF EXISTS courses")
+            onCreate(db)
         }
     }
 
     fun readBookmarkedCourse(limit: Int?): MutableList<CourseItem> {
         val data = mutableListOf<CourseItem>()
-        val cursor = readableDatabase.query(
+        val db = readableDatabase
+        val cursor = db.query(
             "courses", null, "bookmarked = ?",
             arrayOf(1.toString()), null, null, "bookmark_idx", limit?.toString()
         )

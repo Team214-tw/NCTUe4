@@ -10,7 +10,6 @@
     <string name="bookmarked_courses">收藏課程</string>
     <string name="old_e3">e3 教學平台</string>
     <string name="new_e3">New e3 教學平台</string>
-    <string name="switch_account">帳號管理</string>
     <string name="settings">設定</string>
 
     <string name="constructing">這個頁面還在吸收日月精華</string>
@@ -35,7 +34,6 @@
     <string name="course_nav_doc">文件</string>
     <string name="course_nav_assignment">作業</string>
     <string name="course_nav_score">成績</string>
-    <string name="course_nav_other">其他</string>
     <string name="course_doc_type_handout">課程講義</string>
     <string name="course_doc_type_reference">參考資料</string>
 
@@ -59,7 +57,6 @@
     <string name="title_ann">公告</string>
     <string name="latest_ann">最新公告</string>
     <string name="download_history">下載紀錄</string>
-    <string name="more">更多</string>
     <string name="more_ann">更多公告</string>
     <string name="more_download_history">更多下載紀錄</string>
     <string name="more_bookmarked_course">更多收藏課程</string>
@@ -72,8 +69,6 @@
     <string name="logout_confirm">登出會清除目前所有的收藏課程和下載紀錄。繼續嗎？</string>
     <string name="cancel">取消</string>
     <string name="no_compatible_app">沒有任何應用程式可以開啟這類檔案</string>
-    <string name="ann_e3_identifier">舊E3</string>
-    <string name="ann_new_e3_identifier">新E3</string>
     <string name="refresh_success">重新整理成功</string>
     <string name="action_refresh">重新整理</string>
     <string name="action_goto_course">到課程頁面</string>
@@ -93,7 +88,6 @@
 
     <string name="new_e3_ann_error">現在無法取得新e3公告\n下拉重試</string>
     <string name="old_e3_ann_error">現在無法取得舊e3公告\n下拉重試</string>
-    <string name="new_e3_not_init">你尚未啟用新e3系統，請至新e3網站啟用</string>
     <string name="login_help">登入幫助</string>
     <string name="login_help_student_id">學號：就是你的學號（例如：0612345）</string>
     <string name="login_help_old_e3">舊e3密碼：登入ecampus（如下圖）所使用的密碼。\n網址：https://dcpc.nctu.edu.tw\n如果沒有手動更改，則和選課系統相同（選課系統密碼預設為身分證後六碼）。</string>

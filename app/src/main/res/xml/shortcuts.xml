@@ -1,0 +1,88 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+           android:exported="true">
+
+    <shortcut
+            android:enabled="true"
+            android:icon="@drawable/shortcut_download"
+            android:shortcutId="compose1"
+            android:shortcutLongLabel="@string/download_history"
+            android:shortcutShortLabel="@string/download_history">
+        <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="com.team214.nctue4.main.MainActivity"
+                android:targetPackage="com.team214.nctue4">
+            <extra
+                    android:name="shortcut"
+                    android:value="nav_download"/>
+        </intent>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+
+    <shortcut
+            android:enabled="true"
+            android:icon="@drawable/shortcut_bookmark"
+            android:shortcutId="compose2"
+            android:shortcutLongLabel="@string/bookmarked_courses"
+            android:shortcutShortLabel="@string/bookmarked_courses">
+        <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="com.team214.nctue4.main.MainActivity"
+                android:targetPackage="com.team214.nctue4">
+            <extra
+                    android:name="shortcut"
+                    android:value="nav_bookmarked"/>
+        </intent>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+
+    <shortcut
+            android:enabled="true"
+            android:icon="@drawable/shortcut_ann"
+            android:shortcutId="compose3"
+            android:shortcutLongLabel="@string/latest_ann"
+            android:shortcutShortLabel="@string/latest_ann">
+        <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="com.team214.nctue4.main.MainActivity"
+                android:targetPackage="com.team214.nctue4">
+            <extra
+                    android:name="shortcut"
+                    android:value="nav_ann"/>
+        </intent>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+
+    <shortcut
+            android:enabled="true"
+            android:icon="@drawable/shortcut_list"
+            android:shortcutId="compose4"
+            android:shortcutLongLabel="@string/new_e3"
+            android:shortcutShortLabel="@string/new_e3">
+        <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="com.team214.nctue4.main.MainActivity"
+                android:targetPackage="com.team214.nctue4">
+            <extra
+                    android:name="shortcut"
+                    android:value="nav_new_e3"/>
+        </intent>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+
+    <shortcut
+            android:enabled="true"
+            android:icon="@drawable/shortcut_list"
+            android:shortcutId="compose5"
+            android:shortcutLongLabel="@string/old_e3"
+            android:shortcutShortLabel="@string/old_e3">
+        <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="com.team214.nctue4.main.MainActivity"
+                android:targetPackage="com.team214.nctue4">
+            <extra
+                    android:name="shortcut"
+                    android:value="nav_old_e3"/>
+        </intent>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+</shortcuts>

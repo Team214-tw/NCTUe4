@@ -54,10 +54,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (savedInstanceState?.getInt("currentFragment") == null) {
             currentFragment = when (intent?.getStringExtra("shortcut")) {
-                "nav_home" -> R.id.nav_home
                 "nav_ann" -> R.id.nav_ann
                 "nav_bookmarked" -> R.id.nav_bookmarked
                 "nav_download" -> R.id.nav_download
+                "nav_old_e3" -> R.id.nav_old_e3
+                "nav_new_e3" -> R.id.nav_new_e3
                 else -> -1
             }
             switchFragment(currentFragment)
