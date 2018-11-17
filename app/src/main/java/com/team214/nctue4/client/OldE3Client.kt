@@ -6,8 +6,14 @@ import android.util.Log
 import com.team214.nctue4.model.AnnItem
 import com.team214.nctue4.model.CourseItem
 import com.team214.nctue4.model.FileItem
+import com.team214.nctue4.model.FolderItem
+import io.reactivex.Emitter
 import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.rxkotlin.toObservable
 import okhttp3.*
+import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.text.SimpleDateFormat
@@ -174,7 +180,7 @@ class OldE3Client(context: Context) : E3Client() {
             }
     }
 
-    override fun getFrontPageAnn(): Observable<MutableList<AnnItem>> {
+    override fun getFrontPageAnns(): Observable<MutableList<AnnItem>> {
         return toHomePage().flatMap { document ->
             Observable.fromCallable {
                 buildCourseIdMap(document)
@@ -276,7 +282,7 @@ class OldE3Client(context: Context) : E3Client() {
         }
     }
 
-    override fun getCourseAnn(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
+    override fun getCourseAnns(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
         return ensureCourseIdMap()
             .flatMap { toCoursePage(courseItem.courseId) }
             .flatMap { get("/stu_announcement_online.aspx") }
@@ -324,6 +330,111 @@ class OldE3Client(context: Context) : E3Client() {
                     courseAnnItems
                 }
             }
+    }
+
+
+    class FolderProperty(
+        val folderType: FolderItem.Type,
+        val tableElId: String,
+        val eventTarget: String,
+        val jsonKey: String,
+        val dataNavigatorElId: String
+    )
+
+    val folderProperties = arrayOf(
+        FolderProperty(
+            FolderItem.Type.Handout,
+            "ctl00_ContentPlaceHolder1_dgCourseHandout",
+            "ctl00\$ContentPlaceHolder1\$DataNavigator1\$ctl03",
+            "ctl00\$ContentPlaceHolder1\$dgCourseHandout",
+            "ctl00_ContentPlaceHolder1_DataNavigator1_ctl02"
+        ),
+        FolderProperty(
+            FolderItem.Type.Reference,
+            "ctl00_ContentPlaceHolder1_dgCourseReference",
+            "ctl00\$ContentPlaceHolder1\$DataNavigator3\$ctl03",
+            "ctl00\$ContentPlaceHolder1\$dgCourseReference",
+            "ctl00_ContentPlaceHolder1_DataNavigator3_ctl02"
+        )
+    )
+
+    override fun getCourseFolders(courseItem: CourseItem): Observable<FolderItem> {
+        return ensureCourseIdMap()
+            .flatMap { toCoursePage(courseItem.courseId) }
+            .flatMap { get("/stu_materials_document_list.aspx") }
+            .flatMap { parseHtmlResponse(it) }
+            .flatMap { document ->
+                getCourseFolderByProperty(document, folderProperties[0]).mergeWith(
+                    getCourseFolderByProperty(
+                        document,
+                        folderProperties[1]
+                    )
+                )
+            }
+    }
+
+    private fun getCourseFolderByProperty(document: Document, folderProperty: FolderProperty): Observable<FolderItem> {
+        return Observable.create<FolderItem> { emitter ->
+            val dataNavigatorText = document
+                .getElementById(folderProperty.dataNavigatorElId)
+                .text()
+            val totalPage = Regex("共 ([\\d]*) 頁")
+                .find(dataNavigatorText)
+                ?.groups?.get(1)?.value?.toInt()
+            if (totalPage != null) {
+                parseMaterialFolderTable(document, folderProperty, emitter)
+                Observable.concatArray(
+                    *(MutableList(totalPage - 1) { getRemainingFolder(folderProperty) }.toTypedArray())
+                ).subscribeBy(
+                    onNext = { emitter.onNext(it) },
+                    onComplete = { emitter.onComplete() }
+                )
+            } else {
+                emitter.onComplete()
+            }
+        }
+    }
+
+    private fun getRemainingFolder(folderProperty: FolderProperty): Observable<FolderItem> {
+        return post(
+            "/stu_materials_document_list.aspx?Anthem_CallBack=true", hashMapOf(
+                "Anthem_UpdatePage" to "true",
+                "__EVENTTARGET" to folderProperty.eventTarget,
+                "ctl00\$ContentPlaceHolder1\$EasyView" to "rdoView1",
+                "${folderProperty.eventTarget}.x" to "0",
+                "${folderProperty.eventTarget}.y" to "0"
+            )
+        ).flatMap { response ->
+            Observable.create<FolderItem> { emitter ->
+                val json = JSONObject(response.body()!!.string())
+                val document = Jsoup.parse(
+                    json.getJSONObject("controls")
+                        .getString(folderProperty.jsonKey)
+                )
+                parseMaterialFolderTable(document, folderProperty, emitter)
+                emitter.onComplete()
+            }
+        }
+    }
+
+    private fun parseMaterialFolderTable(
+        document: Document,
+        folderProperty: FolderProperty,
+        emitter: ObservableEmitter<FolderItem>
+    ) {
+        val tableEl = document.getElementById(folderProperty.tableElId)
+        val trEls = tableEl.getElementsByTag("tr").drop(1)
+        for (trEl in trEls) {
+            val tdEls = trEl.getElementsByTag("td")
+            val name = tdEls[0].text()
+            val tdElOnclick = tdEls[3]
+                .getElementsByTag("a")[0]
+                .attr("onclick")
+            val matched = Regex("ReferenceSourceId=([^;,']*).*CurrentCourseId=([^;,']*)").find(tdElOnclick)
+            val folderId = matched!!.groups[1]!!.value
+            val courseId = matched.groups[2]!!.value
+            emitter.onNext(FolderItem(name, folderId, courseId, folderProperty.folderType))
+        }
     }
 
     override fun getCookie(): MutableList<Cookie>? {

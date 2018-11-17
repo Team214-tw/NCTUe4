@@ -6,6 +6,7 @@ import android.util.Log
 import com.team214.nctue4.model.AnnItem
 import com.team214.nctue4.model.CourseItem
 import com.team214.nctue4.model.FileItem
+import com.team214.nctue4.model.FolderItem
 import io.reactivex.Observable
 import okhttp3.*
 import org.jsoup.Jsoup
@@ -81,7 +82,7 @@ class NewE3WebClient(context: Context) : E3Client() {
         }
     }
 
-    override fun getFrontPageAnn(): Observable<MutableList<AnnItem>> {
+    override fun getFrontPageAnns(): Observable<MutableList<AnnItem>> {
         return get("https://e3new.nctu.edu.tw/theme/dcpc/news/index.php?lang=en").flatMap {
             Observable.fromCallable {
                 val document = Jsoup.parse(it.body()!!.string()).apply {
@@ -171,7 +172,11 @@ class NewE3WebClient(context: Context) : E3Client() {
         throw NotImplementedError()
     }
 
-    override fun getCourseAnn(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
+    override fun getCourseAnns(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
+        throw NotImplementedError()
+    }
+
+    override fun getCourseFolders(courseItem: CourseItem): Observable<FolderItem> {
         throw NotImplementedError()
     }
 }

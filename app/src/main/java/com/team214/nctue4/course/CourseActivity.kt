@@ -45,14 +45,14 @@ class CourseActivity : AppCompatActivity() {
                 )
                 CourseAnnFragment()
             }
-//            R.id.course_nav_doc -> {
-//                firebaseAnalytics!!.setCurrentScreen(
-//                    this,
-//                    "CourseDocListFragment",
-//                    CourseDocListFragment::class.java.simpleName
-//                )
-//                CourseDocListFragment()
-//            }
+            R.id.course_nav_doc -> {
+                firebaseAnalytics!!.setCurrentScreen(
+                    this,
+                    "CourseDocListFragment",
+                    CourseFolderFragment::class.java.simpleName
+                )
+                CourseFolderFragment()
+            }
 //            R.id.course_nav_assignment -> {
 //                firebaseAnalytics!!.setCurrentScreen(this, "AssignFragment", AssignFragment::class.java.simpleName)
 //                AssignFragment()

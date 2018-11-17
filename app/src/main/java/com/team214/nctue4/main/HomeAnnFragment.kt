@@ -82,12 +82,12 @@ class HomeAnnFragment : Fragment() {
         error_wrong_credential?.visibility = View.GONE
         annItems.clear()
         disposable = mutableListOf(
-            oldE3Client.getFrontPageAnn()
+            oldE3Client.getFrontPageAnns()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext { annItems.addAll(it) }
                 .doOnError { oldE3Failed = true },
-            newE3WebClient.getFrontPageAnn()
+            newE3WebClient.getFrontPageAnns()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext { annItems.addAll(it) }

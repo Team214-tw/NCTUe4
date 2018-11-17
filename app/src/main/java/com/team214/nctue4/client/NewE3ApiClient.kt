@@ -5,6 +5,7 @@ import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.AnnItem
 import com.team214.nctue4.model.CourseItem
+import com.team214.nctue4.model.FolderItem
 import io.reactivex.Observable
 import okhttp3.Cookie
 import okhttp3.FormBody
@@ -130,7 +131,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
         }
     }
 
-    override fun getCourseAnn(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
+    override fun getCourseAnns(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
         return post(
             hashMapOf(
                 "wsfunction" to "mod_forum_get_forums_by_courses",
@@ -170,7 +171,42 @@ class NewE3ApiClient(context: Context) : E3Client() {
         }
     }
 
-    override fun getFrontPageAnn(): Observable<MutableList<AnnItem>> {
+    override fun getCourseFolders(courseItem: CourseItem): Observable<FolderItem> {
+        return post(
+            hashMapOf(
+                "wsfunction" to "mod_folder_get_folders_by_courses",
+                "courseids[0]" to courseItem.courseId
+            )
+        ).flatMap { response ->
+            Observable.create<FolderItem> { emitter ->
+                val resJson = JSONObject(response).getJSONArray("folders")
+                (0 until resJson.length()).map { resJson.get(it) as JSONObject }.forEach {
+                    var name = it.getString("name")
+                    val folderType =
+                        if (name.startsWith("[參考資料]")) {
+                            name = name.removePrefix("[參考資料]")
+                            FolderItem.Type.Reference
+                        } else if (name.startsWith("[Reference]")) {
+                            name = name.removePrefix("[Reference]")
+                            FolderItem.Type.Reference
+                        } else {
+                            FolderItem.Type.Handout
+                        }
+                    emitter.onNext(
+                        FolderItem(
+                            name,
+                            it.getString("coursemodule"),
+                            courseItem.courseId,
+                            folderType
+                        )
+                    )
+                }
+                emitter.onComplete()
+            }
+        }
+    }
+
+    override fun getFrontPageAnns(): Observable<MutableList<AnnItem>> {
         throw NotImplementedError()
     }
 
