@@ -180,11 +180,10 @@ class OldE3Client(context: Context) : E3Client() {
             }
     }
 
-    override fun getFrontPageAnns(): Observable<MutableList<AnnItem>> {
+    override fun getFrontPageAnns(): Observable<AnnItem> {
         return toHomePage().flatMap { document ->
-            Observable.fromCallable {
+            Observable.create<AnnItem> { emitter ->
                 buildCourseIdMap(document)
-                val annItems = mutableListOf<AnnItem>()
                 val dateCourseElId = "ctl00_ContentPlaceHolder1_rptNewList_ctl%02d_lbCourseNa"
                 val titleElId = "ctl00_ContentPlaceHolder1_rptNewList_ctl%02d_lnkMore"
                 val contentElId = "ctl00_ContentPlaceHolder1_rptNewList_ctl%02d_lbContent"
@@ -200,9 +199,9 @@ class OldE3Client(context: Context) : E3Client() {
                     val date = df.parse(dateCourse.split("【")[0])
                     val title = titleEl.text()
                     val courseId = titleEl.attr("courseid")
-                    annItems.add(AnnItem(E3Type.OLD, title, date, courseName, courseId))
+                    emitter.onNext(AnnItem(E3Type.OLD, title, date, courseName, courseId))
                 }
-                annItems
+                emitter.onComplete()
             }
         }
     }
@@ -261,9 +260,9 @@ class OldE3Client(context: Context) : E3Client() {
         }
     }
 
-    override fun getCourseList(): Observable<MutableList<CourseItem>> {
+    override fun getCourseList(): Observable<CourseItem> {
         return toHomePage().flatMap { document ->
-            Observable.fromCallable {
+            Observable.create<CourseItem> { emitter ->
                 buildCourseIdMap(document)
                 val courseItems = mutableListOf<CourseItem>()
                 val courseEls = document
@@ -275,20 +274,20 @@ class OldE3Client(context: Context) : E3Client() {
                     val additionalInfo = it.parent().parent()
                         .getElementsByTag("td")
                         .run { this[0].text() + this[1].text() }
-                    courseItems.add(CourseItem(E3Type.OLD, courseName, courseId, additionalInfo))
+                    emitter.onNext(CourseItem(E3Type.OLD, courseName, courseId, additionalInfo))
                 }
-                courseItems
+                emitter.onComplete()
             }
         }
     }
 
-    override fun getCourseAnns(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
+    override fun getCourseAnns(courseItem: CourseItem): Observable<AnnItem> {
         return ensureCourseIdMap()
             .flatMap { toCoursePage(courseItem.courseId) }
             .flatMap { get("/stu_announcement_online.aspx") }
             .flatMap { parseHtmlResponse(it) }
             .flatMap { document ->
-                Observable.fromCallable {
+                Observable.create<AnnItem> { emitter ->
                     val courseName = document.getElementById("ctl00_lbCurrentCourseName").text()
                     val targets = arrayOf("tpLatest_rpNew", "tpExpire_rptExpire")
                     val titleElId = "ctl00_ContentPlaceHolder1_tabAnnouncement_%s_ctl%02d_lbCaption"
@@ -313,7 +312,7 @@ class OldE3Client(context: Context) : E3Client() {
                                 fileItems.add(FileItem(fileName, fileUrl))
                             }
                             val content = document.getElementById(contentElId.format(target, idx)).html()
-                            courseAnnItems.add(
+                            emitter.onNext(
                                 AnnItem(
                                     E3Type.OLD,
                                     titleEl.text(),
@@ -327,7 +326,7 @@ class OldE3Client(context: Context) : E3Client() {
                             idx++
                         }
                     }
-                    courseAnnItems
+                    emitter.onComplete()
                 }
             }
     }

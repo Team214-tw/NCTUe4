@@ -83,35 +83,33 @@ class HomeAnnFragment : Fragment() {
         annItems.clear()
         disposable = mutableListOf(
             oldE3Client.getFrontPageAnns()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { annItems.addAll(it) }
                 .doOnError { oldE3Failed = true },
             newE3WebClient.getFrontPageAnns()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { annItems.addAll(it) }
                 .doOnError { newE3Failed = true }
-        ).mergeDelayError().subscribeBy(
-            onComplete = {
-                annItems.sortByDescending { it.date }
-                displayErrorToast()
-                displayData()
-            },
-            onError = {
-                if (it is E3Client.WrongCredentialsException) {
-                    displayWrongCredentialsError()
-                } else {
-                    if (newE3Failed && oldE3Failed) {
-                        displayError()
+        ).mergeDelayError()
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .collectInto(annItems) { annItems, annItem -> annItems.add(annItem) }
+            .subscribeBy(
+                onSuccess = {
+                    annItems.sortByDescending { annItem -> annItem.date }
+                    displayErrorToast()
+                    displayData()
+                },
+                onError = {
+                    if (it is E3Client.WrongCredentialsException) {
+                        displayWrongCredentialsError()
                     } else {
-                        annItems.sortByDescending { it.date }
-                        displayErrorToast()
-                        displayData()
+                        if (newE3Failed && oldE3Failed) {
+                            displayError()
+                        } else {
+                            annItems.sortByDescending { it.date }
+                            displayErrorToast()
+                            displayData()
+                        }
                     }
                 }
-            }
-        )
+            )
 
     }
 

@@ -51,8 +51,9 @@ class CourseAnnFragment : Fragment() {
         disposable = client.getCourseAnns(courseItem)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
+            .collectInto(mutableListOf<AnnItem>()) { annItems, annItem -> annItems.add(annItem) }
             .subscribeBy(
-                onNext = {
+                onSuccess = {
                     displayData(it)
                     progress_bar.visibility = View.GONE
                 },

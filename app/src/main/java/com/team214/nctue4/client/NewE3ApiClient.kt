@@ -105,16 +105,15 @@ class NewE3ApiClient(context: Context) : E3Client() {
         }
     }
 
-    override fun getCourseList(): Observable<MutableList<CourseItem>> {
+    override fun getCourseList(): Observable<CourseItem> {
         return post(
             hashMapOf(
                 "wsfunction" to "core_enrol_get_users_courses",
                 "userid" to userId
             )
         ).flatMap { response ->
-            Observable.fromCallable {
+            Observable.create<CourseItem> { emitter ->
                 val resJson = JSONArray(response)
-                val courseItems = mutableListOf<CourseItem>()
                 (0 until resJson.length()).map { resJson.get(it) as JSONObject }
                     .forEach {
                         if (it.getLong("enddate") > System.currentTimeMillis() / 1000) {
@@ -123,15 +122,15 @@ class NewE3ApiClient(context: Context) : E3Client() {
                             }
                             val courseId = it.getString("id")
                             val additionalInfo = it.getString("shortname")
-                            courseItems.add(CourseItem(E3Type.NEW, courseName, courseId, additionalInfo))
+                            emitter.onNext(CourseItem(E3Type.NEW, courseName, courseId, additionalInfo))
                         }
                     }
-                courseItems
+                emitter.onComplete()
             }
         }
     }
 
-    override fun getCourseAnns(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
+    override fun getCourseAnns(courseItem: CourseItem): Observable<AnnItem> {
         return post(
             hashMapOf(
                 "wsfunction" to "mod_forum_get_forums_by_courses",
@@ -148,14 +147,14 @@ class NewE3ApiClient(context: Context) : E3Client() {
                 )
             )
         }.flatMap { response ->
-            Observable.fromCallable {
+            Observable.create<AnnItem> { emitter ->
                 val resJson = JSONObject(response).getJSONArray("discussions")
                 val courseAnnItems = mutableListOf<AnnItem>()
                 (0 until resJson.length()).map { resJson.get(it) as JSONObject }.forEach { ann ->
                     val title = ann.getString("name")
                     val content = ann.getString("message")
                     val date = Date(ann.getLong("timemodified") * 1000)
-                    courseAnnItems.add(
+                    emitter.onNext(
                         AnnItem(
                             E3Type.NEW,
                             title,
@@ -166,7 +165,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
                         )
                     )
                 }
-                courseAnnItems
+                emitter.onComplete()
             }
         }
     }
@@ -206,7 +205,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
         }
     }
 
-    override fun getFrontPageAnns(): Observable<MutableList<AnnItem>> {
+    override fun getFrontPageAnns(): Observable<AnnItem> {
         throw NotImplementedError()
     }
 

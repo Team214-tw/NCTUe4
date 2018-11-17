@@ -82,9 +82,9 @@ class NewE3WebClient(context: Context) : E3Client() {
         }
     }
 
-    override fun getFrontPageAnns(): Observable<MutableList<AnnItem>> {
+    override fun getFrontPageAnns(): Observable<AnnItem> {
         return get("https://e3new.nctu.edu.tw/theme/dcpc/news/index.php?lang=en").flatMap {
-            Observable.fromCallable {
+            Observable.create<AnnItem> { emitter ->
                 val document = Jsoup.parse(it.body()!!.string()).apply {
                     if (this.selectFirst(".login > a")?.text() == "Log in" ||
                         this.selectFirst("body > div")?.text() == "Invalid user"
@@ -119,9 +119,9 @@ class NewE3WebClient(context: Context) : E3Client() {
                         .split("\\xa0".toRegex())[1].split(" ")[0]
 
                     val title = el.select(".colL-19").text()
-                    annItems.add(AnnItem(E3Type.NEW, title, date, courseName, "$detailLocationHint&lang=en"))
+                    emitter.onNext(AnnItem(E3Type.NEW, title, date, courseName, "$detailLocationHint&lang=en"))
                 }
-                annItems
+                emitter.onComplete()
             }
         }.retryWhen {
             it.flatMap { error ->
@@ -168,11 +168,11 @@ class NewE3WebClient(context: Context) : E3Client() {
         return mutableListOf(sessionId!!)
     }
 
-    override fun getCourseList(): Observable<MutableList<CourseItem>> {
+    override fun getCourseList(): Observable<CourseItem> {
         throw NotImplementedError()
     }
 
-    override fun getCourseAnns(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
+    override fun getCourseAnns(courseItem: CourseItem): Observable<AnnItem> {
         throw NotImplementedError()
     }
 

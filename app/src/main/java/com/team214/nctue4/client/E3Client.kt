@@ -13,15 +13,15 @@ abstract class E3Client {
 
     abstract fun login(studentId: String? = null, password: String? = null): Observable<Unit>
 
-    abstract fun getFrontPageAnns(): Observable<MutableList<AnnItem>>
+    abstract fun getFrontPageAnns(): Observable<AnnItem>
 
     abstract fun getAnn(annItem: AnnItem): Observable<AnnItem>
 
     abstract fun getCookie(): MutableList<Cookie>?
 
-    abstract fun getCourseList(): Observable<MutableList<CourseItem>>
+    abstract fun getCourseList(): Observable<CourseItem>
 
-    abstract fun getCourseAnns(courseItem: CourseItem): Observable<MutableList<AnnItem>>
+    abstract fun getCourseAnns(courseItem: CourseItem): Observable<AnnItem>
 
     abstract fun getCourseFolders(courseItem: CourseItem): Observable<FolderItem>
 }

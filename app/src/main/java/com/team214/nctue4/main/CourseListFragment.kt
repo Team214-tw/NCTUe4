@@ -85,8 +85,9 @@ class CourseListFragment : Fragment() {
         disposable = client.getCourseList()
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
+            .collectInto(mutableListOf<CourseItem>()) { courseItems, courseItem -> courseItems.add(courseItem) }
             .subscribeBy(
-                onNext = {
+                onSuccess = {
                     courseDBHelper.refreshCourses(it, e3Type)
                     courseItems.clear()
                     courseItems.addAll(courseDBHelper.readCourses(e3Type))
