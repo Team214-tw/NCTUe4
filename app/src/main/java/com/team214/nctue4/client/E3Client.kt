@@ -19,4 +19,6 @@ abstract class E3Client {
     abstract fun getCookie(): MutableList<Cookie>?
 
     abstract fun getCourseList(): Observable<MutableList<CourseItem>>
+
+    abstract fun getCourseAnn(courseItem: CourseItem): Observable<MutableList<AnnItem>>
 }

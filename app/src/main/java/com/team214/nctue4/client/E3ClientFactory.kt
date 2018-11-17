@@ -2,6 +2,7 @@ package com.team214.nctue4.client
 
 import android.content.Context
 import com.team214.nctue4.model.AnnItem
+import com.team214.nctue4.model.CourseItem
 
 interface E3ClientFactory {
     companion object {
@@ -14,8 +15,8 @@ interface E3ClientFactory {
             }
         }
 
-        fun createFromE3Type(context: Context, e3Type: E3Type): E3Client {
-            return when (e3Type) {
+        fun createFromCourse(context: Context, courseItem: CourseItem): E3Client {
+            return when (courseItem.e3Type) {
                 E3Type.NEW -> NewE3ApiClient(context)
                 E3Type.OLD -> OldE3Client(context)
             }

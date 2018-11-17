@@ -13,6 +13,7 @@ import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.*
 
 class NewE3ApiClient(context: Context) : E3Client() {
     class TokenInvalidException : Exception()
@@ -125,6 +126,46 @@ class NewE3ApiClient(context: Context) : E3Client() {
                         }
                     }
                 courseItems
+            }
+        }
+    }
+
+    override fun getCourseAnn(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
+        return post(
+            hashMapOf(
+                "wsfunction" to "mod_forum_get_forums_by_courses",
+                "courseids[0]" to courseItem.courseId
+            )
+        ).flatMap {
+            post(
+                hashMapOf(
+                    "wsfunction" to "mod_forum_get_forum_discussions_paginated",
+                    "forumid" to JSONArray(it).getJSONObject(0).getString("id"),
+                    "sortdirection" to "DESC",
+                    "perpage" to "100",
+                    "sortby" to "timemodified"
+                )
+            )
+        }.flatMap { response ->
+            Observable.fromCallable {
+                val resJson = JSONObject(response).getJSONArray("discussions")
+                val courseAnnItems = mutableListOf<AnnItem>()
+                (0 until resJson.length()).map { resJson.get(it) as JSONObject }.forEach { ann ->
+                    val title = ann.getString("name")
+                    val content = ann.getString("message")
+                    val date = Date(ann.getLong("timemodified") * 1000)
+                    courseAnnItems.add(
+                        AnnItem(
+                            E3Type.NEW,
+                            title,
+                            date,
+                            courseItem.courseName,
+                            null,
+                            content
+                        )
+                    )
+                }
+                courseAnnItems
             }
         }
     }

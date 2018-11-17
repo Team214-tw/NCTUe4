@@ -265,6 +265,10 @@ class OldE3Client(context: Context) : E3Client() {
         }
     }
 
+    override fun getCourseAnn(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun getCookie(): MutableList<Cookie>? {
         return null
     }

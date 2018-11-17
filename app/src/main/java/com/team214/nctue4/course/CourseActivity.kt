@@ -7,6 +7,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
+import com.team214.nctue4.client.E3ClientFactory
 import com.team214.nctue4.model.CourseItem
 import kotlinx.android.synthetic.main.activity_course.*
 
@@ -32,24 +33,18 @@ class CourseActivity : AppCompatActivity() {
         outState?.putInt("currentFragment", currentFragment)
     }
 
-    private val mOnNavigationItemSelectedListener =
-        BottomNavigationView.OnNavigationItemSelectedListener { item ->
-            switchFragment(item.itemId)
-            return@OnNavigationItemSelectedListener true
-        }
-
 
     private fun switchFragment(itemId: Int) {
-//        currentFragment = itemId
-//        val fragment = when (itemId) {
-//            R.id.course_nav_ann -> {
-//                firebaseAnalytics!!.setCurrentScreen(
-//                    this,
-//                    "CourseAnnFragment",
-//                    CourseAnnFragment::class.java.simpleName
-//                )
-//                CourseAnnFragment()
-//            }
+        currentFragment = itemId
+        val fragment = when (itemId) {
+            R.id.course_nav_ann -> {
+                firebaseAnalytics!!.setCurrentScreen(
+                    this,
+                    "CourseAnnFragment",
+                    CourseAnnFragment::class.java.simpleName
+                )
+                CourseAnnFragment()
+            }
 //            R.id.course_nav_doc -> {
 //                firebaseAnalytics!!.setCurrentScreen(
 //                    this,
@@ -70,18 +65,17 @@ class CourseActivity : AppCompatActivity() {
 //                firebaseAnalytics!!.setCurrentScreen(this, "MembersFragment", MembersFragment::class.java.simpleName)
 //                MembersFragment()
 //            }
-//            else -> {
-//                firebaseAnalytics!!.setCurrentScreen(
-//                    this,
-//                    "CourseAnnFragment",
-//                    CourseAnnFragment::class.java.simpleName
-//                )
-//                CourseAnnFragment()
-//            }
-//        }
-//        fragment.arguments = intent.extras
-//        supportFragmentManager.beginTransaction().replace(R.id.course_container, fragment).commit()
-
+            else -> {
+                firebaseAnalytics!!.setCurrentScreen(
+                    this,
+                    "CourseAnnFragment",
+                    CourseAnnFragment::class.java.simpleName
+                )
+                CourseAnnFragment()
+            }
+        }
+        fragment.arguments = intent.extras
+        supportFragmentManager.beginTransaction().replace(R.id.course_container, fragment).commit()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,12 +85,15 @@ class CourseActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         courseItem = intent.extras!!.getParcelable("courseItem")!!
+        client = E3ClientFactory.createFromCourse(this, courseItem)
         this.title = courseItem.courseName
-
         if (savedInstanceState?.getInt("currentFragment") == null)
             switchFragment(-1)
 
-        course_bottom_nav?.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        course_bottom_nav.setOnNavigationItemSelectedListener { item ->
+            switchFragment(item.itemId)
+            true
+        }
     }
 
 }

@@ -170,4 +170,8 @@ class NewE3WebClient(context: Context) : E3Client() {
     override fun getCourseList(): Observable<MutableList<CourseItem>> {
         throw NotImplementedError()
     }
+
+    override fun getCourseAnn(courseItem: CourseItem): Observable<MutableList<AnnItem>> {
+        throw NotImplementedError()
+    }
 }
