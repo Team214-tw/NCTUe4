@@ -9,7 +9,7 @@
             android:shortcutShortLabel="@string/download_history">
         <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="com.team214.nctue4.main.MainActivity"
+                android:targetClass="com.team214.nctue4.LandingActivity"
                 android:targetPackage="com.team214.nctue4">
             <extra
                     android:name="shortcut"
@@ -26,7 +26,7 @@
             android:shortcutShortLabel="@string/bookmarked_courses">
         <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="com.team214.nctue4.main.MainActivity"
+                android:targetClass="com.team214.nctue4.LandingActivity"
                 android:targetPackage="com.team214.nctue4">
             <extra
                     android:name="shortcut"
@@ -43,7 +43,7 @@
             android:shortcutShortLabel="@string/latest_ann">
         <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="com.team214.nctue4.main.MainActivity"
+                android:targetClass="com.team214.nctue4.LandingActivity"
                 android:targetPackage="com.team214.nctue4">
             <extra
                     android:name="shortcut"
@@ -60,7 +60,7 @@
             android:shortcutShortLabel="@string/new_e3">
         <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="com.team214.nctue4.main.MainActivity"
+                android:targetClass="com.team214.nctue4.LandingActivity"
                 android:targetPackage="com.team214.nctue4">
             <extra
                     android:name="shortcut"
@@ -77,7 +77,7 @@
             android:shortcutShortLabel="@string/old_e3">
         <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="com.team214.nctue4.main.MainActivity"
+                android:targetClass="com.team214.nctue4.LandingActivity"
                 android:targetPackage="com.team214.nctue4">
             <extra
                     android:name="shortcut"

@@ -63,6 +63,7 @@ class HwkFragment : Fragment() {
     }
 
     private fun displayData(hwkItems: MutableList<HwkItem>) {
+        hwkItems.sortByDescending { it.endDate }
         if (hwkItems.isEmpty()) {
             empty_request.visibility = View.VISIBLE
             return

@@ -45,6 +45,7 @@ class LandingActivity : AppCompatActivity() {
                 Intent(this, LoginActivity::class.java)
             } else {
                 Intent(this, MainActivity::class.java)
+                    .putExtra("shortcut", intent?.getStringExtra("shortcut"))
             }
         startActivity(intent)
         finish()

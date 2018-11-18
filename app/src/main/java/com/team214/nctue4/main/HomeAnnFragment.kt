@@ -80,7 +80,9 @@ class HomeAnnFragment : Fragment() {
     private fun getData() {
         error_request.visibility = View.GONE
         error_wrong_credential.visibility = View.GONE
-        progress_bar.visibility = View.VISIBLE
+        if (!ann_swipe_refresh_layout.isRefreshing) {
+            progress_bar.visibility = View.VISIBLE
+        }
         disposable?.dispose()
         annItems.clear()
         disposable = mutableListOf(
