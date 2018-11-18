@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.team214.nctue4.LandingActivity
 import com.team214.nctue4.R
 import com.team214.nctue4.model.CourseDBHelper
 import java.io.File
@@ -26,7 +27,7 @@ class LogoutActivity : AppCompatActivity() {
         val dir = File(path, "Download")
         dir.deleteRecursively()
         Toast.makeText(this, getString(R.string.logout_success), Toast.LENGTH_SHORT).show()
-        val intent = Intent(this, LoginActivity::class.java)
+        val intent = Intent(this, LandingActivity::class.java)
         startActivity(intent)
         finish()
     }

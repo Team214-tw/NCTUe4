@@ -95,6 +95,28 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
         }
     }
 
+    fun addCourses(data: MutableList<CourseItem>) {
+        data.forEach {
+            val values = ContentValues()
+            values.put("e3_type", it.e3Type.name)
+            values.put("course_name", it.courseName)
+            values.put("course_id", it.courseId)
+            values.put("additional_info", it.additionalInfo)
+            values.put("bookmarked", 0)
+            values.put("bookmark_idx", it.bookmarkIdx)
+            writableDatabase.insert("courses", null, values)
+        }
+    }
+
+    fun isCoursesTableEmpty(): Boolean {
+        var empty = true
+        val cursor = readableDatabase.rawQuery("SELECT COUNT(*) FROM courses", null);
+        if (cursor != null && cursor.moveToFirst()) {
+            empty = (cursor.getInt(0) == 0)
+        }
+        cursor.close()
+        return empty
+    }
 
     fun readCourses(e3Type: E3Type): MutableList<CourseItem> {
         val data = mutableListOf<CourseItem>()

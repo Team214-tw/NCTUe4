@@ -12,9 +12,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
+import com.team214.nctue4.client.E3Type
 import com.team214.nctue4.client.NewE3ApiClient
 import com.team214.nctue4.client.OldE3Client
 import com.team214.nctue4.main.MainActivity
+import com.team214.nctue4.model.CourseDBHelper
+import com.team214.nctue4.model.CourseItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -24,6 +27,8 @@ import kotlinx.android.synthetic.main.activity_login.*
 class LoginActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var disposable: Disposable? = null
+    private lateinit var oldE3Client: OldE3Client
+    private lateinit var newE3ApiClient: NewE3ApiClient
 
     override fun onDestroy() {
         disposable?.dispose()
@@ -67,8 +72,8 @@ class LoginActivity : AppCompatActivity() {
                 }.show()
         }
 
-        val oldE3Client = OldE3Client(this)
-        val newE3ApiClient = NewE3ApiClient(this)
+        oldE3Client = OldE3Client(this)
+        newE3ApiClient = NewE3ApiClient(this)
         login_button?.setOnClickListener {
             disableInput()
 
@@ -90,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
                         prefsEditor.putString("studentId", studentId)
                         prefsEditor.putString("studentPortalPassword", studentPortalPassword)
                         prefsEditor.apply()
-                        handleLoginSuccess()
+                        getCourseList()
                     },
                     onError = { error ->
                         when (error) {
@@ -100,6 +105,36 @@ class LoginActivity : AppCompatActivity() {
                     }
                 )
         }
+    }
+
+    private fun getCourseList() {
+        val courseDBHelper = CourseDBHelper(this)
+        if (!courseDBHelper.isCoursesTableEmpty()) {
+            handleLoginSuccess()
+            return
+        }
+        disposable = oldE3Client.getCourseList()
+            .mergeWith(newE3ApiClient.getCourseList())
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .collectInto(
+                Pair<MutableList<CourseItem>, MutableList<CourseItem>>(
+                    mutableListOf(),
+                    mutableListOf()
+                )
+            ) { courseItems, courseItem ->
+                when (courseItem.e3Type) {
+                    E3Type.OLD -> courseItems.first.add(courseItem)
+                    E3Type.NEW -> courseItems.second.add(courseItem)
+                }
+            }
+            .subscribeBy(
+                onSuccess = {
+                    courseDBHelper.addCourses(it.first)
+                    courseDBHelper.addCourses(it.second)
+                    handleLoginSuccess()
+                }
+            )
     }
 
 
