@@ -480,7 +480,7 @@ class OldE3Client(context: Context) : E3Client() {
                         .first()
                         .getElementsByTag("tr")
                         .drop(1)
-                    trEls.subList(0, trEls.size - 2)
+                    trEls.take(trEls.size - 1)
                         .forEach { el ->
                             val tdEls = el.getElementsByTag("td")
                             if (tdEls.size == 6) {

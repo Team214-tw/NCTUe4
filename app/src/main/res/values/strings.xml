@@ -123,6 +123,6 @@
     </string>
 
     <string name="warning">Warning</string>
-    <string name="course_not_found_in_db">Course not found in local database</string>
+    <string name="course_not_found_in_db">Course not found in local database, please refresh in course list page</string>
 
 </resources>

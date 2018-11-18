@@ -94,5 +94,5 @@
     <string name="login_help_new_e3">單一入口密碼：登入單一入口（如下圖）時用的密碼。\n網址：https://portal.nctu.edu.tw</string>
 
     <string name="warning">警告</string>
-    <string name="course_not_found_in_db">本地資料庫沒有此課程</string>
+    <string name="course_not_found_in_db">本地資料庫沒有此課程，請至課程列表頁面刷新</string>
 </resources>
