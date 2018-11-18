@@ -16,7 +16,7 @@ class NewE3WebClient(context: Context) : E3Client() {
 
     class SessionInvalidException : Exception()
 
-    private val client = OkHttpClient().newBuilder()
+    override val client = OkHttpClient().newBuilder()
         .cookieJar(object : CookieJar {
             override fun loadForRequest(url: HttpUrl): MutableList<Cookie>? {
                 val cookies = mutableListOf<Cookie>()
@@ -34,43 +34,50 @@ class NewE3WebClient(context: Context) : E3Client() {
         })
         .followRedirects(false)
         .followSslRedirects(false)
-        .build()
+        .build()!!
 
     override fun login(studentId: String?, password: String?): Observable<Unit> {
-        return Observable.fromCallable {
-            Log.d("NewE3Web", "Login")
-            val formBody = FormBody.Builder()
-                .add("username", (studentId ?: prefs.getString("studentId", "")!!))
-                .add("password", (password ?: prefs.getString("studentPortalPassword", "")!!))
-                .build()
-            val request = okhttp3.Request
-                .Builder()
-                .url("https://e3new.nctu.edu.tw/login/index.php?lang=en")
-                .post(formBody)
-                .build()
-            client.newCall(request).execute().apply {
-                if (this.header("Location") == "https://e3new.nctu.edu.tw/login/index.php") {
-                    throw WrongCredentialsException()
+        Log.d("NewE3Web", "Login")
+        val formBody = FormBody.Builder()
+            .add("username", (studentId ?: prefs.getString("studentId", "")!!))
+            .add("password", (password ?: prefs.getString("studentPortalPassword", "")!!))
+            .build()
+        val request = okhttp3.Request
+            .Builder()
+            .url("https://e3new.nctu.edu.tw/login/index.php?lang=en")
+            .post(formBody)
+            .build()
+        return clientExecute(request).flatMap { (response, _) ->
+            Observable.fromCallable {
+                response.apply {
+                    if (this.header("Location") == "https://e3new.nctu.edu.tw/login/index.php") {
+                        throw WrongCredentialsException()
+                    }
                 }
+                Unit
             }
-            Unit
         }
     }
 
-    fun get(path: String): Observable<Response> {
+    fun get(path: String): Observable<String> {
         return Observable.fromCallable {
             if (sessionId == null) throw SessionInvalidException()
             Log.d("NewE3WebGet", path)
-            val request = okhttp3.Request
+            okhttp3.Request
                 .Builder()
                 .url(path)
                 .get()
                 .build()
-            client.newCall(request).execute().apply {
-                if (this.header("Location") == "https://e3new.nctu.edu.tw/login/index.php") {
-                    throw SessionInvalidException()
+        }.flatMap { request ->
+            clientExecute(request)
+        }.flatMap { (response, responseBody) ->
+            Observable.fromCallable {
+                response.apply {
+                    if (this.header("Location") == "https://e3new.nctu.edu.tw/login/index.php") {
+                        throw SessionInvalidException()
+                    }
                 }
-
+                responseBody
             }
         }.retryWhen {
             it.flatMap { error ->
@@ -82,15 +89,13 @@ class NewE3WebClient(context: Context) : E3Client() {
     override fun getFrontPageAnns(): Observable<AnnItem> {
         return get("https://e3new.nctu.edu.tw/theme/dcpc/news/index.php?lang=en").flatMap {
             Observable.create<AnnItem> { emitter ->
-                val document = Jsoup.parse(it.body()!!.string()).apply {
+                val document = Jsoup.parse(it).apply {
                     if (this.selectFirst(".login > a")?.text() == "Log in" ||
                         this.selectFirst("body > div")?.text() == "Invalid user"
                     ) {
                         throw SessionInvalidException()
                     }
                 }
-
-                val annItems = mutableListOf<AnnItem>()
                 val newsRowEls = document.select(".NewsRow").dropLast(1)
                 val df = SimpleDateFormat("d MMM, HH:mm", Locale.US)
                 newsRowEls.forEach { el ->
@@ -130,7 +135,7 @@ class NewE3WebClient(context: Context) : E3Client() {
     override fun getAnn(annItem: AnnItem): Observable<AnnItem> {
         return get(annItem.detailLocationHint!!).flatMap {
             Observable.fromCallable {
-                val document = Jsoup.parse(it.body()!!.string())
+                val document = Jsoup.parse(it)
                 val df = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.US)
 
                 val attachItems =

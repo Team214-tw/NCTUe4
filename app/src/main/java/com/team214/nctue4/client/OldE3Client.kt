@@ -29,7 +29,7 @@ class OldE3Client(context: Context) : E3Client() {
     private var currentPage: String = "home"
     private var courseIdMap = HashMap<String, String>()
 
-    private val client = OkHttpClient().newBuilder()
+    override var client = OkHttpClient().newBuilder()
         .cookieJar(object : CookieJar {
             override fun loadForRequest(url: HttpUrl): MutableList<Cookie>? {
                 val cookies = mutableListOf<Cookie>()
@@ -49,19 +49,27 @@ class OldE3Client(context: Context) : E3Client() {
         })
         .followRedirects(false)
         .followSslRedirects(false)
-        .build()
+        .build()!!
 
-    private fun get(path: String): Observable<Response> {
+    private fun get(path: String): Observable<String> {
         return Observable.fromCallable {
-            if (path != "/login.aspx" && (sessionId == null || aspXAuth == null)) throw SessionInvalidException()
+            if (path != "/login.aspx" && (sessionId == null || aspXAuth == null)) {
+                throw SessionInvalidException()
+            }
             Log.d("OldE3Get", path)
-            val request = Request.Builder()
+            Request.Builder()
                 .url(WEB_URL + path)
                 .build()
-            client.newCall(request).execute().apply {
-                if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx")) {
-                    throw SessionInvalidException()
+        }.flatMap {
+            clientExecute(it)
+        }.flatMap { (response, responseBody) ->
+            Observable.fromCallable {
+                response.apply {
+                    if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx")) {
+                        throw SessionInvalidException()
+                    }
                 }
+                responseBody
             }
         }.retryWhen {
             it.flatMap { error ->
@@ -75,9 +83,11 @@ class OldE3Client(context: Context) : E3Client() {
         path: String,
         data: HashMap<String, String>,
         headers: HashMap<String, String>? = null
-    ): Observable<Response> {
+    ): Observable<String> {
         return Observable.fromCallable {
-            if (path != "/login.aspx" && (sessionId == null || aspXAuth == null)) throw SessionInvalidException()
+            if (path != "/login.aspx" && (sessionId == null || aspXAuth == null)) {
+                throw SessionInvalidException()
+            }
             Log.d("OldE3Post", path)
             val formBodyBuilder = FormBody.Builder()
             data.forEach { entry -> formBodyBuilder.add(entry.key, entry.value) }
@@ -87,11 +97,17 @@ class OldE3Client(context: Context) : E3Client() {
                 .url(WEB_URL + path)
                 .post(formBody)
             headers?.forEach { entry -> requestBuilder.addHeader(entry.key, entry.value) }
-            val request = requestBuilder.build()
-            client.newCall(request).execute().apply {
-                if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx")) {
-                    throw SessionInvalidException()
+            requestBuilder.build()
+        }.flatMap {
+            clientExecute(it)
+        }.flatMap { (response, responseBody) ->
+            Observable.fromCallable {
+                response.apply {
+                    if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx")) {
+                        throw SessionInvalidException()
+                    }
                 }
+                responseBody
             }
         }.retryWhen {
             it.flatMap { error ->
@@ -100,9 +116,9 @@ class OldE3Client(context: Context) : E3Client() {
         }
     }
 
-    private fun parseHtmlResponse(response: Response): Observable<Document> {
+    private fun parseHtmlResponse(response: String): Observable<Document> {
         return Observable.fromCallable {
-            Jsoup.parse(response.body()!!.string()).also {
+            Jsoup.parse(response).also {
                 viewState = it.select("#__VIEWSTATE").attr("value")
             }
         }
@@ -169,7 +185,7 @@ class OldE3Client(context: Context) : E3Client() {
             }
             .flatMap {
                 Observable.fromCallable {
-                    if (it.body()!!.string().contains("window.location.href='login.aspx';")) {
+                    if (it.contains("window.location.href='login.aspx';")) {
                         throw WrongCredentialsException()
                     }
                     currentPage = "home"
@@ -333,7 +349,7 @@ class OldE3Client(context: Context) : E3Client() {
         val dataNavigatorElId: String
     )
 
-    val folderProperties = arrayOf(
+    private val folderProperties = arrayOf(
         FolderProperty(
             FolderItem.Type.Handout,
             "ctl00_ContentPlaceHolder1_dgCourseHandout",
@@ -398,7 +414,7 @@ class OldE3Client(context: Context) : E3Client() {
             )
         ).flatMap { response ->
             Observable.create<FolderItem> { emitter ->
-                val json = JSONObject(response.body()!!.string())
+                val json = JSONObject(response)
                 val document = Jsoup.parse(
                     json.getJSONObject("controls")
                         .getString(folderProperty.jsonKey)
@@ -435,7 +451,7 @@ class OldE3Client(context: Context) : E3Client() {
             .flatMap { get("/dialog_common_view_attach_media_list.aspx?ReferenceSourceId=${folderItem.folderId}&CurrentCourseId=${folderItem.courseId}") }
             .flatMap { response ->
                 Observable.create<FileItem> { emitter ->
-                    val document = Jsoup.parse(response.body()!!.string())
+                    val document = Jsoup.parse(response)
                     document.getElementById("ctl00_ContentPlaceHolder1_fileList2_dgFileList")
                         .getElementsByTag("tr")
                         .drop(1).forEach { el ->
@@ -445,7 +461,6 @@ class OldE3Client(context: Context) : E3Client() {
                                 .find(tdEls[5].selectFirst("a").attr("onclick"))
                             val url =
                                 "$WEB_URL/common_view_standalone_file.ashx?AttachMediaId=${match!!.groups[1]!!.value}&CourseId=${match.groups[2]!!.value}"
-                            Log.d("E3", url)
                             emitter.onNext(FileItem(name, url))
                         }
                     emitter.onComplete()
@@ -586,7 +601,7 @@ class OldE3Client(context: Context) : E3Client() {
                 )
             }
             .flatMap {
-                val token = JSONObject(it.body()!!.string()).getString("value")
+                val token = JSONObject(it).getString("value")
                 get("/dialog_stu_homework_view.aspx?crsHwkId=${hwkItem.hwkId}&TokenId=$token")
             }
             .flatMap { parseHtmlResponse(it) }
@@ -636,12 +651,7 @@ class OldE3Client(context: Context) : E3Client() {
     }
 
     override fun getHwkSubmitFiles(hwkItem: HwkItem): Observable<FileItem> {
-        return Observable.create<FileItem> { emitter ->
-            hwkItem.submitItems.map {
-                emitter.onNext(it)
-            }
-            emitter.onComplete()
-        }
+        return Observable.fromIterable(hwkItem.submitItems)
     }
 
     override fun getCookie(): MutableList<Cookie>? {

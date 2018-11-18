@@ -3,11 +3,31 @@ package com.team214.nctue4.client
 import com.team214.nctue4.model.*
 import io.reactivex.Observable
 import okhttp3.Cookie
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 
 
 abstract class E3Client {
     class ServiceErrorException : Exception()
     class WrongCredentialsException : Exception()
+
+    protected abstract val client: OkHttpClient
+    protected fun clientExecute(request: Request): Observable<Pair<Response, String>> {
+        return Observable.create { emitter ->
+            try {
+                val response = client.newCall(request).execute()
+                emitter.onNext(Pair(response, response.body()!!.string()))
+                emitter.onComplete()
+            } catch (e: Exception) {
+                if (emitter.isDisposed) {
+                    emitter.onComplete()
+                } else {
+                    emitter.onError(e)
+                }
+            }
+        }
+    }
 
     abstract fun login(studentId: String? = null, password: String? = null): Observable<Unit>
 

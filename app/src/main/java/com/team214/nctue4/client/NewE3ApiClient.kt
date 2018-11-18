@@ -21,11 +21,11 @@ class NewE3ApiClient(context: Context) : E3Client() {
         const val API_URL = "https://e3new.nctu.edu.tw/webservice/rest/server.php?moodlewsrestformat=json"
     }
 
-    private val client = OkHttpClient()
+    override val client = OkHttpClient()
         .newBuilder()
         .followRedirects(false)
         .followSslRedirects(false)
-        .build()
+        .build()!!
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     private var token = prefs.getString("newE3Token", null)
     private var userId = prefs.getString("newE3UserId", "")
@@ -39,10 +39,10 @@ class NewE3ApiClient(context: Context) : E3Client() {
         data.forEach { entry -> formBodyBuilder.add(entry.key, entry.value) }
         val formBody = formBodyBuilder.build()
         val request = okhttp3.Request.Builder().url(API_URL).post(formBody).build()
-        return Observable.fromCallable {
-            Log.d("NewE3ApiPost", data["wsfunction"] ?: "")
-            client.newCall(request).execute().run {
-                this.body()!!.string().apply {
+        Log.d("NewE3ApiPost", data["wsfunction"] ?: "")
+        return clientExecute(request).flatMap { (_, response) ->
+            Observable.fromCallable {
+                response.apply {
                     try {
                         val resJson = JSONObject(this)
                         if (resJson.has("errorcode") &&
@@ -63,23 +63,25 @@ class NewE3ApiClient(context: Context) : E3Client() {
     }
 
     override fun login(studentId: String?, password: String?): Observable<Unit> {
-        return Observable.fromCallable {
-            val formBody = FormBody.Builder()
-                .add("username", (studentId ?: prefs.getString("studentId", "")!!))
-                .add("password", (password ?: prefs.getString("studentPortalPassword", "")!!))
-                .add("service", "moodle_mobile_app")
-                .build()
-            val request = Request.Builder()
-                .url("https://e3new.nctu.edu.tw/login/token.php")
-                .post(formBody)
-                .build()
-            val response = client.newCall(request).execute()
-            val resJson = JSONObject(response.body()!!.string())
-            if (resJson.has("token")) {
-                token = resJson.getString("token")
-                prefs.edit().putString("newE3Token", token).apply()
-            } else {
-                throw WrongCredentialsException()
+
+        val formBody = FormBody.Builder()
+            .add("username", (studentId ?: prefs.getString("studentId", "")!!))
+            .add("password", (password ?: prefs.getString("studentPortalPassword", "")!!))
+            .add("service", "moodle_mobile_app")
+            .build()
+        val request = Request.Builder()
+            .url("https://e3new.nctu.edu.tw/login/token.php")
+            .post(formBody)
+            .build()
+        return clientExecute(request).flatMap { (_, response) ->
+            Observable.fromCallable {
+                val resJson = JSONObject(response)
+                if (resJson.has("token")) {
+                    token = resJson.getString("token")
+                    prefs.edit().putString("newE3Token", token).apply()
+                } else {
+                    throw WrongCredentialsException()
+                }
             }
         }
     }
@@ -179,14 +181,16 @@ class NewE3ApiClient(context: Context) : E3Client() {
                 (0 until resJson.length()).map { resJson.get(it) as JSONObject }.forEach {
                     var name = it.getString("name")
                     val folderType =
-                        if (name.startsWith("[參考資料]")) {
-                            name = name.removePrefix("[參考資料]")
-                            FolderItem.Type.Reference
-                        } else if (name.startsWith("[Reference]")) {
-                            name = name.removePrefix("[Reference]")
-                            FolderItem.Type.Reference
-                        } else {
-                            FolderItem.Type.Handout
+                        when {
+                            name.startsWith("[參考資料]") -> {
+                                name = name.removePrefix("[參考資料]")
+                                FolderItem.Type.Reference
+                            }
+                            name.startsWith("[Reference]") -> {
+                                name = name.removePrefix("[Reference]")
+                                FolderItem.Type.Reference
+                            }
+                            else -> FolderItem.Type.Handout
                         }
                     emitter.onNext(
                         FolderItem(
