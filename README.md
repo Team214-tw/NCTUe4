@@ -1,5 +1,6 @@
 <a href='https://play.google.com/store/apps/details?id=com.team214.nctue4&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="75px" align="right"/></a>
 # NCTUe4
+### This is a v2 rewrite of the app, for older version please go [here](https://github.com/Summon528/NCTUe4-Deprecated).
 [![GitHub top language](https://img.shields.io/github/languages/top/summon528/nctue4.svg)](https://github.com/Summon528/NCTUe4)
 ![Api 19+](https://img.shields.io/badge/api-19%2b-blue.svg)
 [![GitHub last commit](https://img.shields.io/github/last-commit/summon528/nctue4.svg)](https://github.com/Summon528/NCTUe4)  
