@@ -3,17 +3,18 @@ package com.team214.nctue4.client
 import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
+import com.team214.nctue4.MainApplication
 import com.team214.nctue4.model.*
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import okhttp3.*
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 class OldE3Client(context: Context) : E3Client() {
     class SessionInvalidException : Exception()
@@ -23,26 +24,22 @@ class OldE3Client(context: Context) : E3Client() {
     }
 
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    private var sessionId: Cookie? = null
-    private var aspXAuth: Cookie? = null
-    private var viewState: String = ""
-    private var currentPage: String = "home"
-    private var courseIdMap = HashMap<String, String>()
+    private val app = (context.applicationContext as MainApplication)
 
     override var client = OkHttpClient().newBuilder()
         .cookieJar(object : CookieJar {
             override fun loadForRequest(url: HttpUrl): MutableList<Cookie>? {
                 val cookies = mutableListOf<Cookie>()
-                if (sessionId != null) cookies.add(sessionId!!)
-                if (aspXAuth != null) cookies.add(aspXAuth!!)
+                if (app.oldE3Session != null) cookies.add(app.oldE3Session!!)
+                if (app.oldE3AspXAuth != null) cookies.add(app.oldE3AspXAuth!!)
                 return cookies
             }
 
             override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>) {
                 for (cookie in cookies) {
                     when (cookie.name()) {
-                        "ASP.NET_SessionId" -> sessionId = cookie
-                        ".ASPXAUTH_NCTU_EASY_E3P_140.113.8.80" -> aspXAuth = cookie
+                        "ASP.NET_SessionId" -> app.oldE3Session = cookie
+                        ".ASPXAUTH_NCTU_EASY_E3P_140.113.8.80" -> app.oldE3AspXAuth = cookie
                     }
                 }
             }
@@ -53,7 +50,7 @@ class OldE3Client(context: Context) : E3Client() {
 
     private fun get(path: String): Observable<String> {
         return Observable.fromCallable {
-            if (path != "/login.aspx" && (sessionId == null || aspXAuth == null)) {
+            if (path != "/login.aspx" && (app.oldE3Session == null || app.oldE3AspXAuth == null)) {
                 throw SessionInvalidException()
             }
             Log.d("OldE3Get", path)
@@ -65,7 +62,9 @@ class OldE3Client(context: Context) : E3Client() {
         }.flatMap { (response, responseBody) ->
             Observable.fromCallable {
                 response.apply {
-                    if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx")) {
+                    if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx") ||
+                        this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/logout.aspx")
+                    ) {
                         throw SessionInvalidException()
                     }
                 }
@@ -85,13 +84,13 @@ class OldE3Client(context: Context) : E3Client() {
         headers: HashMap<String, String>? = null
     ): Observable<String> {
         return Observable.fromCallable {
-            if (path != "/login.aspx" && (sessionId == null || aspXAuth == null)) {
+            if (path != "/login.aspx" && (app.oldE3Session == null || app.oldE3AspXAuth == null)) {
                 throw SessionInvalidException()
             }
             Log.d("OldE3Post", path)
             val formBodyBuilder = FormBody.Builder()
             data.forEach { entry -> formBodyBuilder.add(entry.key, entry.value) }
-            formBodyBuilder.add("__VIEWSTATE", viewState)
+            formBodyBuilder.add("__VIEWSTATE", app.oldE3ViewState)
             val formBody = formBodyBuilder.build()
             val requestBuilder = okhttp3.Request.Builder()
                 .url(WEB_URL + path)
@@ -103,7 +102,9 @@ class OldE3Client(context: Context) : E3Client() {
         }.flatMap { (response, responseBody) ->
             Observable.fromCallable {
                 response.apply {
-                    if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx")) {
+                    if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx") ||
+                        this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/logout.aspx")
+                    ) {
                         throw SessionInvalidException()
                     }
                 }
@@ -119,7 +120,7 @@ class OldE3Client(context: Context) : E3Client() {
     private fun parseHtmlResponse(response: String): Observable<Document> {
         return Observable.fromCallable {
             Jsoup.parse(response).also {
-                viewState = it.select("#__VIEWSTATE").attr("value")
+                app.oldE3ViewState = it.select("#__VIEWSTATE").attr("value")
             }
         }
     }
@@ -127,27 +128,37 @@ class OldE3Client(context: Context) : E3Client() {
 
     private fun toHomePage(): Observable<Document> {
         return get("/enter_course_index.aspx").flatMap { response ->
-            currentPage = "home"
+            app.oldE3CurrentPage = "home"
             Observable.just(response)
         }.flatMap { parseHtmlResponse(it) }
     }
 
     private fun toCoursePage(courseId: String): Observable<Unit> {
-        return if (currentPage == courseId) {
+        return if (app.oldE3CurrentPage == courseId) {
             Observable.just(Unit)
-        } else {
+        } else if (app.oldE3CurrentPage == "home") {
             post(
                 "/enter_course_index.aspx",
-                hashMapOf("__EVENTTARGET" to courseIdMap[courseId]!!)
+                hashMapOf("__EVENTTARGET" to app.oldE3CourseIdMap[courseId]!!)
             ).flatMap {
-                currentPage = courseId
+                app.oldE3CurrentPage = courseId
                 Observable.just(Unit)
+            }
+        } else {
+            toHomePage().flatMap {
+                post(
+                    "/enter_course_index.aspx",
+                    hashMapOf("__EVENTTARGET" to app.oldE3CourseIdMap[courseId]!!)
+                ).flatMap {
+                    app.oldE3CurrentPage = courseId
+                    Observable.just(Unit)
+                }
             }
         }
     }
 
     private fun ensureCourseIdMap(): Observable<Unit> {
-        return if (courseIdMap.isEmpty()) {
+        return if (app.oldE3CourseIdMap.isEmpty()) {
             toHomePage().flatMap { Observable.fromCallable { buildCourseIdMap(it) } }
         } else {
             Observable.just(Unit)
@@ -155,12 +166,12 @@ class OldE3Client(context: Context) : E3Client() {
     }
 
     private fun buildCourseIdMap(document: Document) {
-        if (!courseIdMap.isEmpty()) return
+        if (!app.oldE3CourseIdMap.isEmpty()) return
         val courseEls = document
             .getElementById("ctl00_ContentPlaceHolder1_gvCourse")
             .getElementsByTag("a")
         courseEls.forEach {
-            courseIdMap[it.attr("courseid")] =
+            app.oldE3CourseIdMap[it.attr("courseid")] =
                     it.attr("id").replace('_', '$')
         }
     }
@@ -169,8 +180,8 @@ class OldE3Client(context: Context) : E3Client() {
         studentId: String?,
         password: String?
     ): Observable<Unit> {
-        sessionId = null
-        aspXAuth = null
+        app.oldE3Session = null
+        app.oldE3AspXAuth = null
         return get("/login.aspx")
             .flatMap { it -> parseHtmlResponse(it) }
             .flatMap {
@@ -188,7 +199,7 @@ class OldE3Client(context: Context) : E3Client() {
                     if (it.contains("window.location.href='login.aspx';")) {
                         throw WrongCredentialsException()
                     }
-                    currentPage = "home"
+                    app.oldE3CurrentPage = "home"
                 }
             }
     }
@@ -376,7 +387,7 @@ class OldE3Client(context: Context) : E3Client() {
                     getCourseFolderByProperty(
                         document,
                         folderProperties[1]
-                    )
+                    ).subscribeOn(Schedulers.newThread())
                 )
             }
     }

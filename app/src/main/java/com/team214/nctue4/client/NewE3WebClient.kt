@@ -3,6 +3,7 @@ package com.team214.nctue4.client
 import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
+import com.team214.nctue4.MainApplication
 import com.team214.nctue4.model.*
 import io.reactivex.Observable
 import okhttp3.*
@@ -11,7 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class NewE3WebClient(context: Context) : E3Client() {
-    private var sessionId: Cookie? = null
+    private val app = (context.applicationContext as MainApplication)
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
     class SessionInvalidException : Exception()
@@ -20,14 +21,14 @@ class NewE3WebClient(context: Context) : E3Client() {
         .cookieJar(object : CookieJar {
             override fun loadForRequest(url: HttpUrl): MutableList<Cookie>? {
                 val cookies = mutableListOf<Cookie>()
-                if (sessionId != null) cookies.add(sessionId!!)
+                if (app.newE3Session != null) cookies.add(app.newE3Session!!)
                 return cookies
             }
 
             override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>) {
                 for (cookie in cookies) {
                     when (cookie.name()) {
-                        "MoodleSession" -> sessionId = cookie
+                        "MoodleSession" -> app.newE3Session = cookie
                     }
                 }
             }
@@ -61,7 +62,7 @@ class NewE3WebClient(context: Context) : E3Client() {
 
     fun get(path: String): Observable<String> {
         return Observable.fromCallable {
-            if (sessionId == null) throw SessionInvalidException()
+            if (app.newE3Session == null) throw SessionInvalidException()
             Log.d("NewE3WebGet", path)
             okhttp3.Request
                 .Builder()
@@ -167,7 +168,7 @@ class NewE3WebClient(context: Context) : E3Client() {
     }
 
     override fun getCookie(): MutableList<Cookie>? {
-        return mutableListOf(sessionId!!)
+        return mutableListOf(app.newE3Session!!)
     }
 
     override fun getCourseList(): Observable<CourseItem> {

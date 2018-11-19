@@ -87,11 +87,12 @@ class HomeAnnFragment : Fragment() {
         annItems.clear()
         disposable = mutableListOf(
             oldE3Client.getFrontPageAnns()
+                .subscribeOn(Schedulers.newThread())
                 .doOnError { oldE3Failed = true },
             newE3WebClient.getFrontPageAnns()
+                .subscribeOn(Schedulers.newThread())
                 .doOnError { newE3Failed = true }
         ).mergeDelayError()
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(annItems) { annItems, annItem -> annItems.add(annItem) }
             .doFinally { progress_bar?.visibility = View.GONE }

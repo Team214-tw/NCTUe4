@@ -2,6 +2,7 @@ package com.team214.nctue4.client
 
 import com.team214.nctue4.model.*
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import okhttp3.Cookie
 import okhttp3.OkHttpClient
 import okhttp3.Request
