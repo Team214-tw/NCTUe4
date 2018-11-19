@@ -24,6 +24,7 @@ import io.reactivex.rxkotlin.mergeDelayError
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_ann.*
+import kotlinx.android.synthetic.main.progress_bar.*
 import kotlinx.android.synthetic.main.status_empty.*
 import kotlinx.android.synthetic.main.status_empty_compact.*
 import kotlinx.android.synthetic.main.status_error.*

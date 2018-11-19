@@ -21,6 +21,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_members.*
 import kotlinx.android.synthetic.main.item_member.view.*
+import kotlinx.android.synthetic.main.progress_bar.*
 import kotlinx.android.synthetic.main.status_empty.*
 import kotlinx.android.synthetic.main.status_error.*
 

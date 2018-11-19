@@ -4,12 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/ann_root">
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:padding="20dp" />
+    <include layout="@layout/progress_bar" />
 
     <include layout="@layout/status_empty" />
 
