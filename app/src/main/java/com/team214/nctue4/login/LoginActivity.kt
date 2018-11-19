@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
-import com.team214.nctue4.client.E3Type
 import com.team214.nctue4.client.NewE3ApiClient
 import com.team214.nctue4.client.OldE3Client
 import com.team214.nctue4.main.MainActivity
@@ -117,23 +116,13 @@ class LoginActivity : AppCompatActivity() {
             .mergeWith(newE3ApiClient.getCourseList())
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .collectInto(
-                Pair<MutableList<CourseItem>, MutableList<CourseItem>>(
-                    mutableListOf(),
-                    mutableListOf()
-                )
-            ) { courseItems, courseItem ->
-                when (courseItem.e3Type) {
-                    E3Type.OLD -> courseItems.first.add(courseItem)
-                    E3Type.NEW -> courseItems.second.add(courseItem)
-                }
-            }
+            .collectInto(mutableListOf<CourseItem>()) { courseItems, courseItem -> courseItems.add(courseItem) }
             .subscribeBy(
                 onSuccess = {
-                    courseDBHelper.addCourses(it.first)
-                    courseDBHelper.addCourses(it.second)
+                    courseDBHelper.addCourses(it)
                     handleLoginSuccess()
-                }
+                },
+                onError = { handleLoginSuccess() }
             )
     }
 
