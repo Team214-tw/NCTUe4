@@ -82,10 +82,11 @@ class LoginActivity : AppCompatActivity() {
             if (studentPortalPassword == "") studentPortalPassword = studentPassword
 
             disposable = oldE3Client.login(studentId, studentPassword)
+                .subscribeOn(Schedulers.newThread())
                 .mergeWith(
                     newE3ApiClient.login(studentId, studentPortalPassword)
-                        .flatMap { newE3ApiClient.saveUserInfo(studentId) })
-                .subscribeOn(Schedulers.newThread())
+                        .flatMap { newE3ApiClient.saveUserInfo(studentId) }
+                        .subscribeOn(Schedulers.newThread()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onComplete = {
@@ -113,8 +114,12 @@ class LoginActivity : AppCompatActivity() {
             return
         }
         disposable = oldE3Client.getCourseList()
-            .mergeWith(newE3ApiClient.getCourseList())
             .subscribeOn(Schedulers.newThread())
+            .mergeWith(
+                newE3ApiClient
+                    .getCourseList()
+                    .subscribeOn(Schedulers.newThread())
+            )
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<CourseItem>()) { courseItems, courseItem -> courseItems.add(courseItem) }
             .subscribeBy(
