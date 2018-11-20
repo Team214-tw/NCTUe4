@@ -2,12 +2,10 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/assign_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:context="com.team214.nctue4.ann.AnnActivity">
+        android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -30,7 +28,7 @@
     <include layout="@layout/progress_bar"/>
 
     <androidx.core.widget.NestedScrollView
-            android:id="@+id/ann_container"
+            android:id="@+id/assign_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible"
@@ -136,8 +134,8 @@
                     android:paddingTop="4dp"/>
 
 
-            <WebView
-                    android:id="@+id/ann_content_web_view"
+            <com.team214.nctue4.utility.NestedWebView
+                    android:id="@+id/assign_content_web_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="8dp"

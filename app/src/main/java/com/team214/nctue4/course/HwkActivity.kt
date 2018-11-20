@@ -125,12 +125,12 @@ class HwkActivity : AppCompatActivity() {
         assign_start_date.text = sdf.format(hwkItem.startDate)
         assign_end_date.text = sdf.format(hwkItem.endDate)
         ann_title.text = hwkItem.name
-        ann_content_web_view.settings.defaultTextEncodingName = "utf-8"
+        assign_content_web_view.settings.defaultTextEncodingName = "utf-8"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ann_content_web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+            assign_content_web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
         }
-        ann_content_web_view.loadData(content, "text/html; charset=utf-8", "UTF-8")
-        ann_content_web_view.setBackgroundColor(Color.TRANSPARENT)
+        assign_content_web_view.loadData(content, "text/html; charset=utf-8", "UTF-8")
+        assign_content_web_view.setBackgroundColor(Color.TRANSPARENT)
         assign_attach.layoutManager = LinearLayoutManager(this)
         assign_attach.adapter = AnnAttachmentAdapter(this, hwkItem.attachItems) {
             url = it.url
@@ -142,7 +142,7 @@ class HwkActivity : AppCompatActivity() {
             }
 
         }
-        ann_container?.visibility = View.VISIBLE
+        assign_container?.visibility = View.VISIBLE
     }
 
     override fun onRequestPermissionsResult(

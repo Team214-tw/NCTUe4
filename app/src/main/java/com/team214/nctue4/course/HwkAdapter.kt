@@ -19,7 +19,7 @@ class HwkAdapter(
 
     class ViewHolder(val view: View, private val itemClickListener: (HwkItem) -> Unit) :
         RecyclerView.ViewHolder(view) {
-        private val df = SimpleDateFormat("yyyy/M/d", Locale.TAIWAN)
+        private val df = SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN)
         fun bind(assign: HwkItem) {
             view.assign_name.text = assign.name
             view.assign_start.text = df.format(assign.startDate)
