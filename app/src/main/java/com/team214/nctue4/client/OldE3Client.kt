@@ -50,8 +50,6 @@ class OldE3Client(context: Context) : E3Client() {
 
     private fun get(path: String): Observable<String> {
         return Observable.fromCallable {
-            Log.d("E3", app.oldE3Session?.value() ?: "")
-            Log.d("E3", app.oldE3AspXAuth?.value() ?: "")
             if (path != "/login.aspx" && (app.oldE3Session == null || app.oldE3AspXAuth == null)) {
                 throw SessionInvalidException()
             }
@@ -132,7 +130,6 @@ class OldE3Client(context: Context) : E3Client() {
     }
 
     private fun restorePage(): Observable<Unit> {
-        Log.d("E3Page", app.oldE3CurrentPage)
         return when (app.oldE3CurrentPage) {
             "notLoggedIn" -> {
                 Observable.just(Unit)
