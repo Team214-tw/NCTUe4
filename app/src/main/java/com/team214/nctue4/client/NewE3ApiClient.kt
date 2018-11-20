@@ -151,8 +151,17 @@ class NewE3ApiClient(context: Context) : E3Client() {
                 val resJson = JSONObject(response).getJSONArray("discussions")
                 (0 until resJson.length()).map { resJson.get(it) as JSONObject }.forEach { ann ->
                     val title = ann.getString("name")
-                    val content = ann.getString("message")
+                    var content = ann.getString("message")
                     val date = Date(ann.getLong("timemodified") * 1000)
+                    if (ann.has("messageinlinefiles")) {
+                        val files = ann.getJSONArray("messageinlinefiles")
+                        (0 until files.length()).map { files.get(it) as JSONObject }.forEach {
+                            content = content.replace(
+                                it.getString("fileurl"),
+                                it.getString("fileurl") + "?token=$token"
+                            )
+                        }
+                    }
                     emitter.onNext(
                         AnnItem(
                             E3Type.NEW,

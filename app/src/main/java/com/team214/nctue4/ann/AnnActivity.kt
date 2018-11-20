@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.client.E3ClientFactory
-import com.team214.nctue4.client.E3Type
 import com.team214.nctue4.course.CourseActivity
 import com.team214.nctue4.model.AnnItem
 import com.team214.nctue4.model.CourseDBHelper
@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.progress_bar.*
 import kotlinx.android.synthetic.main.status_error.*
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.regex.PatternSyntaxException
+
 
 class AnnActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -105,16 +105,6 @@ class AnnActivity : AppCompatActivity() {
 
     private fun showData(annItem: AnnItem) {
         error_request.visibility = View.GONE
-        // replace <img src="/...> to <img src="http://e3.nctu.edu.tw/..."
-        val content =
-            if (annItem.e3Type == E3Type.OLD) {
-                try {
-                    Regex("(?<=(<img[.\\s\\S^>]{0,300}src[ \n]{0,300}=[ \n]{0,300}\"))(/)(?=([^/]))")
-                        .replace(annItem.content!!, "http://e3.nctu.edu.tw/")
-                } catch (e: PatternSyntaxException) {
-                    annItem.content
-                }
-            } else annItem.content
         ann_title.text = annItem.title
         ann_courseName.text = annItem.courseName
         ann_date.text = if (annItem.date != null) {
@@ -124,7 +114,15 @@ class AnnActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ann_content_web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
         }
-        ann_content_web_view.loadData(content, "text/html; charset=utf-8", "UTF-8")
+        val cookieManager = CookieManager.getInstance()
+        cookieManager.setAcceptCookie(true)
+        val cookies = client.getCookie()
+        cookieManager.removeAllCookie()
+        cookies?.forEach { cookie ->
+            val cookieString = cookie.name() + "=" + cookie.value() + "; Domain=" + cookie.domain()
+            cookieManager.setCookie(cookie.domain(), cookieString)
+        }
+        ann_content_web_view.loadData(annItem.content, "text/html; charset=utf-8", "UTF-8")
         ann_content_web_view.setBackgroundColor(Color.TRANSPARENT)
         announcement_attach.layoutManager = LinearLayoutManager(this)
         announcement_attach.adapter = AnnAttachmentAdapter(this, annItem.attachItems) {

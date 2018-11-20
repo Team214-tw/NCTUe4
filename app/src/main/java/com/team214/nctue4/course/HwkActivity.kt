@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,6 @@ import com.team214.nctue4.R
 import com.team214.nctue4.ann.AnnAttachmentAdapter
 import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.client.E3ClientFactory
-import com.team214.nctue4.client.E3Type
 import com.team214.nctue4.model.CourseItem
 import com.team214.nctue4.model.HwkItem
 import com.team214.nctue4.utility.downloadFile
@@ -30,7 +30,6 @@ import kotlinx.android.synthetic.main.progress_bar.*
 import kotlinx.android.synthetic.main.status_error.*
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.regex.PatternSyntaxException
 
 class HwkActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -111,16 +110,6 @@ class HwkActivity : AppCompatActivity() {
 
     private fun showData(hwkItem: HwkItem) {
         error_request.visibility = View.GONE
-        // replace <img src="/...> to <img src="http://e3.nctu.edu.tw/..."
-        val content =
-            if (hwkItem.e3Type == E3Type.OLD) {
-                try {
-                    Regex("(?<=(<img[.\\s\\S^>]{0,300}src[ \n]{0,300}=[ \n]{0,300}\"))(/)(?=([^/]))")
-                        .replace(hwkItem.content!!, "http://e3.nctu.edu.tw/")
-                } catch (e: PatternSyntaxException) {
-                    hwkItem.content
-                }
-            } else hwkItem.content
         val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.TAIWAN)
         assign_start_date.text = sdf.format(hwkItem.startDate)
         assign_end_date.text = sdf.format(hwkItem.endDate)
@@ -129,7 +118,15 @@ class HwkActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             assign_content_web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
         }
-        assign_content_web_view.loadData(content, "text/html; charset=utf-8", "UTF-8")
+        val cookieManager = CookieManager.getInstance()
+        cookieManager.setAcceptCookie(true)
+        val cookies = client.getCookie()
+        cookieManager.removeAllCookie()
+        cookies?.forEach { cookie ->
+            val cookieString = cookie.name() + "=" + cookie.value() + "; Domain=" + cookie.domain()
+            cookieManager.setCookie(cookie.domain(), cookieString)
+        }
+        assign_content_web_view.loadData(hwkItem.content, "text/html; charset=utf-8", "UTF-8")
         assign_content_web_view.setBackgroundColor(Color.TRANSPARENT)
         assign_attach.layoutManager = LinearLayoutManager(this)
         assign_attach.adapter = AnnAttachmentAdapter(this, hwkItem.attachItems) {

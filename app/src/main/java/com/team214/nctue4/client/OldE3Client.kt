@@ -15,6 +15,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.PatternSyntaxException
 
 class OldE3Client(context: Context) : E3Client() {
     class SessionInvalidException : Exception()
@@ -241,6 +242,15 @@ class OldE3Client(context: Context) : E3Client() {
         }
     }
 
+    private fun fixReleativeUrl(html: String): String {
+        return try {
+            Regex("(?<=(<img[.\\s\\S^>]{0,300}src[ \n]{0,300}=[ \n]{0,300}\"))(/)(?=([^/]))")
+                .replace(html, "https://e3.nctu.edu.tw/")
+        } catch (e: PatternSyntaxException) {
+            html
+        }
+    }
+
     override fun getAnn(annItem: AnnItem): Observable<AnnItem> {
         return if (annItem.detailLocationHint == null) {
             Observable.just(annItem)
@@ -276,7 +286,9 @@ class OldE3Client(context: Context) : E3Client() {
                                         )
                                     fileItems.add(FileItem(fileName, fileUrl))
                                 }
-                                val content = document.getElementById(contentElId.format(target, idx)).html()
+                                // replace <img src="/...> to <img src="https://e3.nctu.edu.tw/..."
+                                val content = document.getElementById(contentElId.format(target, idx))
+                                    .html().run { fixReleativeUrl(this) }
                                 return@fromCallable AnnItem(
                                     E3Type.OLD,
                                     titleEl.text(),
@@ -342,7 +354,9 @@ class OldE3Client(context: Context) : E3Client() {
                                     )
                                 fileItems.add(FileItem(fileName, fileUrl))
                             }
-                            val content = document.getElementById(contentElId.format(target, idx)).html()
+                            // replace <img src="/...> to <img src="https://e3.nctu.edu.tw/..."
+                            val content = document.getElementById(contentElId.format(target, idx))
+                                .html().run { fixReleativeUrl(this) }
                             emitter.onNext(
                                 AnnItem(
                                     E3Type.OLD,
@@ -643,6 +657,7 @@ class OldE3Client(context: Context) : E3Client() {
             .flatMap { document ->
                 Observable.fromCallable {
                     val content = document.getElementById("ctl00_ContentPlaceHolder1_HwkInfo1_lbContent").html()
+                        .run { fixReleativeUrl(this) }
                     val attachItems = mutableListOf<FileItem>()
                     val submitItems = mutableListOf<FileItem>()
                     document.getElementById("Anthem_ctl00_ContentPlaceHolder1_HwkInfo1_fileAttachManageLite_rpFileList__")
