@@ -242,7 +242,7 @@ class OldE3Client(context: Context) : E3Client() {
         }
     }
 
-    private fun fixReleativeUrl(html: String): String {
+    private fun fixRelativeUrl(html: String): String {
         return try {
             Regex("(?<=(<img[.\\s\\S^>]{0,300}src[ \n]{0,300}=[ \n]{0,300}\"))(/)(?=([^/]))")
                 .replace(html, "https://e3.nctu.edu.tw/")
@@ -288,7 +288,7 @@ class OldE3Client(context: Context) : E3Client() {
                                 }
                                 // replace <img src="/...> to <img src="https://e3.nctu.edu.tw/..."
                                 val content = document.getElementById(contentElId.format(target, idx))
-                                    .html().run { fixReleativeUrl(this) }
+                                    .html().run { fixRelativeUrl(this) }
                                 return@fromCallable AnnItem(
                                     E3Type.OLD,
                                     titleEl.text(),
@@ -356,7 +356,7 @@ class OldE3Client(context: Context) : E3Client() {
                             }
                             // replace <img src="/...> to <img src="https://e3.nctu.edu.tw/..."
                             val content = document.getElementById(contentElId.format(target, idx))
-                                .html().run { fixReleativeUrl(this) }
+                                .html().run { fixRelativeUrl(this) }
                             emitter.onNext(
                                 AnnItem(
                                     E3Type.OLD,
@@ -657,7 +657,7 @@ class OldE3Client(context: Context) : E3Client() {
             .flatMap { document ->
                 Observable.fromCallable {
                     val content = document.getElementById("ctl00_ContentPlaceHolder1_HwkInfo1_lbContent").html()
-                        .run { fixReleativeUrl(this) }
+                        .run { fixRelativeUrl(this) }
                     val attachItems = mutableListOf<FileItem>()
                     val submitItems = mutableListOf<FileItem>()
                     document.getElementById("Anthem_ctl00_ContentPlaceHolder1_HwkInfo1_fileAttachManageLite_rpFileList__")
