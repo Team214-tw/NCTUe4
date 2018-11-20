@@ -62,9 +62,7 @@ class OldE3Client(context: Context) : E3Client() {
         }.flatMap { (response, responseBody) ->
             Observable.fromCallable {
                 response.apply {
-                    if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx") ||
-                        this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/logout.aspx")
-                    ) {
+                    if (this.header("Location", "")!!.contains(Regex("(login)|(logout)"))) {
                         throw SessionInvalidException()
                     }
                 }
@@ -102,9 +100,7 @@ class OldE3Client(context: Context) : E3Client() {
         }.flatMap { (response, responseBody) ->
             Observable.fromCallable {
                 response.apply {
-                    if (this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/login.aspx") ||
-                        this.header("Location", "")!!.startsWith("/NCTU_EASY_E3P/LMS31/logout.aspx")
-                    ) {
+                    if (this.header("Location", "")!!.contains(Regex("(login)|(logout)"))) {
                         throw SessionInvalidException()
                     }
                 }
@@ -134,18 +130,16 @@ class OldE3Client(context: Context) : E3Client() {
     }
 
     private fun toCoursePage(courseId: String): Observable<Unit> {
-        return if (app.oldE3CurrentPage == courseId) {
-            Observable.just(Unit)
-        } else if (app.oldE3CurrentPage == "home") {
-            post(
+        return when {
+            app.oldE3CurrentPage == courseId -> Observable.just(Unit)
+            app.oldE3CurrentPage == "home" -> post(
                 "/enter_course_index.aspx",
                 hashMapOf("__EVENTTARGET" to app.oldE3CourseIdMap[courseId]!!)
             ).flatMap {
                 app.oldE3CurrentPage = courseId
                 Observable.just(Unit)
             }
-        } else {
-            toHomePage().flatMap {
+            else -> toHomePage().flatMap {
                 post(
                     "/enter_course_index.aspx",
                     hashMapOf("__EVENTTARGET" to app.oldE3CourseIdMap[courseId]!!)
