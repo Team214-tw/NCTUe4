@@ -50,6 +50,8 @@ class OldE3Client(context: Context) : E3Client() {
 
     private fun get(path: String): Observable<String> {
         return Observable.fromCallable {
+            Log.d("E3", app.oldE3Session?.value() ?: "")
+            Log.d("E3", app.oldE3AspXAuth?.value() ?: "")
             if (path != "/login.aspx" && (app.oldE3Session == null || app.oldE3AspXAuth == null)) {
                 throw SessionInvalidException()
             }
@@ -70,7 +72,11 @@ class OldE3Client(context: Context) : E3Client() {
             }
         }.retryWhen {
             it.flatMap { error ->
-                if (error is SessionInvalidException) login() else Observable.error(error)
+                if (error is SessionInvalidException) {
+                    login().flatMap { restorePage() }
+                } else {
+                    Observable.error(error)
+                }
             }
         }
     }
@@ -108,7 +114,11 @@ class OldE3Client(context: Context) : E3Client() {
             }
         }.retryWhen {
             it.flatMap { error ->
-                if (error is SessionInvalidException) login() else Observable.error(error)
+                if (error is SessionInvalidException) {
+                    login().flatMap { restorePage() }
+                } else {
+                    Observable.error(error)
+                }
             }
         }
     }
@@ -121,6 +131,31 @@ class OldE3Client(context: Context) : E3Client() {
         }
     }
 
+    private fun restorePage(): Observable<Unit> {
+        Log.d("E3Page", app.oldE3CurrentPage)
+        return when (app.oldE3CurrentPage) {
+            "notLoggedIn" -> {
+                Observable.just(Unit)
+            }
+            "home" -> {
+                toHomePage().flatMap { Observable.just(Unit) }
+            }
+            else -> {
+                val bkPage = app.oldE3CurrentPage
+                toHomePage().flatMap { toCoursePage(bkPage) }
+            }
+        }
+    }
+
+    private fun toCoursePage(courseId: String): Observable<Unit> {
+        return post(
+            "/enter_course_index.aspx",
+            hashMapOf("__EVENTTARGET" to app.oldE3CourseIdMap[courseId]!!)
+        ).flatMap {
+            app.oldE3CurrentPage = courseId
+            Observable.just(Unit)
+        }
+    }
 
     private fun toHomePage(): Observable<Document> {
         return get("/enter_course_index.aspx").flatMap { response ->
@@ -129,25 +164,11 @@ class OldE3Client(context: Context) : E3Client() {
         }.flatMap { parseHtmlResponse(it) }
     }
 
-    private fun toCoursePage(courseId: String): Observable<Unit> {
+    private fun ensureCoursePage(courseId: String): Observable<Unit> {
         return when {
             app.oldE3CurrentPage == courseId -> Observable.just(Unit)
-            app.oldE3CurrentPage == "home" -> post(
-                "/enter_course_index.aspx",
-                hashMapOf("__EVENTTARGET" to app.oldE3CourseIdMap[courseId]!!)
-            ).flatMap {
-                app.oldE3CurrentPage = courseId
-                Observable.just(Unit)
-            }
-            else -> toHomePage().flatMap {
-                post(
-                    "/enter_course_index.aspx",
-                    hashMapOf("__EVENTTARGET" to app.oldE3CourseIdMap[courseId]!!)
-                ).flatMap {
-                    app.oldE3CurrentPage = courseId
-                    Observable.just(Unit)
-                }
-            }
+            app.oldE3CurrentPage == "home" -> toCoursePage(courseId)
+            else -> toHomePage().flatMap { toCoursePage(courseId) }
         }
     }
 
@@ -193,7 +214,6 @@ class OldE3Client(context: Context) : E3Client() {
                     if (it.contains("window.location.href='login.aspx';")) {
                         throw WrongCredentialsException()
                     }
-                    app.oldE3CurrentPage = "home"
                 }
             }
     }
@@ -229,7 +249,7 @@ class OldE3Client(context: Context) : E3Client() {
             Observable.just(annItem)
         } else {
             ensureCourseIdMap()
-                .flatMap { toCoursePage(annItem.detailLocationHint) }
+                .flatMap { ensureCoursePage(annItem.detailLocationHint) }
                 .flatMap { get("/stu_announcement_online.aspx") }
                 .flatMap { parseHtmlResponse(it) }
                 .flatMap { document ->
@@ -299,7 +319,7 @@ class OldE3Client(context: Context) : E3Client() {
 
     override fun getCourseAnns(courseItem: CourseItem): Observable<AnnItem> {
         return ensureCourseIdMap()
-            .flatMap { toCoursePage(courseItem.courseId) }
+            .flatMap { ensureCoursePage(courseItem.courseId) }
             .flatMap { get("/stu_announcement_online.aspx") }
             .flatMap { parseHtmlResponse(it) }
             .flatMap { document ->
@@ -373,7 +393,7 @@ class OldE3Client(context: Context) : E3Client() {
 
     override fun getCourseFolders(courseItem: CourseItem): Observable<FolderItem> {
         return ensureCourseIdMap()
-            .flatMap { toCoursePage(courseItem.courseId) }
+            .flatMap { ensureCoursePage(courseItem.courseId) }
             .flatMap { get("/stu_materials_document_list.aspx") }
             .flatMap { parseHtmlResponse(it) }
             .flatMap { document ->
@@ -452,7 +472,7 @@ class OldE3Client(context: Context) : E3Client() {
 
     override fun getFiles(folderItem: FolderItem): Observable<FileItem> {
         return ensureCourseIdMap()
-            .flatMap { toCoursePage(folderItem.courseId) }
+            .flatMap { ensureCoursePage(folderItem.courseId) }
             .flatMap { get("/dialog_common_view_attach_media_list.aspx?ReferenceSourceId=${folderItem.folderId}&CurrentCourseId=${folderItem.courseId}") }
             .flatMap { response ->
                 Observable.create<FileItem> { emitter ->
@@ -464,18 +484,31 @@ class OldE3Client(context: Context) : E3Client() {
                             val name = tdEls[1].text()
                             val match = Regex("AttachMediaId=([^;,']*).*CourseId=([^;,']*)")
                                 .find(tdEls[5].selectFirst("a").attr("onclick"))
+                            if (match == null) {
+                                emitter.onError(SessionInvalidException())
+                                emitter.onComplete()
+                                return@create
+                            }
                             val url =
-                                "$WEB_URL/common_view_standalone_file.ashx?AttachMediaId=${match!!.groups[1]!!.value}&CourseId=${match.groups[2]!!.value}"
+                                "$WEB_URL/common_view_standalone_file.ashx?AttachMediaId=${match.groups[1]!!.value}&CourseId=${match.groups[2]!!.value}"
                             emitter.onNext(FileItem(name, url))
                         }
                     emitter.onComplete()
+                }
+            }.retryWhen {
+                it.flatMap { error ->
+                    if (error is SessionInvalidException) {
+                        login().flatMap { restorePage() }
+                    } else {
+                        Observable.error(error)
+                    }
                 }
             }
     }
 
     override fun getScore(courseItem: CourseItem): Observable<ScoreItem> {
         return ensureCourseIdMap()
-            .flatMap { toCoursePage(courseItem.courseId) }
+            .flatMap { ensureCoursePage(courseItem.courseId) }
             .flatMap { get("/stu_scores_list.aspx") }
             .flatMap { parseHtmlResponse(it) }
             .flatMap { document ->
@@ -507,7 +540,7 @@ class OldE3Client(context: Context) : E3Client() {
 
     override fun getMembers(courseItem: CourseItem): Observable<MemberItem> {
         return ensureCourseIdMap()
-            .flatMap { toCoursePage(courseItem.courseId) }
+            .flatMap { ensureCoursePage(courseItem.courseId) }
             .flatMap { get("/stu_classintro_teacher.aspx") }
             .flatMap { parseHtmlResponse(it) }
             .flatMap { document ->
@@ -561,7 +594,7 @@ class OldE3Client(context: Context) : E3Client() {
 
     override fun getCourseHwk(courseItem: CourseItem): Observable<HwkItem> {
         return ensureCourseIdMap()
-            .flatMap { toCoursePage(courseItem.courseId) }
+            .flatMap { ensureCoursePage(courseItem.courseId) }
             .flatMap { get("/stu_materials_homework_list.aspx") }
             .flatMap { parseHtmlResponse(it) }
             .flatMap { document ->
@@ -597,7 +630,7 @@ class OldE3Client(context: Context) : E3Client() {
 
     override fun getHwkDetail(hwkItem: HwkItem, courseItem: CourseItem?): Observable<HwkItem> {
         return ensureCourseIdMap()
-            .flatMap { toCoursePage(courseItem!!.courseId) }
+            .flatMap { ensureCoursePage(courseItem!!.courseId) }
             .flatMap {
                 post(
                     "/ajaxpro/WebPageBase,App_Code.ashx",
