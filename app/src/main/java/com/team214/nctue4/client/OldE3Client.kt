@@ -539,7 +539,7 @@ class OldE3Client(context: Context) : E3Client() {
                                     emitter.onNext(ScoreItem(tdEls[0].text(), tdEls[4].text()))
                                 }
                             } else if (tdEls.size == 5) {
-                                emitter.onNext(ScoreItem(tdEls[0].text(), tdEls[4].text()))
+                                emitter.onNext(ScoreItem(tdEls[0].text(), tdEls[3].text()))
                             }
                         }
                     val tdEls = trEls.last().getElementsByTag("td")
