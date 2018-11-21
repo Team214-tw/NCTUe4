@@ -139,13 +139,17 @@ class NewE3WebClient(context: Context) : E3Client() {
                 val document = Jsoup.parse(it)
                 val df = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.US)
 
-                val attachItems =
-                    document.select(".attachments").map { el ->
-                        FileItem(
-                            el.select("a").last().text(),
-                            el.select("a").last().attr("href")
+                val attachItems = mutableListOf<FileItem>()
+
+                document.getElementsByClass("attachments")
+                    ?.first()
+                    ?.getElementsByTag("a")
+                    ?.filter { el -> el.hasText() }
+                    ?.forEach { el ->
+                        attachItems.add(
+                            FileItem(el.text(), el.attr("href"))
                         )
-                    }.toMutableList()
+                    }
 
                 val title = if (document.select(".name").size > 0) {
                     document.select(".name").text()

@@ -155,10 +155,22 @@ class NewE3ApiClient(context: Context) : E3Client() {
                     val date = Date(ann.getLong("timemodified") * 1000)
                     if (ann.has("messageinlinefiles")) {
                         val files = ann.getJSONArray("messageinlinefiles")
-                        (0 until files.length()).map { files.get(it) as JSONObject }.forEach {
+                        (0 until files.length()).map { files.getJSONObject(it) }.forEach {
                             content = content.replace(
                                 it.getString("fileurl"),
                                 it.getString("fileurl") + "?token=$token"
+                            )
+                        }
+                    }
+                    val attachItems = mutableListOf<FileItem>()
+                    if (ann.has("attachments")) {
+                        val files = ann.getJSONArray("attachments")
+                        (0 until files.length()).map { files.getJSONObject(it) }.forEach {
+                            attachItems.add(
+                                FileItem(
+                                    it.getString("filename"),
+                                    it.getString("fileurl") + "?token=$token"
+                                )
                             )
                         }
                     }
@@ -169,7 +181,8 @@ class NewE3ApiClient(context: Context) : E3Client() {
                             date,
                             courseItem.courseName,
                             null,
-                            content
+                            content,
+                            attachItems
                         )
                     )
                 }
