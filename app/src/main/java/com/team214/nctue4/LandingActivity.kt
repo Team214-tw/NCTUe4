@@ -13,7 +13,7 @@ class LandingActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme_NoActionBar)  //End Splash Screen
+        setTheme(R.style.AppTheme)  //End Splash Screen
         super.onCreate(savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         CourseDBHelper(this).writableDatabase
