@@ -122,7 +122,13 @@ class AnnActivity : AppCompatActivity() {
             val cookieString = cookie.name() + "=" + cookie.value() + "; Domain=" + cookie.domain()
             cookieManager.setCookie(cookie.domain(), cookieString)
         }
-        ann_content_web_view.loadData(annItem.content, "text/html; charset=utf-8", "UTF-8")
+        ann_content_web_view.loadDataWithBaseURL(
+            client.getBaseUrl(),
+            annItem.content,
+            "text/html",
+            "UTF-8",
+            null
+        )
         ann_content_web_view.setBackgroundColor(Color.TRANSPARENT)
         announcement_attach.layoutManager = LinearLayoutManager(this)
         announcement_attach.adapter = AnnAttachmentAdapter(this, annItem.attachItems) {

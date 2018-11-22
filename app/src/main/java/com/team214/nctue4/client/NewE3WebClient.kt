@@ -210,4 +210,8 @@ class NewE3WebClient(context: Context) : E3Client() {
     override fun getHwkDetail(hwkItem: HwkItem, courseItem: CourseItem?): Observable<HwkItem> {
         throw NotImplementedError()
     }
+
+    override fun getBaseUrl(): String? {
+        return "https://e3new.nctu.edu.tw"
+    }
 }

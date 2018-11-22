@@ -421,4 +421,8 @@ class NewE3ApiClient(context: Context) : E3Client() {
     override fun getCookie(): MutableList<Cookie>? {
         return null
     }
+
+    override fun getBaseUrl(): String? {
+        return "https://e3new.nctu.edu.tw"
+    }
 }

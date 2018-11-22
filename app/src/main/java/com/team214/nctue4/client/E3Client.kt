@@ -2,7 +2,6 @@ package com.team214.nctue4.client
 
 import com.team214.nctue4.model.*
 import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import okhttp3.Cookie
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -55,4 +54,6 @@ abstract class E3Client {
     abstract fun getHwkDetail(hwkItem: HwkItem, courseItem: CourseItem?): Observable<HwkItem>
 
     abstract fun getHwkSubmitFiles(hwkItem: HwkItem): Observable<FileItem>
+
+    abstract fun getBaseUrl(): String?
 }

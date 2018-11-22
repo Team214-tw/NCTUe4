@@ -126,7 +126,13 @@ class HwkActivity : AppCompatActivity() {
             val cookieString = cookie.name() + "=" + cookie.value() + "; Domain=" + cookie.domain()
             cookieManager.setCookie(cookie.domain(), cookieString)
         }
-        assign_content_web_view.loadData(hwkItem.content, "text/html; charset=utf-8", "UTF-8")
+        assign_content_web_view.loadDataWithBaseURL(
+            client.getBaseUrl(),
+            hwkItem.content,
+            "text/html",
+            "UTF-8",
+            null
+        )
         assign_content_web_view.setBackgroundColor(Color.TRANSPARENT)
         assign_attach.layoutManager = LinearLayoutManager(this)
         assign_attach.adapter = AnnAttachmentAdapter(this, hwkItem.attachItems) {
