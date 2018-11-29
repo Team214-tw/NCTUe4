@@ -2,7 +2,6 @@ package com.team214.nctue4.course
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +57,7 @@ class CourseAnnFragment : Fragment() {
             .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
                 onSuccess = {
+                    it.sortByDescending { annItem -> annItem.date }
                     displayData(it)
                 },
                 onError = {
