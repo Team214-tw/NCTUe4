@@ -103,7 +103,7 @@ class HomeAnnFragment : Fragment() {
                     displayErrorToast()
                     displayData()
                 },
-                onError = {
+                onError = { it ->
                     if (it is E3Client.WrongCredentialsException) {
                         displayWrongCredentialsError()
                     } else {

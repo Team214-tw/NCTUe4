@@ -168,8 +168,8 @@ class MembersFragment : Fragment() {
                     val intent = Intent(Intent.ACTION_SENDTO)
                     intent.type = "text/plain"
                     var emailUri = "mailto: "
-                    memberItems.filter { it.selected && it.email != "" }.forEach {
-                        emailUri += it.email + ","
+                    memberItems.filter { member -> member.selected && member.email != "" }.forEach { member ->
+                        emailUri += member.email + ","
                     }
                     emailUri += "?subject=${courseItem.courseName}"
                     intent.data = Uri.parse(emailUri)

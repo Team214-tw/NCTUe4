@@ -37,7 +37,7 @@ class HwkActivity : AppCompatActivity() {
     private lateinit var fileName: String
     lateinit var client: E3Client
     private lateinit var courseItem: CourseItem
-    lateinit var hwkItem: HwkItem
+    private lateinit var hwkItem: HwkItem
     private var disposable: Disposable? = null
     private var requestComplete = false
 

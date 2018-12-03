@@ -110,7 +110,7 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
 
     fun isCoursesTableEmpty(): Boolean {
         var empty = true
-        val cursor = readableDatabase.rawQuery("SELECT COUNT(*) FROM courses", null);
+        val cursor = readableDatabase.rawQuery("SELECT COUNT(*) FROM courses", null)
         if (cursor != null && cursor.moveToFirst()) {
             empty = (cursor.getInt(0) == 0)
         }

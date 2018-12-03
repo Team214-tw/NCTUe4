@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.dialog_assign.*
 
 class HwkDialog : DialogFragment() {
     lateinit var client: E3Client
-    lateinit var hwkItem: HwkItem
+    private lateinit var hwkItem: HwkItem
     lateinit var courseItem: CourseItem
     private var disposable: Disposable? = null
     private lateinit var url: String
