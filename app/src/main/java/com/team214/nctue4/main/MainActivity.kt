@@ -14,7 +14,10 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.BuildConfig
 import com.team214.nctue4.R
-import com.team214.nctue4.client.*
+import com.team214.nctue4.client.E3Type
+import com.team214.nctue4.client.NewE3ApiClient
+import com.team214.nctue4.client.NewE3WebClient
+import com.team214.nctue4.client.OldE3Client
 import com.team214.nctue4.login.LogoutActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*

@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import com.team214.nctue4.R
 import com.team214.nctue4.model.FolderItem
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.fragment_course_folder_viewpager.*
 

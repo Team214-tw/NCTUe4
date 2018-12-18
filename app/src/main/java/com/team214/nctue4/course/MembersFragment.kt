@@ -18,7 +18,6 @@ import com.team214.nctue4.model.MemberItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_members.*
 import kotlinx.android.synthetic.main.item_member.view.*
 import kotlinx.android.synthetic.main.progress_bar.*

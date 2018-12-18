@@ -32,8 +32,10 @@ class DownloadDialog : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.dialog_download, container, false)
     }
 
@@ -76,8 +78,10 @@ class DownloadDialog : BottomSheetDialogFragment() {
         download_share?.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             val type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
-            val fileUri = FileProvider.getUriForFile(context!!,
-                context!!.applicationContext.packageName + ".com.team214", file)
+            val fileUri = FileProvider.getUriForFile(
+                context!!,
+                context!!.applicationContext.packageName + ".com.team214", file
+            )
             intent.setDataAndType(fileUri, type)
             intent.putExtra(Intent.EXTRA_STREAM, fileUri)
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
