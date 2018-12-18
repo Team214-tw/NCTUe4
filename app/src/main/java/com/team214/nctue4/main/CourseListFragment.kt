@@ -83,7 +83,6 @@ class CourseListFragment : Fragment() {
             E3Type.NEW -> (activity as MainActivity).newE3ApiClient
         }
         disposable = client.getCourseList()
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<CourseItem>()) { courseItems, courseItem -> courseItems.add(courseItem) }
             .doFinally { progress_bar?.visibility = View.GONE }

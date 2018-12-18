@@ -20,7 +20,6 @@ import com.team214.nctue4.model.CourseItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -82,11 +81,8 @@ class LoginActivity : AppCompatActivity() {
             if (studentPortalPassword == "") studentPortalPassword = studentPassword
 
             disposable = oldE3Client.login(studentId, studentPassword)
-                .subscribeOn(Schedulers.newThread())
-                .mergeWith(
-                    newE3ApiClient.login(studentId, studentPortalPassword)
-                        .flatMap { newE3ApiClient.saveUserInfo(studentId) }
-                        .subscribeOn(Schedulers.newThread()))
+                .mergeWith(newE3ApiClient.login(studentId, studentPortalPassword))
+                .flatMap { newE3ApiClient.saveUserInfo(studentId) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onComplete = {
@@ -114,11 +110,9 @@ class LoginActivity : AppCompatActivity() {
             return
         }
         disposable = oldE3Client.getCourseList()
-            .subscribeOn(Schedulers.newThread())
             .mergeWith(
-                newE3ApiClient
-                    .getCourseList()
-                    .subscribeOn(Schedulers.newThread())
+
+                newE3ApiClient.getCourseList()
             )
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<CourseItem>()) { courseItems, courseItem -> courseItems.add(courseItem) }

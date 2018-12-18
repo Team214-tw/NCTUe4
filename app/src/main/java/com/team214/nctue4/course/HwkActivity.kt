@@ -91,7 +91,6 @@ class HwkActivity : AppCompatActivity() {
         progress_bar?.visibility = View.VISIBLE
         client = E3ClientFactory.createFromHwk(this, hwkItem)
         disposable = client.getHwkDetail(hwkItem, courseItem)
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(

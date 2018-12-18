@@ -61,7 +61,6 @@ class AnnActivity : AppCompatActivity() {
         annItem = intent?.extras?.getParcelable("annItem")!!
         client = E3ClientFactory.createFromAnn(this, annItem)
         disposable = client.getAnn(annItem)
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(

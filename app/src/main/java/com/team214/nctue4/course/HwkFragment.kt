@@ -50,7 +50,6 @@ class HwkFragment : Fragment() {
         error_request.visibility = View.GONE
         progress_bar.visibility = View.VISIBLE
         disposable = client.getCourseHwk(courseItem)
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { progress_bar?.visibility = View.GONE }
             .collectInto(mutableListOf<HwkItem>()) { hwkItems, hwkItem -> hwkItems.add(hwkItem) }

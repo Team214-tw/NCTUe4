@@ -48,7 +48,6 @@ class ScoreFragment : Fragment() {
         error_request.visibility = View.GONE
         progress_bar.visibility = View.VISIBLE
         disposable = client.getScore(courseItem)
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<ScoreItem>()) { scoreItems, scoreItem -> scoreItems.add(scoreItem) }
             .doFinally { progress_bar?.visibility = View.GONE }

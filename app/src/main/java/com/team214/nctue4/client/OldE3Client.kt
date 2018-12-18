@@ -398,7 +398,7 @@ class OldE3Client(context: Context) : E3Client() {
                     getCourseFolderByProperty(
                         document,
                         folderProperties[1]
-                    ).subscribeOn(Schedulers.newThread())
+                    )
                 )
             }
     }

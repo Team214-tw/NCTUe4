@@ -114,16 +114,16 @@ class NewE3ApiClient(context: Context) : E3Client() {
         ).flatMap { response ->
             Observable.create<CourseItem> { emitter ->
                 val resJson = JSONArray(response)
-                (0 until resJson.length()).map { resJson.get(it) as JSONObject }
+                (0 until resJson.length())
+                    .map { resJson.get(it) as JSONObject }
+                    .filter { it.getLong("enddate") > System.currentTimeMillis() / 1000 }
                     .forEach {
-                        if (it.getLong("enddate") > System.currentTimeMillis() / 1000) {
-                            val courseName = it.getString("fullname").split(".").run {
-                                if (this.size >= 3) this[2].split(" ").first() else this[0]
-                            }
-                            val courseId = it.getString("id")
-                            val additionalInfo = it.getString("shortname")
-                            emitter.onNext(CourseItem(E3Type.NEW, courseName, courseId, additionalInfo))
+                        val courseName = it.getString("fullname").split(".").run {
+                            if (this.size >= 3) this[2].split(" ").first() else this[0]
                         }
+                        val courseId = it.getString("id")
+                        val additionalInfo = it.getString("shortname")
+                        emitter.onNext(CourseItem(E3Type.NEW, courseName, courseId, additionalInfo))
                     }
                 emitter.onComplete()
             }

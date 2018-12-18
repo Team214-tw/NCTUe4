@@ -56,7 +56,6 @@ class HwkDialog : DialogFragment() {
 
     private fun getData() {
         disposable = client.getHwkSubmitFiles(hwkItem)
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<FileItem>()) { fileItems, fileItem -> fileItems.add(fileItem) }
             .doFinally { progress_bar?.visibility = View.GONE }

@@ -49,7 +49,6 @@ class FolderFragment : Fragment() {
         error_request.visibility = View.GONE
         progress_bar.visibility = View.VISIBLE
         disposable = client.getCourseFolders(courseItem)
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<FolderItem>()) { folderItems, folderItem -> folderItems.add(folderItem) }
             .doFinally { progress_bar?.visibility = View.GONE }

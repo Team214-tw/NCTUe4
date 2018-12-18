@@ -90,7 +90,6 @@ class MembersFragment : Fragment() {
         progress_bar.visibility = View.VISIBLE
         memberItems.clear()
         disposable = client.getMembers(courseItem)
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(memberItems) { memberItems, memberItem -> memberItems.add(memberItem) }
             .doFinally { progress_bar?.visibility = View.GONE }

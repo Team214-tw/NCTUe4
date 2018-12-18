@@ -51,7 +51,6 @@ class CourseAnnFragment : Fragment() {
         error_request.visibility = View.GONE
         progress_bar.visibility = View.VISIBLE
         disposable = client.getCourseAnns(courseItem)
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<AnnItem>()) { annItems, annItem -> annItems.add(annItem) }
             .doFinally { progress_bar?.visibility = View.GONE }

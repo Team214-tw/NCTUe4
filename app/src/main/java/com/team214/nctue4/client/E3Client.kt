@@ -2,6 +2,7 @@ package com.team214.nctue4.client
 
 import com.team214.nctue4.model.*
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import okhttp3.Cookie
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -14,19 +15,18 @@ abstract class E3Client {
 
     protected abstract val client: OkHttpClient
     protected fun clientExecute(request: Request): Observable<Pair<Response, String>> {
-        return Observable.create { emitter ->
+        return Observable.create<Pair<Response, String>> { emitter ->
             try {
                 val response = client.newCall(request).execute()
                 emitter.onNext(Pair(response, response.body()!!.string()))
-                emitter.onComplete()
             } catch (e: Exception) {
-                if (emitter.isDisposed) {
-                    emitter.onComplete()
-                } else {
+                if (!emitter.isDisposed) {
                     emitter.onError(e)
                 }
+            } finally {
+                emitter.onComplete()
             }
-        }
+        }.subscribeOn(Schedulers.io())
     }
 
     abstract fun login(studentId: String? = null, password: String? = null): Observable<Unit>

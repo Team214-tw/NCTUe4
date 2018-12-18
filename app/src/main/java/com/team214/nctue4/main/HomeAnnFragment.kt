@@ -88,10 +88,8 @@ class HomeAnnFragment : Fragment() {
         annItems.clear()
         disposable = mutableListOf(
             oldE3Client.getFrontPageAnns()
-                .subscribeOn(Schedulers.newThread())
                 .doOnError { oldE3Failed = true },
             newE3WebClient.getFrontPageAnns()
-                .subscribeOn(Schedulers.newThread())
                 .doOnError { newE3Failed = true }
         ).mergeDelayError()
             .observeOn(AndroidSchedulers.mainThread())
