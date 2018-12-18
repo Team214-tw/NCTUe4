@@ -27,6 +27,18 @@
                     app:layout_scrollFlags="scroll|enterAlways|snap"
                     app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
+            <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/toolbar_tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:visibility="gone"
+                    app:tabGravity="fill"
+                    app:tabIndicatorHeight="2dp"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@android:color/white"
+                    app:tabTextColor="@android:color/white"/>
+
         </com.google.android.material.appbar.AppBarLayout>
 
 

@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.team214.nctue4.R
 import com.team214.nctue4.model.FolderItem
 import kotlinx.android.synthetic.main.item_course_folder.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FolderAdapter(
     private val context: Context,
@@ -21,14 +23,12 @@ class FolderAdapter(
         private val view: View,
         private val itemClickListener: (FolderItem) -> Unit
     ) : RecyclerView.ViewHolder(view) {
-        fun bind(doc: FolderItem) {
-            view.doc_group_display_name.text = doc.name
-            view.course_doc_type.text = when (doc.folderType) {
-                FolderItem.Type.Handout -> context.getString(R.string.course_doc_type_handout)
-                FolderItem.Type.Reference -> context.getString(R.string.course_doc_type_reference)
-            }
-            view.course_doc_group_list_item?.setOnClickListener {
-                itemClickListener(doc)
+        fun bind(folder: FolderItem) {
+            view.folder_display_name.text = folder.name
+            val df = SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN)
+            view.folder_modify_date.text = df.format(folder.timeModified)
+            view.course_folder_list_item?.setOnClickListener {
+                itemClickListener(folder)
             }
         }
     }

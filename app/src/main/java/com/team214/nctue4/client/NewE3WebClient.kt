@@ -183,7 +183,7 @@ class NewE3WebClient(context: Context) : E3Client() {
         throw NotImplementedError()
     }
 
-    override fun getCourseFolders(courseItem: CourseItem): Observable<FolderItem> {
+    override fun getCourseFolders(courseItem: CourseItem, folderType: FolderItem.Type): Observable<FolderItem> {
         throw NotImplementedError()
     }
 
@@ -213,5 +213,9 @@ class NewE3WebClient(context: Context) : E3Client() {
 
     override fun getBaseUrl(): String? {
         return "https://e3new.nctu.edu.tw"
+    }
+
+    override fun prepareCourseFolders(courseItem: CourseItem): Observable<Unit> {
+        throw NotImplementedError()
     }
 }

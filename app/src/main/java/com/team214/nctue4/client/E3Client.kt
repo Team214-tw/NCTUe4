@@ -41,7 +41,9 @@ abstract class E3Client {
 
     abstract fun getCourseAnns(courseItem: CourseItem): Observable<AnnItem>
 
-    abstract fun getCourseFolders(courseItem: CourseItem): Observable<FolderItem>
+    abstract fun prepareCourseFolders(courseItem: CourseItem): Observable<Unit>
+
+    abstract fun getCourseFolders(courseItem: CourseItem, folderType: FolderItem.Type): Observable<FolderItem>
 
     abstract fun getFiles(folderItem: FolderItem): Observable<FileItem>
 

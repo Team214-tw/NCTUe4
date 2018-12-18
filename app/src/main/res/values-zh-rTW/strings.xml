@@ -34,8 +34,8 @@
     <string name="course_nav_doc">文件</string>
     <string name="course_nav_assignment">作業</string>
     <string name="course_nav_score">成績</string>
-    <string name="course_doc_type_handout">課程講義</string>
-    <string name="course_doc_type_reference">參考資料</string>
+    <string name="course_folder_type_handout">課程講義</string>
+    <string name="course_folder_type_reference">參考資料</string>
 
     <!--Title Activity-->
     <string name="title_activity_ann">公告</string>
@@ -95,4 +95,6 @@
 
     <string name="warning">警告</string>
     <string name="course_not_found_in_db">本地資料庫沒有此課程，請至課程列表頁面刷新</string>
+
+    <string name="modified_time">異動時間: </string>
 </resources>

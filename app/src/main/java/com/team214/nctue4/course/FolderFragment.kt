@@ -14,7 +14,6 @@ import com.team214.nctue4.model.FolderItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_course_folder.*
 import kotlinx.android.synthetic.main.progress_bar.*
 import kotlinx.android.synthetic.main.status_empty.*
@@ -48,12 +47,16 @@ class FolderFragment : Fragment() {
         disposable?.dispose()
         error_request.visibility = View.GONE
         progress_bar.visibility = View.VISIBLE
-        disposable = client.getCourseFolders(courseItem)
+        val folderType = arguments!!.getSerializable("folderType") as FolderItem.Type
+        disposable = client.getCourseFolders(courseItem, folderType)
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<FolderItem>()) { folderItems, folderItem -> folderItems.add(folderItem) }
             .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
-                onSuccess = { displayData(it) },
+                onSuccess = {
+                    it.sortByDescending { folderItem -> folderItem.timeModified }
+                    displayData(it)
+                },
                 onError = {
                     error_request.visibility = View.VISIBLE
                     error_request_retry.setOnClickListener { getData() }
@@ -66,20 +69,20 @@ class FolderFragment : Fragment() {
             empty_request.visibility = View.VISIBLE
             return
         }
-        course_doc_list_recycler_view?.layoutManager = LinearLayoutManager(context)
-        course_doc_list_recycler_view?.addItemDecoration(
+        course_folder_list_recycler_view?.layoutManager = LinearLayoutManager(context)
+        course_folder_list_recycler_view?.addItemDecoration(
             DividerItemDecoration(
                 context,
                 LinearLayoutManager.VERTICAL
             )
         )
-        course_doc_list_recycler_view?.adapter = FolderAdapter(context!!, folderItems) {
+        course_folder_list_recycler_view?.adapter = FolderAdapter(context!!, folderItems) {
             val dialog = FileDialog()
             dialog.arguments = Bundle().apply {
                 this.putParcelable("folderItem", it)
             }
             dialog.show(fragmentManager, "FileDialog")
         }
-        course_doc_list_recycler_view?.visibility = View.VISIBLE
+        course_folder_list_recycler_view?.visibility = View.VISIBLE
     }
 }

@@ -5,6 +5,7 @@ import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.*
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import okhttp3.Cookie
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
@@ -13,6 +14,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
+import java.util.concurrent.CountDownLatch
 
 class NewE3ApiClient(context: Context) : E3Client() {
     class TokenInvalidException : Exception()
@@ -191,41 +193,68 @@ class NewE3ApiClient(context: Context) : E3Client() {
         }
     }
 
-    override fun getCourseFolders(courseItem: CourseItem): Observable<FolderItem> {
+    private var courseFolderLatch: CountDownLatch? = null
+    private var courseFolderCache: List<MutableList<FolderItem>>? = null
+    private var courseFolderPrepared = false
+
+    override fun prepareCourseFolders(courseItem: CourseItem): Observable<Unit> {
+        courseFolderPrepared = true
+        courseFolderLatch = CountDownLatch(1)
+        courseFolderCache = listOf(mutableListOf(), mutableListOf())
         return post(
             hashMapOf(
                 "wsfunction" to "mod_folder_get_folders_by_courses",
                 "courseids[0]" to courseItem.courseId
             )
         ).flatMap { response ->
-            Observable.create<FolderItem> { emitter ->
-                val resJson = JSONObject(response).getJSONArray("folders")
-                (0 until resJson.length()).map { resJson.get(it) as JSONObject }.forEach {
-                    var name = it.getString("name")
-                    val folderType =
-                        when {
-                            name.startsWith("[參考資料]") -> {
-                                name = name.removePrefix("[參考資料]")
-                                FolderItem.Type.Reference
-                            }
-                            name.startsWith("[Reference]") -> {
-                                name = name.removePrefix("[Reference]")
-                                FolderItem.Type.Reference
-                            }
-                            else -> FolderItem.Type.Handout
+            val resJson = JSONObject(response).getJSONArray("folders")
+            (0 until resJson.length()).map { resJson.get(it) as JSONObject }.forEach {
+                var name = it.getString("name")
+                val folderType =
+                    when {
+                        name.startsWith("[參考資料]") -> {
+                            name = name.removePrefix("[參考資料]")
+                            FolderItem.Type.Reference
                         }
-                    emitter.onNext(
-                        FolderItem(
-                            name,
-                            it.getString("coursemodule"),
-                            courseItem.courseId,
-                            folderType
-                        )
-                    )
+                        name.startsWith("[Reference]") -> {
+                            name = name.removePrefix("[Reference]")
+                            FolderItem.Type.Reference
+                        }
+                        else -> FolderItem.Type.Handout
+                    }
+                val folderItem = FolderItem(
+                    name,
+                    it.getString("coursemodule"),
+                    courseItem.courseId,
+                    folderType,
+                    Date(it.getLong("timemodified") * 1000)
+                )
+                when (folderType) {
+                    FolderItem.Type.Handout -> courseFolderCache!![0].add(folderItem)
+                    FolderItem.Type.Reference -> courseFolderCache!![1].add(folderItem)
                 }
+            }
+            courseFolderLatch!!.countDown()
+            Observable.just(Unit)
+        }
+    }
+
+    override fun getCourseFolders(courseItem: CourseItem, folderType: FolderItem.Type): Observable<FolderItem> {
+        if (!courseFolderPrepared) prepareCourseFolders(courseItem)
+        val folderTypeIdx = when (folderType) {
+            FolderItem.Type.Handout -> 0
+            FolderItem.Type.Reference -> 1
+        }
+        return Observable.create<FolderItem> { emitter ->
+            try {
+                courseFolderLatch!!.await()
+                courseFolderCache!![folderTypeIdx].forEach { emitter.onNext(it) }
+            } catch (e: InterruptedException) {
+                if (!emitter.isDisposed) emitter.onError(e)
+            } finally {
                 emitter.onComplete()
             }
-        }
+        }.subscribeOn(Schedulers.io())
     }
 
     override fun getFiles(folderItem: FolderItem): Observable<FileItem> {
@@ -425,4 +454,5 @@ class NewE3ApiClient(context: Context) : E3Client() {
     override fun getBaseUrl(): String? {
         return "https://e3new.nctu.edu.tw"
     }
+
 }

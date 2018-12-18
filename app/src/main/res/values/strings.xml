@@ -44,8 +44,8 @@
     <string name="course_nav_assignment">Task</string>
     <string name="course_nav_score">Score</string>
     <string name="course_nav_members">Members</string>
-    <string name="course_doc_type_handout">Handout</string>
-    <string name="course_doc_type_reference">Reference</string>
+    <string name="course_folder_type_handout">Handout</string>
+    <string name="course_folder_type_reference">Reference</string>
     <string name="download_start">Start downloading&#8230;</string>
     <string name="download">Download</string>
 
@@ -123,6 +123,8 @@
     </string>
 
     <string name="warning">Warning</string>
-    <string name="course_not_found_in_db">Course not found in local database, please refresh in course list page</string>
+    <string name="course_not_found_in_db">Course not found in local database, please refresh in course list page
+    </string>
 
+    <string name="modified_time">Modified: </string>
 </resources>

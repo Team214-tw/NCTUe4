@@ -47,10 +47,10 @@ class CourseActivity : AppCompatActivity() {
             R.id.course_nav_doc -> {
                 firebaseAnalytics!!.setCurrentScreen(
                     this,
-                    "CourseDocListFragment",
-                    FolderFragment::class.java.simpleName
+                    "FolderViewPager",
+                    FolderViewPager::class.java.simpleName
                 )
-                FolderFragment()
+                FolderViewPager()
             }
             R.id.course_nav_assignment -> {
                 firebaseAnalytics!!.setCurrentScreen(this, "HwkFragment", HwkFragment::class.java.simpleName)
