@@ -240,7 +240,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
     }
 
     override fun getCourseFolders(courseItem: CourseItem, folderType: FolderItem.Type): Observable<FolderItem> {
-        if (!courseFolderPrepared) prepareCourseFolders(courseItem)
+        if (!courseFolderPrepared) prepareCourseFolders(courseItem).subscribe()
         val folderTypeIdx = when (folderType) {
             FolderItem.Type.Handout -> 0
             FolderItem.Type.Reference -> 1
