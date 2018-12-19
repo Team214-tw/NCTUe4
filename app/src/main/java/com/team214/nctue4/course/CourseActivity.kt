@@ -15,8 +15,6 @@ class CourseActivity : AppCompatActivity() {
     lateinit var client: E3Client
     lateinit var courseItem: CourseItem
 
-    private var currentFragment = -1
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -27,14 +25,8 @@ class CourseActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        outState?.putInt("currentFragment", currentFragment)
-    }
-
 
     private fun switchFragment(itemId: Int) {
-        currentFragment = itemId
         val fragment = when (itemId) {
             R.id.course_nav_ann -> {
                 firebaseAnalytics!!.setCurrentScreen(
@@ -86,9 +78,7 @@ class CourseActivity : AppCompatActivity() {
         courseItem = intent.extras!!.getParcelable("courseItem")!!
         client = E3ClientFactory.createFromCourse(this, courseItem)
         this.title = courseItem.courseName
-        if (savedInstanceState?.getInt("currentFragment") == null)
-            switchFragment(-1)
-
+        if (savedInstanceState == null) switchFragment(R.id.course_nav_ann)
         course_bottom_nav.setOnNavigationItemSelectedListener { item ->
             switchFragment(item.itemId)
             true

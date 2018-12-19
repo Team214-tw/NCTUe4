@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    private var currentFragment = -1
     lateinit var oldE3Client: OldE3Client
     lateinit var newE3ApiClient: NewE3ApiClient
     lateinit var newE3WebClient: NewE3WebClient
@@ -51,65 +50,55 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         newE3ApiClient = NewE3ApiClient(this)
         newE3WebClient = NewE3WebClient(this)
 
-        currentFragment =
-                if (savedInstanceState?.getInt("currentFragment") != null)
-                    savedInstanceState.getInt("currentFragment") else -1
-
-        if (savedInstanceState?.getInt("currentFragment") == null) {
-            currentFragment = when (intent?.getStringExtra("shortcut")) {
-                "nav_ann" -> R.id.nav_ann
-                "nav_bookmarked" -> R.id.nav_bookmarked
-                "nav_download" -> R.id.nav_download
-                "nav_old_e3" -> R.id.nav_old_e3
-                "nav_new_e3" -> R.id.nav_new_e3
-                else -> -1
-            }
-            switchFragment(currentFragment)
+        if (savedInstanceState == null) {
+            switchFragment(
+                when (intent?.getStringExtra("shortcut")) {
+                    "nav_ann" -> R.id.nav_ann
+                    "nav_bookmarked" -> R.id.nav_bookmarked
+                    "nav_download" -> R.id.nav_download
+                    "nav_old_e3" -> R.id.nav_old_e3
+                    "nav_new_e3" -> R.id.nav_new_e3
+                    else -> R.id.nav_home
+                }
+            )
         }
 
         nav_view.getHeaderView(0).findViewById<TextView>(R.id.student_name).text = studentName
         nav_view.getHeaderView(0).findViewById<TextView>(R.id.student_email).text = studentEmail
-
     }
 
     override fun onBackPressed() {
         when {
             drawer_layout.isDrawerOpen(GravityCompat.START) -> drawer_layout.closeDrawer(GravityCompat.START)
-            currentFragment != R.id.nav_home -> switchFragment(R.id.nav_home)
+            supportFragmentManager.findFragmentByTag(HomeFragment::class.java.simpleName) == null -> switchFragment(R.id.nav_home)
             else -> super.onBackPressed()
         }
     }
 
     fun switchFragment(id: Int) {
-        if (id != -1) nav_view.setCheckedItem(id)
-        else nav_view.setCheckedItem(R.id.nav_home)
+        nav_view.setCheckedItem(id)
         val fragment = when (id) {
             R.id.nav_home -> {
-                currentFragment = id
                 firebaseAnalytics
                     .setCurrentScreen(this, "HomeFragment", HomeFragment::class.java.simpleName)
                 HomeFragment()
             }
             R.id.nav_ann -> {
-                currentFragment = id
                 firebaseAnalytics
                     .setCurrentScreen(this, "HomeAnnFragment", HomeAnnFragment::class.java.simpleName)
                 HomeAnnFragment()
             }
             R.id.nav_bookmarked -> {
-                currentFragment = id
                 firebaseAnalytics
                     .setCurrentScreen(this, "BookmarkedFragment", BookmarkedFragment::class.java.simpleName)
                 BookmarkedFragment()
             }
             R.id.nav_download -> {
-                currentFragment = id
                 firebaseAnalytics
                     .setCurrentScreen(this, "DownloadFragment", DownloadFragment::class.java.simpleName)
                 DownloadFragment()
             }
             R.id.nav_old_e3 -> {
-                currentFragment = id
                 firebaseAnalytics
                     .setCurrentScreen(this, "OldE3Fragment", CourseListFragment::class.java.simpleName)
                 CourseListFragment().apply {
@@ -119,7 +108,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
             R.id.nav_new_e3 -> {
-                currentFragment = id
                 firebaseAnalytics
                     .setCurrentScreen(this, "NewE3Fragment", CourseListFragment::class.java.simpleName)
                 CourseListFragment().apply {
@@ -160,12 +148,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             else -> {
                 firebaseAnalytics.setCurrentScreen(this, "HomeFragment", HomeAnnFragment::class.java.simpleName)
-                currentFragment = R.id.nav_home
                 HomeFragment()
             }
         }
         if (fragment != null) {
-            supportFragmentManager.beginTransaction().replace(R.id.main_container, fragment, "main_fragment").commit()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_container, fragment, fragment.javaClass.simpleName).commit()
         }
     }
 
