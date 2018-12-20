@@ -63,7 +63,7 @@ class DownloadFragment : Fragment() {
                 )
                 download_recycler?.adapter = DownloadAdapter(context!!, files,
                     fun(it) {
-                        openFile(it.name, it, context!!, activity!!)
+                        openFile(it.name, it, context!!)
                     },
                     fun(it) {
                         val dialog = DownloadDialog()
@@ -72,7 +72,6 @@ class DownloadFragment : Fragment() {
                         bundle.putSerializable("file", it)
                         dialog.arguments = bundle
                         dialog.show(fragmentManager, "TAG")
-
                     })
             } else {
                 download_recycler?.adapter?.notifyDataSetChanged()

@@ -2,15 +2,15 @@ package com.team214.nctue4.course
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.team214.nctue4.BaseActivity
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.client.E3ClientFactory
 import com.team214.nctue4.model.CourseItem
 import kotlinx.android.synthetic.main.activity_course.*
 
-class CourseActivity : AppCompatActivity() {
+class CourseActivity : BaseActivity(R.id.course_container) {
     private var firebaseAnalytics: FirebaseAnalytics? = null
     lateinit var client: E3Client
     lateinit var courseItem: CourseItem

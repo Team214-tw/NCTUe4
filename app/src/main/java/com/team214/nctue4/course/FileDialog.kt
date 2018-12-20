@@ -70,7 +70,7 @@ class FileDialog : DialogFragment() {
         course_doc_dialog_recycler_view.adapter = FileAdapter(context!!, fileItems) {
             url = it.url
             fileName = it.name
-            downloadFile(fileName, url, context!!, activity!!, activity!!.findViewById(R.id.container)) {
+            downloadFile(fileName, url, context!!) {
                 requestPermissions(
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     0
@@ -97,8 +97,6 @@ class FileDialog : DialogFragment() {
                         fileName,
                         url,
                         context!!,
-                        activity!!,
-                        activity!!.findViewById(R.id.container),
                         null,
                         null
                     )

@@ -81,7 +81,7 @@ class HwkDialog : DialogFragment() {
         assign_dialog_recycler_view.adapter = FileAdapter(context!!, fileItems) {
             url = it.url
             fileName = it.name
-            downloadFile(fileName, url, context!!, activity!!, activity!!.findViewById(R.id.assign_root)) {
+            downloadFile(fileName, url, context!!) {
                 requestPermissions(
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     0
@@ -109,8 +109,6 @@ class HwkDialog : DialogFragment() {
                         fileName,
                         url,
                         context!!,
-                        activity!!,
-                        activity!!.findViewById(R.id.assign_root),
                         null,
                         null
                     )

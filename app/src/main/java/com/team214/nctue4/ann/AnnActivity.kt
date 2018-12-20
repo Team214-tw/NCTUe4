@@ -12,9 +12,9 @@ import android.view.View
 import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.team214.nctue4.BaseActivity
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.client.E3ClientFactory
@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class AnnActivity : AppCompatActivity() {
+class AnnActivity : BaseActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var url: String
     private lateinit var fileName: String
@@ -132,7 +132,7 @@ class AnnActivity : AppCompatActivity() {
         announcement_attach.adapter = AnnAttachmentAdapter(this, annItem.attachItems) {
             url = it.url
             fileName = it.name
-            downloadFile(fileName, url, this, this, ann_root, client.getCookie()) {
+            downloadFile(fileName, url, this, client.getCookie()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
                 }
@@ -152,7 +152,7 @@ class AnnActivity : AppCompatActivity() {
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 ) {
-                    downloadFile(fileName, url, this, this, ann_root, client.getCookie(), null)
+                    downloadFile(fileName, url, this, client.getCookie(), null)
                 }
                 return
             }

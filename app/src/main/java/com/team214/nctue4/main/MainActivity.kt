@@ -8,10 +8,10 @@ import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.team214.nctue4.BaseActivity
 import com.team214.nctue4.BuildConfig
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Type
@@ -22,7 +22,8 @@ import com.team214.nctue4.login.LogoutActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     lateinit var oldE3Client: OldE3Client
     lateinit var newE3ApiClient: NewE3ApiClient
     lateinit var newE3WebClient: NewE3WebClient
