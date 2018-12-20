@@ -416,19 +416,26 @@ class NewE3ApiClient(context: Context) : E3Client() {
                     .getJSONObject("lastattempt")
                     .getJSONObject("submission")
                     .getJSONArray("plugins")
-                    .getJSONObject(0)
-                    .getJSONArray("fileareas")
-                    .getJSONObject(0)
-                    .getJSONArray("files")
-                (0 until resJson.length()).map { resJson.get(it) as JSONObject }
-                    .forEach {
-                        emitter.onNext(
-                            FileItem(
-                                it.getString("filename"),
-                                it.getString("fileurl") + "?token=$token"
+
+                val files = (0 until resJson.length())
+                    .map { resJson.getJSONObject(it) }
+                    .firstOrNull { it.getString("type") == "file" }
+                    ?.getJSONArray("fileareas")
+                    ?.getJSONObject(0)
+                    ?.getJSONArray("files")
+
+                if (files != null) {
+                    (0 until files.length()).map { files.get(it) as JSONObject }
+                        .forEach {
+                            emitter.onNext(
+                                FileItem(
+                                    it.getString("filename"),
+                                    it.getString("fileurl") + "?token=$token"
+                                )
                             )
-                        )
-                    }
+                        }
+                }
+
                 emitter.onComplete()
             }
 
