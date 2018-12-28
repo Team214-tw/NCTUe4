@@ -107,8 +107,8 @@ class NewE3WebClient(context: Context) : E3Client() {
                     val curYear = now.get(Calendar.YEAR) - 1900
                     // 嘗試猜公告的年份為何
                     date.year =
-                            if (curMonth >= 9 && date.month <= 2) curYear + 1
-                            else if (curMonth <= 2 && date.month >= 9) curYear - 1
+                            if (curMonth >= 7 && date.month <= 1) curYear + 1
+                            else if (curMonth <= 1 && date.month >= 7) curYear - 1
                             else curYear
 
                     // Detail ann link
