@@ -71,7 +71,7 @@ class DownloadFragment : Fragment() {
                         val bundle = Bundle()
                         bundle.putSerializable("file", it)
                         dialog.arguments = bundle
-                        dialog.show(fragmentManager, "TAG")
+                        dialog.show(fragmentManager!!, "TAG")
                     })
             } else {
                 download_recycler?.adapter?.notifyDataSetChanged()

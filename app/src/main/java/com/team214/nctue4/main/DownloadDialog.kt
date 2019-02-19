@@ -25,7 +25,7 @@ class DownloadDialog : BottomSheetDialogFragment() {
         this.onDismissListener = onDismissListener
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         if (onDismissListener != null) {
             onDismissListener!!.onDismiss(dialog)
@@ -41,7 +41,7 @@ class DownloadDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         val file = arguments?.getSerializable("file") as File
         download_delete?.setOnClickListener {
             val deleteDialog = AlertDialog.Builder(context!!)

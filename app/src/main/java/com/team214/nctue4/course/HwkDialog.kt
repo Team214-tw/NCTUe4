@@ -49,7 +49,7 @@ class HwkDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         client = (activity as HwkActivity).client
         hwkItem = arguments!!.getParcelable("hwkItem")!!
-        dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         getData()
     }
 

@@ -51,13 +51,14 @@ class MembersFragment : Fragment() {
         getData()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater!!.inflate(R.menu.select_all, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.select_all, menu)
     }
 
     private var selectAll = false
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item!!.itemId) {
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.action_select_all -> {
                 if (course_member_recycler_view.adapter != null) {
                     if (!selectAll) {

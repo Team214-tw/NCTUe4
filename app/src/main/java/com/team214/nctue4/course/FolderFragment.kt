@@ -81,7 +81,7 @@ class FolderFragment : Fragment() {
             dialog.arguments = Bundle().apply {
                 this.putParcelable("folderItem", it)
             }
-            dialog.show(fragmentManager, "FileDialog")
+            dialog.show(fragmentManager!!, "FileDialog")
         }
         course_folder_list_recycler_view?.visibility = View.VISIBLE
     }
