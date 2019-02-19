@@ -2,6 +2,7 @@ package com.team214.nctue4.login
 
 import android.content.Intent
 import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.TypedValue
@@ -21,6 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_login.*
+
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -96,6 +98,7 @@ class LoginActivity : AppCompatActivity() {
                     onError = { error ->
                         when (error) {
                             is E3Client.WrongCredentialsException -> handleWrongCredentials()
+                            is NewE3ApiClient.SitePolicyNotAgreedException -> handleSitePolicyNotAgreedException()
                             else -> handleServiceError()
                         }
                     }
@@ -134,6 +137,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun handleWrongCredentials() {
+        login_error_text_view.setOnClickListener(null)
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val prefsEditor = prefs.edit()
         prefsEditor.remove("studentPassword")
@@ -144,7 +148,16 @@ class LoginActivity : AppCompatActivity() {
         enableInput()
     }
 
+    private fun handleSitePolicyNotAgreedException() {
+        login_error_text_view.text = getString(R.string.click_to_agree_site_policy)
+        login_error_text_view.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://e3new.nctu.edu.tw/user/policy.php")))
+        }
+        enableInput()
+    }
+
     private fun handleServiceError() {
+        login_error_text_view.setOnClickListener(null)
         login_error_text_view.text = getString(R.string.generic_error)
         enableInput()
     }

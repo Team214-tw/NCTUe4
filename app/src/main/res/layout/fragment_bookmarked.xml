@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/course_list_root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="-7dp"
+            android:elevation="10dp"
+            android:indeterminate="true"
+            android:visibility="invisible"/>
+
+    <include layout="@layout/status_empty"/>
+
+    <include layout="@layout/status_error"/>
+
+    <include layout="@layout/status_empty_compact"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/course_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical">
+
+    </androidx.recyclerview.widget.RecyclerView>
+</RelativeLayout>
+

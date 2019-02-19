@@ -1,6 +1,7 @@
 package com.team214.nctue4.main
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.core.content.ContextCompat
@@ -104,9 +105,29 @@ class CourseListFragment : Fragment() {
             course_list_recycler_view.adapter?.notifyDataSetChanged()
             return
         }
-        if (courseItems.isEmpty()) empty_request.visibility = View.VISIBLE
-        else {
+        if (courseItems.isEmpty()) {
+            when (e3Type) {
+                E3Type.NEW -> {
+                    empty_request.visibility = View.GONE
+                    empty_request_new_e3.visibility = View.VISIBLE
+                    click_to_agree_site_policy.setOnClickListener {
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://e3new.nctu.edu.tw/user/policy.php")
+                            )
+                        )
+                    }
+                }
+                E3Type.OLD -> {
+                    empty_request_new_e3.visibility = View.GONE
+                    empty_request.visibility = View.VISIBLE
+                }
+            }
+
+        } else {
             empty_request.visibility = View.GONE
+            empty_request_new_e3.visibility = View.GONE
             course_list_recycler_view?.layoutManager = LinearLayoutManager(context)
             course_list_recycler_view?.addItemDecoration(
                 DividerItemDecoration(

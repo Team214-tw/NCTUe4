@@ -16,8 +16,9 @@ import org.json.JSONObject
 import java.util.*
 import java.util.concurrent.CountDownLatch
 
-class NewE3ApiClient(context: Context) : E3Client() {
+class NewE3ApiClient(val context: Context) : E3Client() {
     class TokenInvalidException : Exception()
+    class SitePolicyNotAgreedException : Exception()
 
     companion object {
         const val API_URL = "https://e3new.nctu.edu.tw/webservice/rest/server.php?moodlewsrestformat=json"
@@ -51,6 +52,11 @@ class NewE3ApiClient(context: Context) : E3Client() {
                             resJson.getString("errorcode") == "invalidtoken"
                         ) {
                             throw TokenInvalidException()
+                        }
+                        if (resJson.has("errorcode") &&
+                            resJson.getString("errorcode") == "sitepolicynotagreed"
+                        ) {
+                            throw SitePolicyNotAgreedException()
                         }
                     } catch (e: JSONException) {
                         // Response is a JsonArray, Pass

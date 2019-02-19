@@ -127,4 +127,7 @@
     </string>
 
     <string name="modified_time">Modified: </string>
+
+    <string name="click_to_agree_site_policy">Click here to goto new E3 and agree with their site policy</string>
+    <string name="no_course_or_site_policy">You have no course or you have not agreed with New E3\'s site policy</string>
 </resources>

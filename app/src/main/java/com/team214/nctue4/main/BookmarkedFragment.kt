@@ -34,7 +34,7 @@ class BookmarkedFragment : Fragment() {
         courseDBHelper = CourseDBHelper(context!!)
         if (arguments?.getBoolean("home") == null)
             activity!!.setTitle(R.string.bookmarked_courses)
-        return inflater.inflate(R.layout.fragment_couse_list, container, false)
+        return inflater.inflate(R.layout.fragment_bookmarked, container, false)
     }
 
     override fun onDestroy() {

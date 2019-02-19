@@ -97,4 +97,6 @@
     <string name="course_not_found_in_db">本地資料庫沒有此課程，請至課程列表頁面刷新</string>
 
     <string name="modified_time">異動時間: </string>
+    <string name="click_to_agree_site_policy">點此移至新e3接受使用規範</string>
+    <string name="no_course_or_site_policy">你沒有任何課程或是你尚未同意新e3的使用規範</string>
 </resources>
