@@ -98,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
                         prefsEditor.putString("studentId", studentId)
                         prefsEditor.putString("studentPortalPassword", studentPortalPassword)
                         prefsEditor.apply()
-                        getCourseList()
+                        getCourseList(studentPassword != "")
                     },
                     onError = { error ->
                         when (error) {
@@ -111,17 +111,15 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCourseList() {
+    private fun getCourseList(oldE3: Boolean) {
         val courseDBHelper = CourseDBHelper(this)
         if (!courseDBHelper.isCoursesTableEmpty()) {
             handleLoginSuccess()
             return
         }
-        disposable = oldE3Client.getCourseList()
-            .mergeWith(
-
-                newE3ApiClient.getCourseList()
-            )
+        val observable = newE3ApiClient.getCourseList()
+        if (oldE3) observable.mergeWith(oldE3Client.getCourseList())
+        disposable = observable
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<CourseItem>()) { courseItems, courseItem -> courseItems.add(courseItem) }
             .subscribeBy(

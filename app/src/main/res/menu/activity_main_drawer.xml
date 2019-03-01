@@ -30,12 +30,13 @@
                 android:id="@+id/nav_new_e3"
                 android:icon="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:title="@string/new_e3"/>
+        <item
+                android:id="@+id/settings"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="@string/settings"/>
     </group>
 
     <group>
-        <item
-                android:id="@+id/settings"
-                android:title="@string/settings"/>
         <item
                 android:id="@+id/nav_account_management"
                 android:title="@string/account_management"/>

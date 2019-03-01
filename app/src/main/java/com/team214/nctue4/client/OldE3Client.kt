@@ -5,6 +5,7 @@ import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.MainApplication
 import com.team214.nctue4.model.*
+import io.reactivex.Emitter
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -145,17 +146,98 @@ class OldE3Client(context: Context) : E3Client() {
     }
 
     private fun toCoursePage(courseId: String): Observable<Unit> {
+        if (courseId in app.oldE3CourseIdMap) {
+            return post(
+                "/enter_course_index.aspx",
+                hashMapOf("__EVENTTARGET" to app.oldE3CourseIdMap[courseId]!!)
+            ).flatMap {
+                app.oldE3CurrentPage = courseId
+                Observable.just(Unit)
+            }
+        }
+        return toCourseHistoryPage()
+            .flatMap { document ->
+                val dataNavigatorText = document
+                    .getElementById("ctl00_ContentPlaceHolder1_DataNavigator1_ctl02")
+                    .text()
+                val totalPage = Regex("共 ([\\d]*) 頁")
+                    .find(dataNavigatorText)
+                    ?.groups?.get(1)?.value?.toInt()
+                val courseTrs = document.getElementById("ctl00_ContentPlaceHolder1_dg")
+                    ?.getElementsByTag("tr")
+                    ?.drop(1)
+                courseTrs?.forEach { tr ->
+                    val a = tr.getElementsByTag("td")[6].getElementsByTag("a").firstOrNull()
+                    if (a != null && a.attr("courseid") == courseId) {
+                        return@flatMap post(
+                            "/enter_course_history.aspx",
+                            hashMapOf("__EVENTTARGET" to a.id().replace("_", "$"))
+                        ).flatMap {
+                            Observable.just(Unit)
+                        }
+                    }
+                }
+
+                return@flatMap Observable.concatArray(
+                    *(MutableList(totalPage!! - 1) { getRemainingCourseList1() }.toTypedArray())
+                ).filter { it.first == courseId }
+                    .take(1)
+                    .flatMap {
+                        Log.d("course", it.toString())
+                        post(
+                            "/enter_course_history.aspx",
+                            hashMapOf("__EVENTTARGET" to it.second)
+                        )
+                    }.flatMap {
+                        Observable.just(Unit)
+                    }
+            }
+    }
+
+
+    private fun getRemainingCourseList1(): Observable<Pair<String, String>> {
         return post(
-            "/enter_course_index.aspx",
-            hashMapOf("__EVENTTARGET" to app.oldE3CourseIdMap[courseId]!!)
-        ).flatMap {
-            app.oldE3CurrentPage = courseId
-            Observable.just(Unit)
+            "/enter_course_history.aspx?Anthem_CallBack=true", hashMapOf(
+                "Anthem_UpdatePage" to "true",
+                "__EVENTTARGET" to "ctl00\$ContentPlaceHolder1\$DataNavigator1\$ctl03",
+                "ctl00\$ContentPlaceHolder1\$DataNavigator1\$ctl03.x" to "0",
+                "ctl00\$ContentPlaceHolder1\$DataNavigator1\$ctl03.y" to "0"
+            )
+        ).flatMap { response ->
+            Observable.create<Pair<String, String>> { emitter ->
+                val documentStr = JSONObject(response)
+                    .getJSONObject("controls")
+                    .getString("ctl00\$ContentPlaceHolder1\$dg")
+                val document = Jsoup.parse(documentStr)
+                parseCourseTable1(document, emitter)
+                emitter.onComplete()
+            }
+        }
+    }
+
+    private fun parseCourseTable1(document: Document, emitter: Emitter<Pair<String, String>>) {
+        val courseTrs = document.getElementById("ctl00_ContentPlaceHolder1_dg")
+            ?.getElementsByTag("tr")
+            ?.drop(1)
+        courseTrs?.forEach {
+            val tds = it.getElementsByTag("td")
+            if (tds[6].getElementsByTag("a").isEmpty()) return@forEach
+            val a = tds[6].getElementsByTag("a").first()
+            val courseId = a.attr("courseid")
+            val id = a.id()
+            emitter.onNext(Pair(courseId, id.replace("_", "$")))
         }
     }
 
     private fun toHomePage(): Observable<Document> {
         return get("/enter_course_index.aspx").flatMap { response ->
+            app.oldE3CurrentPage = "home"
+            Observable.just(response)
+        }.flatMap { parseHtmlResponse(it) }
+    }
+
+    private fun toCourseHistoryPage(): Observable<Document> {
+        return get("/enter_course_history.aspx").flatMap { response ->
             app.oldE3CurrentPage = "home"
             Observable.just(response)
         }.flatMap { parseHtmlResponse(it) }
@@ -184,7 +266,7 @@ class OldE3Client(context: Context) : E3Client() {
             ?.getElementsByTag("a")
         courseEls?.forEach {
             app.oldE3CourseIdMap[it.attr("courseid")] =
-                    it.attr("id").replace('_', '$')
+                it.attr("id").replace('_', '$')
         }
     }
 
@@ -295,22 +377,67 @@ class OldE3Client(context: Context) : E3Client() {
     }
 
     override fun getCourseList(): Observable<CourseItem> {
-        return toHomePage().flatMap { document ->
+        return toCourseHistoryPage().flatMap { document ->
             Observable.create<CourseItem> { emitter ->
-                buildCourseIdMap(document)
-                val courseEls = document
-                    .getElementById("ctl00_ContentPlaceHolder1_gvCourse")
-                    ?.getElementsByTag("a")
-                courseEls?.forEach {
-                    val courseName = it.text()
-                    val courseId = it.attr("courseid")
-                    val additionalInfo = it.parent().parent()
-                        .getElementsByTag("td")
-                        .run { this[0].text() + this[1].text() }
-                    emitter.onNext(CourseItem(E3Type.OLD, courseName, courseId, additionalInfo))
+                val dataNavigatorText = document
+                    .getElementById("ctl00_ContentPlaceHolder1_DataNavigator1_ctl02")
+                    .text()
+                val totalPage = Regex("共 ([\\d]*) 頁")
+                    .find(dataNavigatorText)
+                    ?.groups?.get(1)?.value?.toInt()
+                if (totalPage != null) {
+                    parseCourseTable(document, emitter)
+                    Observable.concatArray(
+                        *(MutableList(totalPage - 1) { getRemainingCourseList() }.toTypedArray())
+                    ).subscribeBy(
+                        onNext = { emitter.onNext(it) },
+                        onComplete = { emitter.onComplete() }
+                    )
+                } else {
+                    emitter.onComplete()
                 }
+            }
+        }
+    }
+
+    private fun getRemainingCourseList(): Observable<CourseItem> {
+        return post(
+            "/enter_course_history.aspx?Anthem_CallBack=true", hashMapOf(
+                "Anthem_UpdatePage" to "true",
+                "__EVENTTARGET" to "ctl00\$ContentPlaceHolder1\$DataNavigator1\$ctl03",
+                "ctl00\$ContentPlaceHolder1\$DataNavigator1\$ctl03.x" to "0",
+                "ctl00\$ContentPlaceHolder1\$DataNavigator1\$ctl03.y" to "0"
+            )
+        ).flatMap { response ->
+            Observable.create<CourseItem> { emitter ->
+                val documentStr = JSONObject(response)
+                    .getJSONObject("controls")
+                    .getString("ctl00\$ContentPlaceHolder1\$dg")
+                val document = Jsoup.parse(documentStr)
+                parseCourseTable(document, emitter)
                 emitter.onComplete()
             }
+        }
+    }
+
+    private fun parseCourseTable(document: Document, emitter: Emitter<CourseItem>) {
+        val courseTrs = document.getElementById("ctl00_ContentPlaceHolder1_dg")
+            ?.getElementsByTag("tr")
+            ?.drop(1)
+        courseTrs?.forEach {
+            val tds = it.getElementsByTag("td")
+            if (tds[6].getElementsByTag("a").isEmpty()) return@forEach
+            val courseName = tds[6].text().split(" 進入課程").first()
+            val courseId = tds[6].getElementsByTag("a").first().attr("courseid")
+            val sortKey = (tds[0].text() +
+                    when (tds[1].text()) {
+                        "上學期" -> "0"
+                        "下學期" -> "1"
+                        "暑修" -> "2"
+                        else -> "3"
+                    }).toLong()
+            val additionalInfo = tds[0].text() + " " + tds[1].text()
+            emitter.onNext(CourseItem(E3Type.OLD, courseName, courseId, additionalInfo, sortKey))
         }
     }
 

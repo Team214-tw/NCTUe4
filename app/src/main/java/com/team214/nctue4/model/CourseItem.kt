@@ -10,6 +10,7 @@ data class CourseItem(
     val courseName: String,
     val courseId: String,
     val additionalInfo: String,
+    val sortKey: Long,
     var bookmarked: Int = 0,
     val bookmarkIdx: Int = 10000,
     val id: Int? = null

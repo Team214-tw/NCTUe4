@@ -114,6 +114,7 @@ class CourseListFragment : Fragment() {
     }
 
     private fun displayData() {
+        courseItems.sortByDescending { it.sortKey }
         if (course_list_recycler_view.adapter != null) {
             course_list_recycler_view.adapter?.notifyDataSetChanged()
             return

@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.login.LoginActivity
 import com.team214.nctue4.main.MainActivity
-import com.team214.nctue4.model.CourseDBHelper
 
 class LandingActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -16,7 +15,6 @@ class LandingActivity : AppCompatActivity() {
         setTheme(R.style.AppTheme)  //End Splash Screen
         super.onCreate(savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        CourseDBHelper(this).writableDatabase
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 

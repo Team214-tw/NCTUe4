@@ -124,14 +124,21 @@ class NewE3ApiClient(val context: Context) : E3Client() {
                 val resJson = JSONArray(response)
                 (0 until resJson.length())
                     .map { resJson.get(it) as JSONObject }
-                    .filter { it.getLong("enddate") > System.currentTimeMillis() / 1000 }
                     .forEach {
                         val courseName = it.getString("fullname").split(".").run {
                             if (this.size >= 3) this[2].split(" ").first() else this[0]
                         }
                         val courseId = it.getString("id")
                         val additionalInfo = it.getString("shortname")
-                        emitter.onNext(CourseItem(E3Type.NEW, courseName, courseId, additionalInfo))
+                        emitter.onNext(
+                            CourseItem(
+                                E3Type.NEW,
+                                courseName,
+                                courseId,
+                                additionalInfo,
+                                it.getLong("enddate")
+                            )
+                        )
                     }
                 emitter.onComplete()
             }
