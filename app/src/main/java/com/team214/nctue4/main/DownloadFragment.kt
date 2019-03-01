@@ -49,7 +49,7 @@ class DownloadFragment : Fragment() {
             emptyRequest.visibility = View.GONE
             fileList.sortByDescending { it.lastModified() }
             if (fromHome) {
-                files.addAll(fileList.filter { it != null }.take(5))
+                files.addAll(fileList.filter { it != null }.take(arguments!!.getInt("home_download_cnt", 5)))
             } else files.addAll(fileList.filter { it != null })
             if (download_recycler.adapter == null) {
                 download_recycler?.layoutManager = LinearLayoutManager(context)

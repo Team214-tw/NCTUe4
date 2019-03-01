@@ -106,7 +106,7 @@ class HomeAnnFragment : Fragment() {
                     displayErrorToast()
                     displayData()
                 },
-                onError = { it ->
+                onError = {
                     if (it is E3Client.WrongCredentialsException) {
                         displayWrongCredentialsError()
                     } else {
@@ -175,7 +175,7 @@ class HomeAnnFragment : Fragment() {
         val fromHome = arguments?.getBoolean("home") != null
         if (fromHome) recyclerView.isNestedScrollingEnabled = false
         recyclerView.adapter = HomeAnnAdapter(
-            if (fromHome) annItems.subList(0, minOf(5, annItems.size - 1))
+            if (fromHome) annItems.subList(0, minOf(arguments!!.getInt("home_ann_cnt", 5), annItems.size))
             else annItems, context!!
         ) {
             val intent = Intent()

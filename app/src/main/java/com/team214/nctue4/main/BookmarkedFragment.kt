@@ -46,7 +46,7 @@ class BookmarkedFragment : Fragment() {
         if (arguments?.getBoolean("home") != null)
             course_list_recycler_view.isNestedScrollingEnabled = false
         courseItems = courseDBHelper.readBookmarkedCourse(
-            if (arguments?.getBoolean("home") != null) 5 else null
+            if (arguments?.getBoolean("home") != null) arguments!!.getInt("home_bookmarked_cnt", 5) else null
         )
         updateList()
         super.onViewCreated(view, savedInstanceState)
@@ -56,7 +56,7 @@ class BookmarkedFragment : Fragment() {
     private fun updateList() {
         if (courseItems.isEmpty())
             (if (arguments?.getBoolean("home") != null) empty_request_compact else empty_request)?.visibility =
-                    View.VISIBLE
+                View.VISIBLE
         else {
             val dragDropManager = RecyclerViewDragDropManager()
             val courseAdapter = CourseDragDropAdapter(courseItems,
@@ -108,7 +108,7 @@ class BookmarkedFragment : Fragment() {
                 !pref.getBoolean("dragDropTipped", false)
             ) {
                 snackBar =
-                        Snackbar.make(course_list_root, getString(R.string.drag_drop_tip), Snackbar.LENGTH_INDEFINITE)
+                    Snackbar.make(course_list_root, getString(R.string.drag_drop_tip), Snackbar.LENGTH_INDEFINITE)
                 snackBar!!.show()
                 pref.edit().putBoolean("dragDropTipped", true).apply()
             }

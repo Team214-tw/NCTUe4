@@ -1,168 +1,192 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                         xmlns:app="http://schemas.android.com/apk/res-auto"
-                                         xmlns:tools="http://schemas.android.com/tools"
-                                         android:id="@+id/home_swipe_refresh"
-                                         android:layout_width="match_parent"
-                                         android:layout_height="match_parent">
+                                                       xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                       xmlns:tools="http://schemas.android.com/tools"
+                                                       android:id="@+id/home_swipe_refresh"
+                                                       android:layout_width="match_parent"
+                                                       android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            tools:context="com.team214.nctue4.main.HomeFragment">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:context="com.team214.nctue4.main.HomeFragment">
 
             <!--ann-->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:text="@string/latest_ann"
-                android:textSize="16sp" />
-
-            <FrameLayout
-                android:layout_width="75dp"
-                android:layout_height="2dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="5dp"
-                android:background="@color/md_red_500" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="8dp">
-
-                <LinearLayout
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <FrameLayout
-                        android:id="@+id/home_ann"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:id="@+id/home_more_ann"
+                    android:orientation="vertical"
+                    android:id="@+id/ann_layout"
+                    android:visibility="gone"
+            >
+                <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="15dp"
                         android:gravity="center"
-                        android:padding="8dp"
-                        android:text="@string/more_ann"
-                        android:textSize="16sp" />
+                        android:text="@string/latest_ann"
+                        android:textSize="16sp"/>
 
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                <FrameLayout
+                        android:layout_width="75dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/md_red_500"/>
 
-            <!--ann-->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:text="@string/download_history"
-                android:textSize="16sp" />
+                <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        app:cardCornerRadius="8dp">
 
-            <FrameLayout
-                android:layout_width="75dp"
-                android:layout_height="2dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="5dp"
-                android:background="@color/md_green_500" />
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="8dp">
+                        <FrameLayout
+                                android:id="@+id/home_ann"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
 
-                <LinearLayout
+                        <TextView
+                                android:id="@+id/home_more_ann"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/selectableItemBackground"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:text="@string/more_ann"
+                                android:textSize="16sp"/>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <!--download-->
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <FrameLayout
-                        android:id="@+id/home_download"
+                    android:orientation="vertical"
+                    android:id="@+id/download_layout"
+                    android:visibility="gone"
+            >
+                <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="-8dp" />
-
-                    <TextView
-                        android:id="@+id/home_more_download"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="15dp"
                         android:gravity="center"
-                        android:padding="8dp"
-                        android:text="@string/more_download_history"
-                        android:textSize="16sp" />
+                        android:text="@string/download_history"
+                        android:textSize="16sp"/>
 
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                <FrameLayout
+                        android:layout_width="75dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/md_green_500"/>
+
+                <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        app:cardCornerRadius="8dp">
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                        <FrameLayout
+                                android:id="@+id/home_download"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="-8dp"/>
+
+                        <TextView
+                                android:id="@+id/home_more_download"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/selectableItemBackground"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:text="@string/more_download_history"
+                                android:textSize="16sp"/>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
             <!--bookmarked-->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:text="@string/bookmarked_courses"
-                android:textSize="16sp" />
-
-
-            <FrameLayout
-                android:layout_width="75dp"
-                android:layout_height="2dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="5dp"
-                android:background="@color/md_indigo_500" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="8dp">
-
-                <LinearLayout
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <FrameLayout
-                        android:id="@+id/home_bookmarked"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:id="@+id/home_more_course"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:id="@+id/bookmarked_layout"
+            >
+                <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="15dp"
                         android:gravity="center"
-                        android:padding="8dp"
-                        android:text="@string/more_bookmarked_course"
-                        android:textSize="16sp" />
+                        android:text="@string/bookmarked_courses"
+                        android:textSize="16sp"/>
 
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+
+                <FrameLayout
+                        android:layout_width="75dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/md_indigo_500"/>
+
+                <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        app:cardCornerRadius="8dp">
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                        <FrameLayout
+                                android:id="@+id/home_bookmarked"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+
+                        <TextView
+                                android:id="@+id/home_more_course"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/selectableItemBackground"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:text="@string/more_bookmarked_course"
+                                android:textSize="16sp"/>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
 
         </LinearLayout>
