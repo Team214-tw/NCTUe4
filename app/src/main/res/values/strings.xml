@@ -126,8 +126,38 @@
     <string name="course_not_found_in_db">Course not found in local database, please refresh in course list page
     </string>
 
-    <string name="modified_time">Modified: </string>
+    <string name="modified_time">Modified:</string>
 
     <string name="click_to_agree_site_policy">Click here to goto new E3 and agree with their site policy</string>
-    <string name="no_course_or_site_policy">You have no course or you have not agreed with New E3\'s site policy</string>
+    <string name="no_course_or_site_policy">You have no course or you have not agreed with New E3\'s site policy
+    </string>
+
+    <string-array name="pref_home_screen_entry_count_array">
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
+
+    <!--Settings-->
+    <string name="home_screen_options">Home Screen Options</string>
+    <string name="home_enable_ann_summary">Show announcements on home screen</string>
+    <string name="home_enable_ann_title">Announcements</string>
+    <string name="home_ann_cnt">Announcements count</string>
+    <string name="home_enable_download_summary">Show download history on home screen</string>
+    <string name="home_enable_download_title">Download history</string>
+    <string name="home_download_cnt">Download history count</string>
+    <string name="home_enable_bookmarked_summary">Show bookmarked courses on home screen</string>
+    <string name="home_enable_bookmarked_title">Bookmarked courses</string>
+    <string name="home_bookmarked_cnt">Bookmarked courses entries count</string>
+    <string name="ann_enable_new_e3_system_title">System announcements</string>
+    <string name="ann_enable_new_e3_system_sum">Show new e3\'s system announcements</string>
+    <string name="ann_enable_old_e3_title">Fetch announcements</string>
+    <string name="ann_enable_old_e3_sum">Fetch old e3 announcements</string>
+
 </resources>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+>
+    <PreferenceCategory android:title="@string/home_screen_options"
+                        app:iconSpaceReserved="false">
+
+        <SwitchPreference
+                android:key="home_enable_ann"
+                android:summary="@string/home_enable_ann_summary"
+                android:title="@string/home_enable_ann_title"
+                app:iconSpaceReserved="false"
+                android:defaultValue="true"/>
+
+        <ListPreference
+                android:dependency="home_enable_ann"
+                android:key="home_ann_cnt"
+                android:layout="?android:attr/preferenceLayoutChild"
+                android:title="@string/home_ann_cnt"
+                android:summary="%s"
+                android:entries="@array/pref_home_screen_entry_count_array"
+                android:entryValues="@array/pref_home_screen_entry_count_array"
+                android:defaultValue="5"
+                app:iconSpaceReserved="false"/>
+
+        <SwitchPreference
+                android:key="home_enable_download"
+                android:summary="@string/home_enable_download_summary"
+                android:title="@string/home_enable_download_title"
+                app:iconSpaceReserved="false"
+                android:defaultValue="true"/>
+        <ListPreference
+                android:dependency="home_enable_download"
+                android:key="home_download_cnt"
+                android:layout="?android:attr/preferenceLayoutChild"
+                android:title="@string/home_download_cnt"
+                android:summary="%s"
+                android:entries="@array/pref_home_screen_entry_count_array"
+                android:entryValues="@array/pref_home_screen_entry_count_array"
+                android:defaultValue="5"
+                app:iconSpaceReserved="false"/>
+
+        <SwitchPreference
+                android:key="home_enable_bookmarked"
+                android:summary="@string/home_enable_bookmarked_summary"
+                android:title="@string/home_enable_bookmarked_title"
+                app:iconSpaceReserved="false"
+                android:defaultValue="true"/>
+
+        <ListPreference
+                android:dependency="home_enable_bookmarked"
+                android:key="home_bookmarked_cnt"
+                android:layout="?android:attr/preferenceLayoutChild"
+                android:title="@string/home_bookmarked_cnt"
+                android:summary="%s"
+                android:entries="@array/pref_home_screen_entry_count_array"
+                android:entryValues="@array/pref_home_screen_entry_count_array"
+                android:defaultValue="5"
+                app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/new_e3"
+                        app:iconSpaceReserved="false"
+    >
+        <CheckBoxPreference
+                android:key="ann_enable_new_e3_system"
+                android:summary="@string/ann_enable_new_e3_system_sum"
+                android:title="@string/ann_enable_new_e3_system_title"
+                app:iconSpaceReserved="false"
+                android:defaultValue="true"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/old_e3"
+                        app:iconSpaceReserved="false"
+    >
+        <CheckBoxPreference
+                android:key="ann_enable_old_e3"
+                android:summary="@string/ann_enable_old_e3_sum"
+                android:title="@string/ann_enable_old_e3_title"
+                app:iconSpaceReserved="false"
+                android:defaultValue="true"/>
+    </PreferenceCategory>
+</PreferenceScreen>

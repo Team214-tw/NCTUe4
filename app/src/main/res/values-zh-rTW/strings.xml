@@ -99,4 +99,18 @@
     <string name="modified_time">異動時間: </string>
     <string name="click_to_agree_site_policy">點此移至新e3接受使用規範</string>
     <string name="no_course_or_site_policy">你沒有任何課程或是你尚未同意新e3的使用規範</string>
+    <string name="home_screen_options">首頁選項</string>
+    <string name="home_ann_cnt">公告數量</string>
+    <string name="home_enable_ann_summary">於首頁顯示公告</string>
+    <string name="home_enable_ann_title">公告</string>
+    <string name="home_enable_download_summary">於首頁顯示下載紀錄</string>
+    <string name="home_enable_download_title">下載紀錄</string>
+    <string name="home_download_cnt">下載紀錄數量</string>
+    <string name="home_enable_bookmarked_summary">於首頁顯示收藏課程</string>
+    <string name="home_enable_bookmarked_title">收藏課程</string>
+    <string name="home_bookmarked_cnt">收藏課程數量</string>
+    <string name="ann_enable_new_e3_system_title">系統公告</string>
+    <string name="ann_enable_new_e3_system_sum">顯示新e3系統公告</string>
+    <string name="ann_enable_old_e3_title">抓取公告</string>
+    <string name="ann_enable_old_e3_sum">抓取舊e3上的公告</string>
 </resources>

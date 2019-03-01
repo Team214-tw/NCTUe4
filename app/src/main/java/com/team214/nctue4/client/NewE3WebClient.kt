@@ -100,16 +100,16 @@ class NewE3WebClient(context: Context) : E3Client() {
                 val newsRowEls = document.select(".NewsRow").dropLast(1)
                 val df = SimpleDateFormat("d MMM, HH:mm", Locale.US)
                 newsRowEls.forEach { el ->
-                    if (el.select(".colL-10").text() == "System") return@forEach
+                    //                    if (el.select(".colL-10").text() == "System") return@forEach
                     val date = df.parse(el.selectFirst(".colR-10").text())
                     val now = Calendar.getInstance()
                     val curMonth = now.get(Calendar.MONTH)
                     val curYear = now.get(Calendar.YEAR) - 1900
                     // 嘗試猜公告的年份為何
                     date.year =
-                            if (curMonth >= 7 && date.month <= 1) curYear + 1
-                            else if (curMonth <= 1 && date.month >= 7) curYear - 1
-                            else curYear
+                        if (curMonth >= 7 && date.month <= 1) curYear + 1
+                        else if (curMonth <= 1 && date.month >= 7) curYear - 1
+                        else curYear
 
                     // Detail ann link
                     val detailLocationHint =
@@ -117,9 +117,14 @@ class NewE3WebClient(context: Context) : E3Client() {
                             .find(el.select("div").attr("onclick"))!!
                             .groups[1]!!.value
 
-                    val courseName = el.select(".colL-10")
-                        .attr("title")
-                        .split("\\xa0".toRegex())[1].split(" ")[0]
+                    val courseName =
+                        try {
+                            el.select(".colL-10")
+                                .attr("title")
+                                .split("\\xa0".toRegex())[1].split(" ")[0]
+                        } catch (e: IndexOutOfBoundsException) {
+                            el.select(".colL-10").text()
+                        }
 
                     val title = el.select(".colL-19").text()
                     emitter.onNext(AnnItem(E3Type.NEW, title, date, courseName, "$detailLocationHint&lang=en"))

@@ -14,6 +14,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.BaseActivity
 import com.team214.nctue4.BuildConfig
 import com.team214.nctue4.R
+import com.team214.nctue4.SettingsFragment
 import com.team214.nctue4.client.E3Type
 import com.team214.nctue4.client.NewE3ApiClient
 import com.team214.nctue4.client.NewE3WebClient
@@ -116,6 +117,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     bundle.putSerializable("e3Type", E3Type.NEW)
                     this.arguments = bundle
                 }
+            }
+            R.id.settings -> {
+                firebaseAnalytics
+                    .setCurrentScreen(this, "SettingsFragment", CourseListFragment::class.java.simpleName)
+                SettingsFragment()
             }
             R.id.nav_log_out -> {
                 AlertDialog.Builder(this)
