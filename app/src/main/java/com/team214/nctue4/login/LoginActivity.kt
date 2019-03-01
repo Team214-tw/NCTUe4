@@ -85,8 +85,8 @@ class LoginActivity : AppCompatActivity() {
             val studentPortalPassword = student_portal_password.text.toString()
             val studentPassword = student_password.text.toString()
 
-            val observable = newE3ApiClient.login(studentId, studentPortalPassword)
-            if (studentPassword != "") observable.mergeWith(oldE3Client.login(studentId, studentPassword))
+            var observable = newE3ApiClient.login(studentId, studentPortalPassword)
+            if (studentPassword != "") observable = observable.mergeWith(oldE3Client.login(studentId, studentPassword))
 
             disposable = observable
                 .flatMap { newE3ApiClient.saveUserInfo(studentId) }
@@ -117,8 +117,8 @@ class LoginActivity : AppCompatActivity() {
             handleLoginSuccess()
             return
         }
-        val observable = newE3ApiClient.getCourseList()
-        if (oldE3) observable.mergeWith(oldE3Client.getCourseList())
+        var observable = newE3ApiClient.getCourseList()
+        if (oldE3) observable = observable.mergeWith(oldE3Client.getCourseList())
         disposable = observable
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<CourseItem>()) { courseItems, courseItem -> courseItems.add(courseItem) }
