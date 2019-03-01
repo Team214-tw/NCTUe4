@@ -181,8 +181,8 @@ class OldE3Client(context: Context) : E3Client() {
         if (!app.oldE3CourseIdMap.isEmpty()) return
         val courseEls = document
             .getElementById("ctl00_ContentPlaceHolder1_gvCourse")
-            .getElementsByTag("a")
-        courseEls.forEach {
+            ?.getElementsByTag("a")
+        courseEls?.forEach {
             app.oldE3CourseIdMap[it.attr("courseid")] =
                     it.attr("id").replace('_', '$')
         }
@@ -300,8 +300,8 @@ class OldE3Client(context: Context) : E3Client() {
                 buildCourseIdMap(document)
                 val courseEls = document
                     .getElementById("ctl00_ContentPlaceHolder1_gvCourse")
-                    .getElementsByTag("a")
-                courseEls.forEach {
+                    ?.getElementsByTag("a")
+                courseEls?.forEach {
                     val courseName = it.text()
                     val courseId = it.attr("courseid")
                     val additionalInfo = it.parent().parent()

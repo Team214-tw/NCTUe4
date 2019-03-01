@@ -37,8 +37,8 @@
                 android:id="@+id/settings"
                 android:title="@string/settings"/>
         <item
-                android:id="@+id/nav_log_out"
-                android:title="@string/logout"/>
+                android:id="@+id/nav_account_management"
+                android:title="@string/account_management"/>
         <item
                 android:id="@+id/nav_feedback"
                 android:title="@string/feedback"/>

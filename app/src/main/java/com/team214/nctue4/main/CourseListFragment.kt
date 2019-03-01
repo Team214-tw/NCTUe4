@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.team214.nctue4.R
+import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.client.E3Type
 import com.team214.nctue4.course.CourseActivity
 import com.team214.nctue4.model.CourseDBHelper
@@ -94,8 +95,20 @@ class CourseListFragment : Fragment() {
                     displayData()
                     Snackbar.make(course_list_root, getString(R.string.refresh_success), Snackbar.LENGTH_SHORT).show()
                 },
-                onError = {
-                    Snackbar.make(course_list_root, getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show()
+                onError = { error ->
+                    when (error) {
+                        is E3Client.WrongCredentialsException -> Snackbar.make(
+                            course_list_root,
+                            getString(R.string.wrong_credential),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        else -> Snackbar.make(
+                            course_list_root,
+                            getString(R.string.generic_error),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+
                 }
             )
     }

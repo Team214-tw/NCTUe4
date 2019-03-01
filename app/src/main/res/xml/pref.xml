@@ -68,7 +68,7 @@
                 android:summary="@string/ann_enable_new_e3_system_sum"
                 android:title="@string/ann_enable_new_e3_system_title"
                 app:iconSpaceReserved="false"
-                android:defaultValue="true"/>
+                android:defaultValue="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/old_e3"
@@ -79,6 +79,6 @@
                 android:summary="@string/ann_enable_old_e3_sum"
                 android:title="@string/ann_enable_old_e3_title"
                 app:iconSpaceReserved="false"
-                android:defaultValue="true"/>
+                android:defaultValue="false"/>
     </PreferenceCategory>
 </PreferenceScreen>

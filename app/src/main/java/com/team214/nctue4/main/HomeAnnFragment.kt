@@ -3,6 +3,7 @@ package com.team214.nctue4.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,10 +58,10 @@ class HomeAnnFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = RecyclerView(context!!)
         recyclerView.layoutParams =
-                RecyclerView.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
+            RecyclerView.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
         ann_swipe_refresh_layout.isEnabled = false
         if (!fromHome) {
             ann_swipe_refresh_layout.visibility = View.VISIBLE
@@ -85,12 +86,17 @@ class HomeAnnFragment : Fragment() {
         }
         disposable?.dispose()
         annItems.clear()
-        disposable = mutableListOf(
-            oldE3Client.getFrontPageAnns()
-                .doOnError { oldE3Failed = true },
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val observables = mutableListOf(
             newE3WebClient.getFrontPageAnns()
                 .doOnError { newE3Failed = true }
-        ).mergeDelayError()
+        )
+        val enableOldE3 = prefs.getBoolean("ann_enable_old_e3", false)
+        if (enableOldE3) {
+            observables.add(oldE3Client.getFrontPageAnns()
+                .doOnError { oldE3Failed = true })
+        }
+        disposable = observables.mergeDelayError()
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(annItems) { annItems, annItem -> annItems.add(annItem) }
             .doFinally { progress_bar?.visibility = View.GONE }

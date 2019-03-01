@@ -19,6 +19,7 @@ import com.team214.nctue4.client.E3Type
 import com.team214.nctue4.client.NewE3ApiClient
 import com.team214.nctue4.client.NewE3WebClient
 import com.team214.nctue4.client.OldE3Client
+import com.team214.nctue4.login.LoginActivity
 import com.team214.nctue4.login.LogoutActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -123,17 +124,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     .setCurrentScreen(this, "SettingsFragment", CourseListFragment::class.java.simpleName)
                 SettingsFragment()
             }
-            R.id.nav_log_out -> {
-                AlertDialog.Builder(this)
-                    .setTitle(R.string.logout)
-                    .setMessage(R.string.logout_confirm)
-                    .setPositiveButton(R.string.positive) { _, _ ->
-                        val intent = Intent(this, LogoutActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }.setNegativeButton(R.string.cancel) { dialog, _ ->
-                        dialog.cancel()
-                    }.show()
+            R.id.nav_account_management -> {
+                val intent = Intent()
+                intent.setClass(this, LoginActivity::class.java)
+                startActivity(intent)
+                this.finish()
                 null
             }
             R.id.nav_feedback -> {

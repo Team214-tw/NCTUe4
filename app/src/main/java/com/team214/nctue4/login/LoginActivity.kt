@@ -29,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
     private var disposable: Disposable? = null
     private lateinit var oldE3Client: OldE3Client
     private lateinit var newE3ApiClient: NewE3ApiClient
+    private var loggedInBefore = false
 
     override fun onDestroy() {
         disposable?.dispose()
@@ -51,9 +52,12 @@ class LoginActivity : AppCompatActivity() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         if (prefs.getString("studentId", "") != "") {
+            loggedInBefore = true
             student_id.isEnabled = false
             logout_button.visibility = View.VISIBLE
             student_id.setText(prefs.getString("studentId", null))
+            student_password.setText(prefs.getString("studentPassword", ""))
+            student_portal_password.setText(prefs.getString("studentPortalPassword", ""))
         }
 
         login_help.paintFlags = login_help.paintFlags or Paint.UNDERLINE_TEXT_FLAG
@@ -78,12 +82,13 @@ class LoginActivity : AppCompatActivity() {
             disableInput()
 
             val studentId = student_id.text.toString().trim()
+            val studentPortalPassword = student_portal_password.text.toString()
             val studentPassword = student_password.text.toString()
-            var studentPortalPassword = student_portal_password.text.toString()
-            if (studentPortalPassword == "") studentPortalPassword = studentPassword
 
-            disposable = oldE3Client.login(studentId, studentPassword)
-                .mergeWith(newE3ApiClient.login(studentId, studentPortalPassword))
+            val observable = newE3ApiClient.login(studentId, studentPortalPassword)
+            if (studentPassword != "") observable.mergeWith(oldE3Client.login(studentId, studentPassword))
+
+            disposable = observable
                 .flatMap { newE3ApiClient.saveUserInfo(studentId) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -166,7 +171,7 @@ class LoginActivity : AppCompatActivity() {
         login_error_text_view?.visibility = View.VISIBLE
         login_progressbar?.visibility = View.GONE
         login_button?.text = getString(R.string.login)
-        student_id.isEnabled = true
+        if (!loggedInBefore) student_id.isEnabled = true
         student_password.isEnabled = true
         student_portal_password.isEnabled = true
         login_button?.isEnabled = true

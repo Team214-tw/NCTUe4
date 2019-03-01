@@ -21,8 +21,8 @@
 
     <!--Login Activity-->
     <string name="student_id">Student ID</string>
-    <string name="student_old_e3_password">Old E3 Password</string>
-    <string name="portal_password">Portal Password (For New e3)</string>
+    <string name="student_old_e3_password">Old E3 Password (Optional)</string>
+    <string name="portal_password">NCTU Portal Password</string>
     <string name="login_hint">Please enter ID and e3 password.</string>
     <string name="login">LogIn</string>
     <string name="logout">Log out</string>
@@ -113,7 +113,7 @@
     <string name="old_e3_ann_error">Can\'t display old e3 announcements at the moment.\nPull to retry.</string>
 
     <string name="login_help_student_id">Student ID: Your Student ID (Ex: 0612345)</string>
-    <string name="login_help_old_e3">Old E3 password: The password you use when logging in ecampus (as figure
+    <string name="login_help_old_e3">Old E3 password (Optional): The password you use when logging in ecampus (as figure
         below)\nURL: https://dcpc.nctu.edu.tw\nIf you never change it manually, the password should be same as NCTU
         Course Registration System　(The default password for Course System is the last 6 digits of your National ID or
         "123456").
@@ -160,4 +160,5 @@
     <string name="ann_enable_old_e3_title">Fetch announcements</string>
     <string name="ann_enable_old_e3_sum">Fetch old e3 announcements</string>
 
+    <string name="account_management">Account management</string>
 </resources>
