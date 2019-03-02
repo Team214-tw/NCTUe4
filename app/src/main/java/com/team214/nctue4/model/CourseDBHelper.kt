@@ -154,7 +154,7 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
                 arrayOf(e3Type.name),
                 null,
                 null,
-                null
+                "sort_key DESC"
             )
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast) {

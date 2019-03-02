@@ -67,9 +67,9 @@ class CourseListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         courseItems = courseDBHelper.readCourses(e3Type)
+        getData()
         if (courseItems.isEmpty()) {
             empty_request.visibility = View.VISIBLE
-            getData()
         } else {
             displayData()
         }
@@ -89,11 +89,16 @@ class CourseListFragment : Fragment() {
             .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
                 onSuccess = {
-                    courseDBHelper.refreshCourses(it, e3Type)
-                    courseItems.clear()
-                    courseItems.addAll(courseDBHelper.readCourses(e3Type))
-                    displayData()
-                    Snackbar.make(course_list_root, getString(R.string.refresh_success), Snackbar.LENGTH_SHORT).show()
+                    val oldSet = setOf(*courseItems.map { x -> x.courseId }.toTypedArray())
+                    val newSet = setOf(*it.map { x -> x.courseId }.toTypedArray())
+                    if (oldSet != newSet) {
+                        courseDBHelper.refreshCourses(it, e3Type)
+                        courseItems.clear()
+                        courseItems.addAll(courseDBHelper.readCourses(e3Type))
+                        displayData()
+                        Snackbar.make(course_list_root, getString(R.string.refresh_success), Snackbar.LENGTH_SHORT)
+                            .show()
+                    }
                 },
                 onError = { error ->
                     when (error) {
@@ -114,7 +119,6 @@ class CourseListFragment : Fragment() {
     }
 
     private fun displayData() {
-        courseItems.sortByDescending { it.sortKey }
         if (course_list_recycler_view.adapter != null) {
             course_list_recycler_view.adapter?.notifyDataSetChanged()
             return
