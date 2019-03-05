@@ -8,6 +8,7 @@ import com.team214.nctue4.model.*
 import io.reactivex.Observable
 import okhttp3.*
 import org.jsoup.Jsoup
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -45,7 +46,7 @@ class NewE3WebClient(context: Context) : E3Client() {
             .build()
         val request = okhttp3.Request
             .Builder()
-            .url("https://e3new.nctu.edu.tw/login/index.php?lang=en")
+            .url("https://e3new.nctu.edu.tw/login/index.php")
             .post(formBody)
             .build()
         return clientExecute(request).flatMap { (response, _) ->
@@ -88,24 +89,31 @@ class NewE3WebClient(context: Context) : E3Client() {
     }
 
     override fun getFrontPageAnns(): Observable<AnnItem> {
-        return get("https://e3new.nctu.edu.tw/theme/dcpc/news/index.php?lang=en").flatMap {
+        return get("https://e3new.nctu.edu.tw/theme/dcpc/news/index.php").flatMap {
             Observable.create<AnnItem> { emitter ->
                 val document = Jsoup.parse(it).apply {
                     if (this.selectFirst(".login > a")?.text() == "Log in" ||
-                        this.selectFirst("body > div")?.text() == "Invalid user"
+                        this.selectFirst(".login > a")?.text() == "登入" ||
+                        this.selectFirst("body > div")?.text() == "Invalid user" ||
+                        this.selectFirst("body > div")?.text() == "無效的使用者"
                     ) {
                         throw SessionInvalidException()
                     }
                 }
                 val newsRowEls = document.select(".NewsRow").dropLast(1)
-                val df = SimpleDateFormat("d MMM, HH:mm", Locale.US)
+                val dfEN = SimpleDateFormat("d MMM, HH:mm", Locale.US)
+                val dfTW = SimpleDateFormat("MM月 d日,HH:mm", Locale.US)
                 newsRowEls.forEach { el ->
                     if (el.select(".colL-10").text() == "System" && !prefs.getBoolean(
                             "ann_enable_new_e3_system",
                             false
                         )
                     ) return@forEach
-                    val date = df.parse(el.selectFirst(".colR-10").text())
+                    val date = try {
+                        dfTW.parse(el.selectFirst(".colR-10").text())
+                    } catch (e: ParseException) {
+                        dfEN.parse(el.selectFirst(".colR-10").text())
+                    }
                     val now = Calendar.getInstance()
                     val curMonth = now.get(Calendar.MONTH)
                     val curYear = now.get(Calendar.YEAR) - 1900
@@ -131,7 +139,7 @@ class NewE3WebClient(context: Context) : E3Client() {
                         }
 
                     val title = el.select(".colL-19").text()
-                    emitter.onNext(AnnItem(E3Type.NEW, title, date, courseName, "$detailLocationHint&lang=en"))
+                    emitter.onNext(AnnItem(E3Type.NEW, title, date, courseName, detailLocationHint))
                 }
                 emitter.onComplete()
             }
@@ -146,7 +154,8 @@ class NewE3WebClient(context: Context) : E3Client() {
         return get(annItem.detailLocationHint!!).flatMap {
             Observable.fromCallable {
                 val document = Jsoup.parse(it)
-                val df = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.US)
+                val dfEN = SimpleDateFormat("EEEE, d MMMM yyyy, h:mm aa", Locale.US)
+                val dfTW = SimpleDateFormat("yyyy年 MM月 d日(EEE) HH:mm", Locale.US)
 
                 val attachItems = mutableListOf<FileItem>()
 
@@ -170,11 +179,12 @@ class NewE3WebClient(context: Context) : E3Client() {
                     .replace("【.*】\\d*".toRegex(), "")
                     .replace(" .*".toRegex(), "")
                 val content = document.select(".content").html()
-                val date = df.parse(
-                    document.select(".author")
-                        .text()
-                        .replace(", \\d+:\\d+.*".toRegex(), "")
-                )
+                val dateStr = document.select(".author").text()
+                val date = try {
+                    dfTW.parse(dateStr)
+                } catch (e: ParseException) {
+                    dfEN.parse(dateStr)
+                }
                 AnnItem(E3Type.NEW, title, date, courseName, null, content, attachItems)
             }
         }
