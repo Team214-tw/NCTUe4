@@ -85,7 +85,6 @@ class HomeAnnFragment : Fragment() {
             progress_bar.visibility = View.VISIBLE
         }
         disposable?.dispose()
-        annItems.clear()
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val observables = mutableListOf(
             newE3WebClient.getFrontPageAnns()
@@ -98,10 +97,12 @@ class HomeAnnFragment : Fragment() {
         }
         disposable = observables.mergeDelayError()
             .observeOn(AndroidSchedulers.mainThread())
-            .collectInto(annItems) { annItems, annItem -> annItems.add(annItem) }
+            .collectInto(mutableListOf<AnnItem>()) { collector, annItem -> collector.add(annItem) }
             .doFinally { progress_bar?.visibility = View.GONE }
             .subscribeBy(
                 onSuccess = {
+                    annItems.clear()
+                    annItems.addAll(it)
                     annItems.sortByDescending { annItem -> annItem.date }
                     displayErrorToast()
                     displayData()
