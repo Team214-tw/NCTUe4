@@ -4,9 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.android.gms.security.ProviderInstaller
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.login.LoginActivity
 import com.team214.nctue4.main.MainActivity
+import javax.net.ssl.SSLContext
+
 
 class LandingActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -15,6 +21,19 @@ class LandingActivity : AppCompatActivity() {
         setTheme(R.style.AppTheme)  //End Splash Screen
         super.onCreate(savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+
+        try {
+            ProviderInstaller.installIfNeeded(applicationContext)
+            val sslContext = SSLContext.getInstance("TLSv1.2")
+            sslContext.init(null, null, null)
+            sslContext.createSSLEngine()
+        } catch (e: GooglePlayServicesRepairableException) {
+            val apiAvailability = GoogleApiAvailability.getInstance()
+            apiAvailability.showErrorNotification(this, e.connectionStatusCode)
+        } catch (e: GooglePlayServicesNotAvailableException) {
+            val apiAvailability = GoogleApiAvailability.getInstance()
+            apiAvailability.showErrorNotification(this, e.errorCode)
+        }
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 

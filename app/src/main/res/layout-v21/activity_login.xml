@@ -57,6 +57,7 @@
                     android:autofillHints="username"
                     android:background="@drawable/edit_text"
                     android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_account_circle_black_24dp"
                     android:hint="@string/student_id"
                     android:maxLines="1"
                     android:padding="10dp"/>
@@ -69,6 +70,7 @@
                     android:autofillHints="password"
                     android:background="@drawable/edit_text"
                     android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_key_black_24dp"
                     android:hint="@string/portal_password"
                     android:inputType="textPassword"
                     android:maxLines="1"
@@ -82,6 +84,7 @@
                     android:autofillHints="password"
                     android:background="@drawable/edit_text"
                     android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_key_black_24dp"
                     android:hint="@string/student_old_e3_password"
                     android:inputType="textPassword"
                     android:maxLines="1"

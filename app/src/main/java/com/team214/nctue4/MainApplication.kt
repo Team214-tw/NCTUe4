@@ -1,9 +1,9 @@
 package com.team214.nctue4
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 import okhttp3.Cookie
 
-class MainApplication : Application() {
+class MainApplication : MultiDexApplication() {
     var newE3Session: Cookie? = null
     var oldE3Session: Cookie? = null
     var oldE3AspXAuth: Cookie? = null
