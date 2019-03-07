@@ -358,8 +358,8 @@ class NewE3ApiClient(val context: Context) : E3Client() {
                             } else MemberItem.Type.Student
                         emitter.onNext(
                             MemberItem(
-                                it.getString("fullname").split(" ").first(),
                                 it.getString("fullname").split(" ").last(),
+                                it.getString("fullname").split(" ").first(),
                                 if (it.has("email")) {
                                     it.getString("email")
                                 } else {

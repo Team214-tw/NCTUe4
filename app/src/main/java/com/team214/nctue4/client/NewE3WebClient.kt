@@ -104,7 +104,9 @@ class NewE3WebClient(context: Context) : E3Client() {
                 val dfEN = SimpleDateFormat("d MMM, HH:mm", Locale.US)
                 val dfTW = SimpleDateFormat("MM月 d日,HH:mm", Locale.US)
                 newsRowEls.forEach { el ->
-                    if (el.select(".colL-10").text() == "System" && !prefs.getBoolean(
+                    if ((el.select(".colL-10").text() == "System" ||
+                                el.select(".colL-10").text() == "系統")
+                        && !prefs.getBoolean(
                             "ann_enable_new_e3_system",
                             false
                         )
