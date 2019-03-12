@@ -26,18 +26,10 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
                         android:layout_marginTop="15dp"
                         android:gravity="center"
                         android:text="@string/latest_ann"
-                        android:textSize="16sp"/>
-
-                <FrameLayout
-                        android:layout_width="75dp"
-                        android:layout_height="2dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        android:background="@color/md_red_500"/>
+                        android:textSize="18sp"/>
 
                 <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -61,12 +53,12 @@
                                 android:layout_height="wrap_content"
                                 android:background="?attr/selectableItemBackground"
                                 android:clickable="true"
-                                android:focusable="false"
+                                android:focusable="true"
                                 android:focusableInTouchMode="false"
+                                android:padding="4dp"
                                 android:gravity="center"
-                                android:padding="8dp"
                                 android:text="@string/more_ann"
-                                android:textSize="16sp"/>
+                                android:textSize="14sp"/>
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -83,18 +75,10 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
                         android:layout_marginTop="15dp"
                         android:gravity="center"
                         android:text="@string/download_history"
-                        android:textSize="16sp"/>
-
-                <FrameLayout
-                        android:layout_width="75dp"
-                        android:layout_height="2dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        android:background="@color/md_green_500"/>
+                        android:textSize="18sp"/>
 
                 <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -119,12 +103,12 @@
                                 android:layout_height="wrap_content"
                                 android:background="?attr/selectableItemBackground"
                                 android:clickable="true"
-                                android:focusable="false"
+                                android:focusable="true"
                                 android:focusableInTouchMode="false"
                                 android:gravity="center"
-                                android:padding="8dp"
+                                android:padding="4dp"
                                 android:text="@string/more_download_history"
-                                android:textSize="16sp"/>
+                                android:textSize="14sp"/>
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -141,19 +125,10 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
                         android:layout_marginTop="15dp"
                         android:gravity="center"
                         android:text="@string/bookmarked_courses"
-                        android:textSize="16sp"/>
-
-
-                <FrameLayout
-                        android:layout_width="75dp"
-                        android:layout_height="2dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        android:background="@color/md_indigo_500"/>
+                        android:textSize="18sp"/>
 
                 <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -177,12 +152,12 @@
                                 android:layout_height="wrap_content"
                                 android:background="?attr/selectableItemBackground"
                                 android:clickable="true"
-                                android:focusable="false"
+                                android:focusable="true"
                                 android:focusableInTouchMode="false"
                                 android:gravity="center"
-                                android:padding="8dp"
+                                android:padding="4dp"
                                 android:text="@string/more_bookmarked_course"
-                                android:textSize="16sp"/>
+                                android:textSize="14sp"/>
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
