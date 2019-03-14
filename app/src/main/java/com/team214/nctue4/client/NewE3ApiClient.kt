@@ -4,6 +4,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.*
+import com.team214.nctue4.utility.unescapeHtml
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Cookie
@@ -192,7 +193,7 @@ class NewE3ApiClient(val context: Context) : E3Client() {
                     emitter.onNext(
                         AnnItem(
                             E3Type.NEW,
-                            title,
+                            unescapeHtml(title),
                             date,
                             courseItem.courseName,
                             null,
