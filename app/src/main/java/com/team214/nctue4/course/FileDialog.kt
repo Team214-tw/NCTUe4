@@ -7,22 +7,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.model.FileItem
 import com.team214.nctue4.model.FolderItem
+import com.team214.nctue4.utility.ThemedDialogFragment
 import com.team214.nctue4.utility.downloadFile
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.dialog_course_folder.*
 
-class FileDialog : DialogFragment() {
+class FileDialog : ThemedDialogFragment() {
     private lateinit var client: E3Client
     private lateinit var folderItem: FolderItem
     private lateinit var url: String
@@ -45,7 +44,6 @@ class FileDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         getData()
     }
 

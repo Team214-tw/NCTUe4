@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
 import com.team214.nctue4.R
+import com.team214.nctue4.utility.ThemedDialogFragment
 
 
-class LoginHelpFragment : DialogFragment() {
+class LoginHelpFragment : ThemedDialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

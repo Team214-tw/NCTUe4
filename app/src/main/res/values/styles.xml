@@ -13,6 +13,10 @@
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
+    <style name="DialogFragmentTheme" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="android:background">@color/floatingBackground</item>
+    </style>
+
     <style name="BottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog"/>
 
     <!-- Base application theme. -->

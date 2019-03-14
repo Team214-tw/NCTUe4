@@ -6,7 +6,10 @@ import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.text.InputType
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
@@ -41,7 +44,6 @@ class DownloadDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         val file = arguments?.getSerializable("file") as File
         download_delete?.setOnClickListener {
             val deleteDialog = AlertDialog.Builder(context!!)

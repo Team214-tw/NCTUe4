@@ -8,16 +8,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.model.CourseItem
 import com.team214.nctue4.model.FileItem
 import com.team214.nctue4.model.HwkItem
+import com.team214.nctue4.utility.ThemedDialogFragment
 import com.team214.nctue4.utility.downloadFile
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -25,7 +24,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.dialog_assign.*
 
 
-class HwkDialog : DialogFragment() {
+class HwkDialog : ThemedDialogFragment() {
     lateinit var client: E3Client
     private lateinit var hwkItem: HwkItem
     lateinit var courseItem: CourseItem
@@ -49,7 +48,6 @@ class HwkDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         client = (activity as HwkActivity).client
         hwkItem = arguments!!.getParcelable("hwkItem")!!
-        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         getData()
     }
 

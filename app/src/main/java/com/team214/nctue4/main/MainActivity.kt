@@ -7,7 +7,6 @@ import android.preference.PreferenceManager
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -20,7 +19,6 @@ import com.team214.nctue4.client.NewE3ApiClient
 import com.team214.nctue4.client.NewE3WebClient
 import com.team214.nctue4.client.OldE3Client
 import com.team214.nctue4.login.LoginActivity
-import com.team214.nctue4.login.LogoutActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 

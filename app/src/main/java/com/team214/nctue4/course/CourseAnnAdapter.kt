@@ -36,7 +36,7 @@ class CourseAnnAdapter(
             }
             val sdf = SimpleDateFormat("MM/dd", Locale.TAIWAN)
             view.announcement_beginDate.text =
-                    if (ann.date == null) "" else sdf.format(ann.date)
+                if (ann.date == null) "" else sdf.format(ann.date)
             view.setOnClickListener {
                 itemClickListener(ann)
             }

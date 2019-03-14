@@ -1,7 +1,6 @@
 package com.team214.nctue4.course
 
 import android.content.Context
-import android.graphics.Color
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -40,7 +39,8 @@ class MembersAdapter(
             view.member_item.setBackgroundColor(
                 if (member.selected) {
                     ContextCompat.getColor(context, R.color.row_activated)
-                } else {val typedValue = TypedValue()
+                } else {
+                    val typedValue = TypedValue()
                     context.theme.resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true)
                     typedValue.data
                 }
