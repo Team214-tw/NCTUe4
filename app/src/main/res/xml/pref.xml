@@ -30,6 +30,12 @@
                 android:title="@string/home_enable_download_title"
                 app:iconSpaceReserved="false"
                 android:defaultValue="true"/>
+        <CheckBoxPreference
+                android:key="ann_enable_old_e3"
+                android:summary="@string/ann_enable_old_e3_sum"
+                android:title="@string/ann_enable_old_e3_title"
+                app:iconSpaceReserved="false"
+                android:defaultValue="false"/>
         <ListPreference
                 android:dependency="home_enable_download"
                 android:key="home_download_cnt"

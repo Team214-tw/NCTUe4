@@ -118,4 +118,17 @@
     <string name="ann_enable_old_e3_title">抓取公告</string>
     <string name="ann_enable_old_e3_sum">抓取舊e3上的公告</string>
     <string name="account_management">帳戶管理</string>
+    <string name="night_mode">夜間模式</string>
+    <string name="general">一般</string>
+
+    <string-array name="pref_night_mode_entries_array">
+        <item>開</item>
+        <item>關</item>
+    </string-array>
+
+    <string-array name="pref_night_mode_entries_array_v28">
+        <item>開</item>
+        <item>關</item>
+        <item>遵循系統設定</item>
+    </string-array>
 </resources>

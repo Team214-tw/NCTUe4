@@ -159,6 +159,30 @@
     <string name="ann_enable_new_e3_system_sum">Show new e3\'s system announcements</string>
     <string name="ann_enable_old_e3_title">Fetch announcements</string>
     <string name="ann_enable_old_e3_sum">Fetch old e3 announcements</string>
+    <string name="general">General</string>
+    <string name="night_mode">Night Mode</string>
+
+    <string-array name="pref_night_mode_entries_array">
+        <item>On</item>
+        <item>Off</item>
+    </string-array>
+
+    <string-array name="pref_night_mode_entry_values_array">
+        <item>MODE_NIGHT_YES</item>
+        <item>MODE_NIGHT_NO</item>
+    </string-array>
+
+    <string-array name="pref_night_mode_entries_array_v28">
+        <item>On</item>
+        <item>Off</item>
+        <item>Follow System Settings</item>
+    </string-array>
+
+    <string-array name="pref_night_mode_entry_values_array_v28">
+        <item>MODE_NIGHT_YES</item>
+        <item>MODE_NIGHT_NO</item>
+        <item>MODE_NIGHT_FOLLOW_SYSTEM</item>
+    </string-array>
 
     <string name="account_management">Account management</string>
 </resources>

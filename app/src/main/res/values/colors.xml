@@ -11,6 +11,6 @@
     <color name="new_e3">#0277BD</color>
     <color name="old_e3">#104698</color>
     <color name="row_activated">#E0E0E0</color>
-
+    <color name="windowBackground">#FAFAFA</color>
 </resources>
 

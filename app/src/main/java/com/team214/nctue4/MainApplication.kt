@@ -1,5 +1,6 @@
 package com.team214.nctue4
 
+import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import okhttp3.Cookie
@@ -15,8 +16,11 @@ class MainApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        AppCompatDelegate.setDefaultNightMode(
-            AppCompatDelegate.MODE_NIGHT_YES
-        )
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        when (prefs.getString("night_mode", "MODE_NIGHT_FOLLOW_SYSTEM")) {
+            "MODE_NIGHT_FOLLOW_SYSTEM" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            "MODE_NIGHT_YES" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            "MODE_NIGHT_NO" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
     }
 }
