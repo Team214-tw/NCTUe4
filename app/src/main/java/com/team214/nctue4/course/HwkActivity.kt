@@ -21,6 +21,7 @@ import com.team214.nctue4.client.E3ClientFactory
 import com.team214.nctue4.model.CourseItem
 import com.team214.nctue4.model.HwkItem
 import com.team214.nctue4.utility.downloadFile
+import com.team214.nctue4.utility.injectCss
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -128,7 +129,7 @@ class HwkActivity : BaseActivity() {
 
         assign_content_web_view.loadDataWithBaseURL(
             client.getBaseUrl(),
-            hwkItem.content,
+            injectCss(hwkItem.content, this),
             "text/html",
             "UTF-8",
             null
