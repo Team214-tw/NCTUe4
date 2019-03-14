@@ -5,7 +5,7 @@ import android.content.res.Configuration
 
 fun injectCss(html: String?, context: Context): String {
     if (html == null) return ""
-    val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK;
+    val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
     if (currentNightMode != Configuration.UI_MODE_NIGHT_YES) return html
     return """
         <style>

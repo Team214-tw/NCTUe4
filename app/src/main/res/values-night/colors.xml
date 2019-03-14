@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="new_e3">#90d6ff</color>
-    <color name="old_e3">#879ffd</color>
+    <color name="new_e3">#c1f0ff</color>
+    <color name="old_e3">#bad5ff</color>
     <color name="row_activated">#424242</color>
     <color name="windowBackground">#212121</color>
+    <color name="colorAccent">#FFFFFF</color>
+    <color name="floatingBackground">#202124</color>
 </resources>

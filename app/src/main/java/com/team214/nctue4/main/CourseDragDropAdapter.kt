@@ -51,7 +51,7 @@ class CourseDragDropAdapter(
                     view.course_star.setColorFilter(ContextCompat.getColor(context!!, R.color.old_e3))
                 else
                     view.course_star.setColorFilter(ContextCompat.getColor(context!!, R.color.new_e3))
-            } else view.course_star.setColorFilter(ContextCompat.getColor(context!!, R.color.blueGrey))
+            } else view.course_star.setColorFilter(ContextCompat.getColor(context!!, R.color.md_grey_500))
 
             if (course.e3Type == E3Type.OLD)
                 view.course_item_e3_bar.setBackgroundColor(ContextCompat.getColor(context, R.color.old_e3))

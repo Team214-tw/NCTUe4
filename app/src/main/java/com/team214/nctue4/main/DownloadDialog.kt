@@ -80,7 +80,7 @@ class DownloadDialog : BottomSheetDialogFragment() {
             val type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
             val fileUri = FileProvider.getUriForFile(
                 context!!,
-                context!!.applicationContext.packageName + ".com.team214", file
+                context!!.applicationContext.packageName + ".provider", file
             )
             intent.setDataAndType(fileUri, type)
             intent.putExtra(Intent.EXTRA_STREAM, fileUri)

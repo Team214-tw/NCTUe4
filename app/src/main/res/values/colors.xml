@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimaryLight">#2196F3</color>
     <color name="colorPrimary">#225ebb</color>
     <color name="colorPrimaryDark">#104698</color>
     <color name="colorAccent">#2196F3</color>
@@ -12,5 +13,6 @@
     <color name="old_e3">#104698</color>
     <color name="row_activated">#E0E0E0</color>
     <color name="windowBackground">#FAFAFA</color>
+    <color name="floatingBackground">#FFFFFF</color>
 </resources>
 

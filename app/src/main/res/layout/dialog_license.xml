@@ -26,7 +26,8 @@
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:paddingEnd="8dp"
-                app:srcCompat="@drawable/ic_font_awesome"/>
+                app:srcCompat="@drawable/ic_font_awesome"
+                app:tint="?android:attr/textColorPrimary"/>
 
         <TextView
                 android:id="@+id/font_awesome_license"
