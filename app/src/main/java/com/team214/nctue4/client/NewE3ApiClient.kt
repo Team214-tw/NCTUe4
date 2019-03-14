@@ -29,7 +29,7 @@ class NewE3ApiClient(val context: Context) : E3Client() {
         .newBuilder()
         .followRedirects(false)
         .followSslRedirects(false)
-        .build()!!
+        .build()
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     private var token = prefs.getString("newE3Token", null)
     private var userId = prefs.getString("newE3UserId", "")

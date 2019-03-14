@@ -87,9 +87,9 @@ class CourseDragDropAdapter(
 
     override fun onCheckCanDrop(draggingPosition: Int, dropPosition: Int): Boolean = true
 
-    override fun onGetItemDraggableRange(holder: ViewHolder?, position: Int): ItemDraggableRange? = null
+    override fun onGetItemDraggableRange(holder: ViewHolder, position: Int): ItemDraggableRange? = null
 
-    override fun onCheckCanStartDrag(holder: ViewHolder?, position: Int, x: Int, y: Int): Boolean = true
+    override fun onCheckCanStartDrag(holder: ViewHolder, position: Int, x: Int, y: Int): Boolean = true
 
     override fun onItemDragFinished(fromPosition: Int, toPosition: Int, result: Boolean) = notifyDataSetChanged()
 
