@@ -14,7 +14,8 @@
     </style>
 
     <style name="DialogFragmentTheme" parent="Theme.MaterialComponents.DayNight.Dialog">
-        <item name="android:background">@color/floatingBackground</item>
+        <item name="android:windowBackground">@color/floatingBackground</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="BottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog"/>
