@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">NCTU e4</string>
-    <string name="action_settings">設定</string>
 
     <string name="navigation_drawer_close">關閉側邊選單</string>
     <string name="navigation_drawer_open">開啟側邊選單</string>
@@ -18,7 +17,6 @@
     <string name="student_id">學號</string>
     <string name="student_old_e3_password">舊e3密碼 (選填)</string>
     <string name="portal_password">單一入口密碼</string>
-    <string name="login_hint">請輸入學號以及 e3 密碼</string>
     <string name="login">登入</string>
     <string name="logout">登出</string>
     <string name="login_id_or_password_error">學號或密碼錯誤，請重試</string>

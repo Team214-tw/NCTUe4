@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">NCTU e4</string>
-    <string name="action_settings">Settings</string>
 
     <!--Main Activity-->
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -23,7 +22,6 @@
     <string name="student_id">Student ID</string>
     <string name="student_old_e3_password">Old E3 Password (Optional)</string>
     <string name="portal_password">NCTU Portal Password</string>
-    <string name="login_hint">Please enter ID and e3 password.</string>
     <string name="login">LogIn</string>
     <string name="logout">Log out</string>
     <string name="login_id_or_password_error">ID or Password incorrect, try again?</string>
