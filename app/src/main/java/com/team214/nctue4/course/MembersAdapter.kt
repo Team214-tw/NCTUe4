@@ -2,6 +2,7 @@ package com.team214.nctue4.course
 
 import android.content.Context
 import android.graphics.Color
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,8 +38,12 @@ class MembersAdapter(
                 }
             )
             view.member_item.setBackgroundColor(
-                if (member.selected) ContextCompat.getColor(context, R.color.md_grey_300)
-                else Color.parseColor("#ffffff")
+                if (member.selected) {
+                    ContextCompat.getColor(context, R.color.row_activated)
+                } else {val typedValue = TypedValue()
+                    context.theme.resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true)
+                    typedValue.data
+                }
             )
             view.member_item.setOnClickListener { itemClickListener(view, member, position) }
             view.member_item.setOnLongClickListener {

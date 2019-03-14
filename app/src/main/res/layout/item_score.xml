@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="作業一 bla"
-            android:textColor="@color/blackText"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="18sp"
             android:layout_marginEnd="16dp" />
 
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:text="7.00"
-            android:textColor="@color/blackText"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="18sp" />
     </LinearLayout>
 </LinearLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="new_e3">#90d6ff</color>
+    <color name="old_e3">#879ffd</color>
+    <color name="row_activated">#424242</color>
+</resources>

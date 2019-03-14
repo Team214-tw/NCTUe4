@@ -31,7 +31,7 @@
                         android:text="@string/latest_ann"
                         android:textSize="18sp"/>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
@@ -61,7 +61,7 @@
                                 android:textSize="14sp"/>
 
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
             <!--download-->
@@ -80,7 +80,7 @@
                         android:text="@string/download_history"
                         android:textSize="18sp"/>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
@@ -111,7 +111,7 @@
                                 android:textSize="14sp"/>
 
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
             <!--bookmarked-->
@@ -130,7 +130,7 @@
                         android:text="@string/bookmarked_courses"
                         android:textSize="18sp"/>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
@@ -160,7 +160,7 @@
                                 android:textSize="14sp"/>
 
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
 

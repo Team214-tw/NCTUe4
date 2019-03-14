@@ -36,6 +36,7 @@
                     app:tabGravity="fill"
                     app:tabIndicatorHeight="2dp"
                     app:tabMode="fixed"
+                    app:tabIndicatorColor="@color/colorAccent"
                     app:tabSelectedTextColor="@android:color/white"
                     app:tabTextColor="@android:color/white"/>
 
@@ -58,7 +59,10 @@
                 android:layout_marginBottom="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                app:tint="@android:color/white"
+                app:backgroundTint="@color/colorAccent"
+        />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -69,7 +73,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="?android:attr/windowBackground"
-            android:elevation="8dp"
+            app:itemTextColor="@color/bottom_nav_color"
+            app:itemIconTint="@color/bottom_nav_color"
+            app:itemRippleColor="@color/colorPrimary"
+            app:elevation="8dp"
             app:menu="@menu/navigation"
             app:labelVisibilityMode="labeled"
     />

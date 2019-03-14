@@ -49,7 +49,7 @@
                         android:layout_width="3dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="12dp"
-                        android:background="@color/colorPrimaryDark"/>
+                        android:background="@color/colorAccent"/>
 
 
                 <LinearLayout
@@ -60,11 +60,11 @@
                         android:paddingTop="4dp">
 
                     <TextView
-                            android:id="@+id/ann_title"
+                            android:id="@+id/assign_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="公告標題"
-                            android:textColor="#303030"
+                            android:textColor="?android:attr/textColorPrimary"
                             android:textSize="23sp"/>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
@@ -78,7 +78,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/start_time"
-                                    android:textColor="#878787"
+                                    android:textColor="?android:attr/textColorSecondary"
                                     android:textSize="14sp"/>
 
 
@@ -86,7 +86,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/end_time"
-                                    android:textColor="#878787"
+                                    android:textColor="?android:attr/textColorSecondary"
                                     android:textSize="14sp"/>
 
                         </LinearLayout>
@@ -101,14 +101,14 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="6dp"
-                                    android:textColor="#878787"
+                                    android:textColor="?android:attr/textColorSecondary"
                                     android:textSize="14sp"/>
                             <TextView
                                     android:id="@+id/assign_end_date"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="6dp"
-                                    android:textColor="#878787"
+                                    android:textColor="?android:attr/textColorSecondary"
                                     android:textSize="14sp"/>
                         </LinearLayout>
                     </LinearLayout>
@@ -139,7 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="8dp"
-                    android:background="#fafafa"/>
+            />
 
 
         </LinearLayout>

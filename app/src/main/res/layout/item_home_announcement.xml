@@ -63,7 +63,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="課堂標題"
-                    android:textColor="@color/blackText"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:textSize="18sp"/>
 
 
@@ -75,7 +75,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="什麼課"
-                    android:textColor="#585858"
+                    android:textColor="?android:attr/textColorSecondary"
                     android:textSize="13sp"/>
 
         </LinearLayout>

@@ -1,9 +1,9 @@
 package com.team214.nctue4.course
 
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.item_member.view.*
 import kotlinx.android.synthetic.main.progress_bar.*
 import kotlinx.android.synthetic.main.status_empty.*
 import kotlinx.android.synthetic.main.status_error.*
+
 
 class MembersFragment : Fragment() {
     lateinit var client: E3Client
@@ -134,9 +135,11 @@ class MembersFragment : Fragment() {
                 member.selected = !member.selected
                 view.member_item.setBackgroundColor(
                     if (member.selected) {
-                        ContextCompat.getColor(context!!, R.color.md_grey_300)
+                        ContextCompat.getColor(context!!, R.color.row_activated)
                     } else {
-                        Color.parseColor("#ffffff")
+                        val typedValue = TypedValue()
+                        context!!.theme.resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true)
+                        typedValue.data
                     }
                 )
                 setupFab()
@@ -146,9 +149,13 @@ class MembersFragment : Fragment() {
                 if (member.selected) selectCnt-- else selectCnt++
                 member.selected = !member.selected
                 view.member_item.setBackgroundColor(
-                    if (member.selected)
-                        ContextCompat.getColor(context!!, R.color.md_grey_300)
-                    else Color.parseColor("#ffffff")
+                    if (member.selected) {
+                        ContextCompat.getColor(context!!, R.color.row_activated)
+                    } else {
+                        val typedValue = TypedValue()
+                        context!!.theme.resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true)
+                        typedValue.data
+                    }
                 )
                 multiSelect = selectCnt != 0
                 setupFab()
@@ -160,8 +167,10 @@ class MembersFragment : Fragment() {
         if (selectCnt > 0) {
             if (fab.visibility != View.VISIBLE) {
                 fab.show()
+                val myFabSrc = resources.getDrawable(R.drawable.ic_email_black_24dp)
+                val willBeWhite = myFabSrc.constantState!!.newDrawable()
                 fab.setImageDrawable(
-                    ContextCompat.getDrawable(context!!, R.drawable.ic_email_black_24dp)
+                    willBeWhite
                 )
                 fab.setOnClickListener {
                     val intent = Intent(Intent.ACTION_SENDTO)

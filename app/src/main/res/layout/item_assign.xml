@@ -22,7 +22,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="作業一 bla"
-        android:textColor="@color/blackText"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="18sp" />
 
     <LinearLayout

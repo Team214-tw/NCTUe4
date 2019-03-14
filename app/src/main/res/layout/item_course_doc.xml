@@ -41,6 +41,6 @@
         android:text="檔案名稱檔案名稱檔案名稱檔案名稱檔案名稱"
         android:maxLines="2"
         android:ellipsize="end"
-        android:textColor="#616161"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="18sp" />
 </LinearLayout>

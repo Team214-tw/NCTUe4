@@ -2,9 +2,9 @@ package com.team214.nctue4.course
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -111,11 +111,12 @@ class HwkActivity : BaseActivity() {
         val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.TAIWAN)
         assign_start_date.text = sdf.format(hwkItem.startDate)
         assign_end_date.text = sdf.format(hwkItem.endDate)
-        ann_title.text = hwkItem.name
-        assign_content_web_view.settings.defaultTextEncodingName = "utf-8"
+        assign_title.text = hwkItem.name
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             assign_content_web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
         }
+
         val cookieManager = CookieManager.getInstance()
         cookieManager.setAcceptCookie(true)
         val cookies = client.getCookie()
@@ -124,6 +125,7 @@ class HwkActivity : BaseActivity() {
             val cookieString = cookie.name() + "=" + cookie.value() + "; Domain=" + cookie.domain()
             cookieManager.setCookie(cookie.domain(), cookieString)
         }
+
         assign_content_web_view.loadDataWithBaseURL(
             client.getBaseUrl(),
             hwkItem.content,
@@ -131,7 +133,11 @@ class HwkActivity : BaseActivity() {
             "UTF-8",
             null
         )
-        assign_content_web_view.setBackgroundColor(Color.TRANSPARENT)
+
+        val typedValue = TypedValue()
+        this.theme.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
+        assign_content_web_view.setBackgroundColor(typedValue.data)
+
         assign_attach.layoutManager = LinearLayoutManager(this)
         assign_attach.adapter = AnnAttachmentAdapter(this, hwkItem.attachItems) {
             url = it.url

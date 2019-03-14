@@ -3,9 +3,9 @@ package com.team214.nctue4.ann
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -105,13 +105,15 @@ class AnnActivity : BaseActivity() {
         error_request.visibility = View.GONE
         ann_title.text = annItem.title
         ann_courseName.text = annItem.courseName
-        ann_date.text = if (annItem.date != null) {
-            SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN).format(annItem.date)
-        } else ""
-        ann_content_web_view.settings.defaultTextEncodingName = "utf-8"
+        ann_date.text =
+            if (annItem.date != null) {
+                SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN).format(annItem.date)
+            } else ""
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ann_content_web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
         }
+
         val cookieManager = CookieManager.getInstance()
         cookieManager.setAcceptCookie(true)
         val cookies = client.getCookie()
@@ -120,6 +122,7 @@ class AnnActivity : BaseActivity() {
             val cookieString = cookie.name() + "=" + cookie.value() + "; Domain=" + cookie.domain()
             cookieManager.setCookie(cookie.domain(), cookieString)
         }
+
         ann_content_web_view.loadDataWithBaseURL(
             client.getBaseUrl(),
             annItem.content,
@@ -127,7 +130,11 @@ class AnnActivity : BaseActivity() {
             "UTF-8",
             null
         )
-        ann_content_web_view.setBackgroundColor(Color.TRANSPARENT)
+
+        val typedValue = TypedValue()
+        this.theme.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
+        ann_content_web_view.setBackgroundColor(typedValue.data)
+
         announcement_attach.layoutManager = LinearLayoutManager(this)
         announcement_attach.adapter = AnnAttachmentAdapter(this, annItem.attachItems) {
             url = it.url
