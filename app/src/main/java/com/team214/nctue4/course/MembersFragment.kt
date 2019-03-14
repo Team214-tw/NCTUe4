@@ -167,11 +167,7 @@ class MembersFragment : Fragment() {
         if (selectCnt > 0) {
             if (fab.visibility != View.VISIBLE) {
                 fab.show()
-                val myFabSrc = resources.getDrawable(R.drawable.ic_email_black_24dp)
-                val willBeWhite = myFabSrc.constantState!!.newDrawable()
-                fab.setImageDrawable(
-                    willBeWhite
-                )
+                fab.setImageResource(R.drawable.ic_email_black_24dp)
                 fab.setOnClickListener {
                     val intent = Intent(Intent.ACTION_SENDTO)
                     intent.type = "text/plain"
