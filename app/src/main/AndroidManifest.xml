@@ -46,11 +46,12 @@
 
         <activity
                 android:name=".login.LoginActivity"
+                android:theme="@style/Theme.AppCompat.Light.NoActionBar"
                 android:configChanges="orientation|screenSize"
                 android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>
 
-        <activity android:name=".login.LogoutActivity" />
+        <activity android:name=".login.LogoutActivity"/>
 
         <activity
                 android:name=".ann.AnnActivity"
