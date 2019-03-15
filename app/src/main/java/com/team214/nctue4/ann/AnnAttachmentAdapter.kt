@@ -31,7 +31,7 @@ class AnnAttachmentAdapter(
             if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
                 val hsv = FloatArray(3)
                 Color.colorToHSV(color, hsv)
-                hsv[2] = 1.0f - 0.1f * (1.0f - hsv[2]);
+                hsv[2] = 1.0f
                 color = Color.HSVToColor(hsv)
             }
             view.announcement_attach_img.setColorFilter(color)
