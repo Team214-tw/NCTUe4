@@ -6,4 +6,5 @@
     <color name="windowBackground">#212121</color>
     <color name="colorAccent">#FFFFFF</color>
     <color name="floatingBackground">#202124</color>
+    <color name="homeBackground">#101114</color>
 </resources>

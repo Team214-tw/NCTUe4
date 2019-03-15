@@ -14,5 +14,6 @@
     <color name="row_activated">#E0E0E0</color>
     <color name="windowBackground">#FAFAFA</color>
     <color name="floatingBackground">#FFFFFF</color>
+    <color name="homeBackground">#FAFAFA</color>
 </resources>
 
