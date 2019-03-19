@@ -22,7 +22,7 @@ import com.team214.nctue4.course.CourseActivity
 import com.team214.nctue4.model.AnnItem
 import com.team214.nctue4.model.CourseDBHelper
 import com.team214.nctue4.utility.downloadFile
-import com.team214.nctue4.utility.injectCss
+import com.team214.nctue4.utility.injectHtml
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -126,7 +126,7 @@ class AnnActivity : BaseActivity() {
 
         ann_content_web_view.loadDataWithBaseURL(
             client.getBaseUrl(),
-            injectCss(annItem.content, this),
+            injectHtml(annItem.content, this),
             "text/html",
             "UTF-8",
             null
@@ -135,6 +135,7 @@ class AnnActivity : BaseActivity() {
         val typedValue = TypedValue()
         this.theme.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
         ann_content_web_view.setBackgroundColor(typedValue.data)
+        ann_content_web_view.settings.javaScriptEnabled = true
 
         announcement_attach.layoutManager = LinearLayoutManager(this)
         announcement_attach.adapter = AnnAttachmentAdapter(this, annItem.attachItems) {
