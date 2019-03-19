@@ -7,7 +7,15 @@ import android.util.TypedValue
 fun injectHtml(html: String?, context: Context): String {
     if (html == null) return ""
     val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-    if (currentNightMode != Configuration.UI_MODE_NIGHT_YES) return html
+    if (currentNightMode != Configuration.UI_MODE_NIGHT_YES) {
+        return """
+        <style>
+            * {
+                word-wrap: break-word;
+            }
+        </style>
+        """.trimIndent() + html
+    }
     val typedValue = TypedValue()
     context.theme.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
     val bgColor = "#" + Integer.toHexString(typedValue.data and 0x00ffffff)
@@ -18,6 +26,9 @@ fun injectHtml(html: String?, context: Context): String {
             }
             a {
                 color: rgb(141, 178, 215);
+            }
+            * {
+                word-wrap: break-word;
             }
         </style>
         """.trimIndent() +

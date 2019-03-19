@@ -136,6 +136,7 @@ class AnnActivity : BaseActivity() {
         this.theme.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
         ann_content_web_view.setBackgroundColor(typedValue.data)
         ann_content_web_view.settings.javaScriptEnabled = true
+        ann_content_web_view.scrollBarDefaultDelayBeforeFade = 0
 
         announcement_attach.layoutManager = LinearLayoutManager(this)
         announcement_attach.adapter = AnnAttachmentAdapter(this, annItem.attachItems) {

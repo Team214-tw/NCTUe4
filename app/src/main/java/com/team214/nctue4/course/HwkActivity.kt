@@ -139,6 +139,7 @@ class HwkActivity : BaseActivity() {
         this.theme.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
         assign_content_web_view.setBackgroundColor(typedValue.data)
         assign_content_web_view.settings.javaScriptEnabled = true
+        assign_content_web_view.scrollBarDefaultDelayBeforeFade = 0
 
         assign_attach.layoutManager = LinearLayoutManager(this)
         assign_attach.adapter = AnnAttachmentAdapter(this, hwkItem.attachItems) {
