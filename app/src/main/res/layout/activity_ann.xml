@@ -105,7 +105,7 @@
             <com.team214.nctue4.utility.NestedWebView
                     android:id="@+id/ann_content_web_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"/>
 
 
