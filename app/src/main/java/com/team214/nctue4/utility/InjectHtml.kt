@@ -39,10 +39,22 @@ fun injectHtml(html: String?, context: Context): String {
                 var currentNode;
                 var ni = document.createNodeIterator(document.body, NodeFilter.SHOW_ELEMENT);
                 while (currentNode = ni.nextNode()) {
-                    if (currentNode.style.color != "") {
+                    var flag = false;
+                    var bgColor = tinycolor("$bgColor");
+                    if (currentNode.style.backgroundColor !== "") {
+                        bgColor = tinycolor(currentNode.style.backgroundColor);
+                        flag = true;
+                    }
+                    var color = tinycolor("#FAFAFA");
+                    if (currentNode.style.color !== "") {
                         var color = tinycolor(currentNode.style.color);
-                        while (tinycolor.readability(color, "$bgColor") < 5) {
-                            color = color.brighten();
+                        flag = true;
+                    }
+                    if (flag) {
+                        var modifyCnt = 0;  // fail safe
+                        while (tinycolor.readability(color, bgColor) < 5 && modifyCnt < 10) {
+                            color = bgColor.isDark() ? color.brighten() :  color.darken() ;
+                            modifyCnt += 1;
                         }
                         currentNode.style.color = color;
                     }
