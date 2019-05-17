@@ -140,7 +140,12 @@ class NewE3WebClient(context: Context) : E3Client() {
                             el.select(".colL-10").text()
                         }
 
-                    val title = el.select(".colL-19").text()
+                    val title =
+                        if (el.select(".colL-19").attr("title") != "") {
+                            el.select(".colL-19").attr("title")
+                        } else {
+                            el.select(".colL-19").text()
+                        }
                     emitter.onNext(AnnItem(E3Type.NEW, title, date, courseName, detailLocationHint))
                 }
                 emitter.onComplete()
