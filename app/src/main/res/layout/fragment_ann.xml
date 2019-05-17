@@ -4,13 +4,18 @@
                 android:layout_height="match_parent"
                 android:id="@+id/ann_root">
 
-    <include layout="@layout/progress_bar"/>
+    <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="-7dp"
+            android:elevation="10dp"
+            android:indeterminate="true"
+            android:visibility="invisible"/>
 
     <include layout="@layout/status_empty"/>
-
-    <include layout="@layout/status_wrong_credential"/>
-
-    <include layout="@layout/status_error"/>
 
     <include layout="@layout/status_empty_compact"/>
 
