@@ -14,8 +14,8 @@ android {
         applicationId "com.team214.nctue4"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 87
-        versionName "2.3.0"
+        versionCode 88
+        versionName "2.4.0-alpha1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
