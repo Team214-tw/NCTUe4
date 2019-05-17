@@ -31,9 +31,7 @@ class HomeAnnViewModel(application: Application) : AndroidViewModel(application)
     private var newE3Failed = false
 
     init {
-        Observable.fromCallable {
-            annItems.postValue(annDao.getAll())
-        }.subscribeOn(Schedulers.io()).subscribe()
+        annItems.value = annDao.getAll()
         getData()
     }
 

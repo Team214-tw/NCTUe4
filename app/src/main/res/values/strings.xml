@@ -100,7 +100,7 @@
     <string name="start_time">Start:</string>
     <string name="end_time">End:</string>
 
-    <string name="wrong_credential">Wrong Credentials\nPlease login again in account management page</string>
+    <string name="wrong_credential">Wrong Credentials\nPlease login again</string>
     <string name="login_again">Login Again</string>
     <string name="drag_drop_tip">Long press to rearrange items.</string>
 
