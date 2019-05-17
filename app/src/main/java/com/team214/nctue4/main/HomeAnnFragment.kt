@@ -16,6 +16,9 @@ import com.team214.nctue4.ann.AnnActivity
 import kotlinx.android.synthetic.main.fragment_ann.*
 import kotlinx.android.synthetic.main.status_empty.*
 import kotlinx.android.synthetic.main.status_empty_compact.*
+import androidx.recyclerview.widget.DividerItemDecoration
+
+
 
 class HomeAnnFragment : Fragment() {
     private lateinit var annViewModel: HomeAnnViewModel
@@ -45,6 +48,11 @@ class HomeAnnFragment : Fragment() {
         recyclerView.visibility = View.VISIBLE
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
+        val dividerItemDecoration = DividerItemDecoration(
+            recyclerView.context,
+            (recyclerView.layoutManager as LinearLayoutManager).orientation
+        )
+        recyclerView.addItemDecoration(dividerItemDecoration)
 
         progress_bar.visibility = View.VISIBLE
         if (!fromHome) {

@@ -32,6 +32,7 @@ class HomeFragment : Fragment() {
         } else {
             home_swipe_refresh?.setOnRefreshListener {
                 fragment1?.refresh()
+                fragment2?.updateList(activity)
                 val handler = Handler()
                 handler.postDelayed({ home_swipe_refresh?.isRefreshing = false }, 1000)
             }
