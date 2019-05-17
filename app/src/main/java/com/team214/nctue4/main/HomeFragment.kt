@@ -23,6 +23,7 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    private var fragment1: HomeAnnFragment? = null
     private var fragment2: DownloadFragment? = null
 
     override fun onStart() {
@@ -30,7 +31,7 @@ class HomeFragment : Fragment() {
             fragment2?.updateList(activity)
         } else {
             home_swipe_refresh?.setOnRefreshListener {
-                loadFragments()
+                fragment1?.refresh()
                 val handler = Handler()
                 handler.postDelayed({ home_swipe_refresh?.isRefreshing = false }, 1000)
             }
@@ -49,10 +50,10 @@ class HomeFragment : Fragment() {
 
         if (prefs.getBoolean("home_enable_ann", true)) {
             ann_layout.visibility = View.VISIBLE
-            val fragment1 = HomeAnnFragment()
+            fragment1 = HomeAnnFragment()
             bundle.putInt("home_ann_cnt", prefs.getString("home_ann_cnt", "5")!!.toInt())
-            fragment1.arguments = bundle
-            transaction.replace(R.id.home_ann, fragment1)
+            fragment1!!.arguments = bundle
+            transaction.replace(R.id.home_ann, fragment1!!)
             home_more_ann?.setOnClickListener { (activity!! as MainActivity).switchFragment(R.id.nav_ann) }
         }
 

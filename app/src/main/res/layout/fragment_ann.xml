@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/ann_root">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/ann_root">
 
-    <include layout="@layout/progress_bar" />
+    <include layout="@layout/progress_bar"/>
 
-    <include layout="@layout/status_empty" />
+    <include layout="@layout/status_empty"/>
 
-    <include layout="@layout/status_wrong_credential" />
+    <include layout="@layout/status_wrong_credential"/>
 
-    <include layout="@layout/status_error" />
+    <include layout="@layout/status_error"/>
 
-    <include layout="@layout/status_empty_compact" />
+    <include layout="@layout/status_empty_compact"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ann_recycler_view_out_swipe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/ann_swipe_refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+            android:id="@+id/ann_swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ann_recycler_view_in_swipe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

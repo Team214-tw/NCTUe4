@@ -100,15 +100,16 @@
     <string name="start_time">Start:</string>
     <string name="end_time">End:</string>
 
-    <string name="wrong_credential">Wrong Credentials</string>
+    <string name="wrong_credential">Wrong Credentials\nPlease login again in account management page</string>
     <string name="login_again">Login Again</string>
     <string name="drag_drop_tip">Long press to rearrange items.</string>
 
     <string name="action_download_assign">Submitted Files</string>
     <string name="no_submitted_assign">No submitted files</string>
 
-    <string name="new_e3_ann_error">Can\'t display new e3 announcements at the moment.\nPull to retry.</string>
-    <string name="old_e3_ann_error">Can\'t display old e3 announcements at the moment.\nPull to retry.</string>
+    <string name="new_e3_ann_error">Can\'t update new e3 announcements at the moment.\nPull to retry.</string>
+    <string name="old_e3_ann_error">Can\'t update old e3 announcements at the moment.\nPull to retry.</string>
+    <string name="ann_error">Can\'t update announcements at the moment.\nPull to retry.</string>
 
     <string name="login_help_student_id">Student ID: Your Student ID (Ex: 0612345)</string>
     <string name="login_help_old_e3">Old E3 password (Optional): The password you use when logging in ecampus (as figure

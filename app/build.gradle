@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 
+apply plugin: "kotlin-kapt"
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -17,6 +19,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
     buildTypes {
         release {
@@ -34,20 +41,26 @@ androidExtensions {
 }
 
 dependencies {
+    kapt "androidx.lifecycle:lifecycle-compiler:2.2.0-alpha01"
+    kapt "androidx.room:room-compiler:2.1.0-beta01"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha03'
-    implementation 'androidx.appcompat:appcompat-resources:1.1.0-alpha03'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
+    implementation 'androidx.appcompat:appcompat-resources:1.1.0-alpha05'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-alpha01"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-alpha01"
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.preference:preference:1.1.0-alpha04'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha03'
-    implementation 'androidx.vectordrawable:vectordrawable:1.1.0-alpha01'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
-    implementation 'com.google.android.material:material:1.1.0-alpha04'
-    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'androidx.preference:preference:1.1.0-alpha05'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha05'
+    implementation "androidx.room:room-runtime:2.1.0-beta01"
+    implementation "androidx.room:room-ktx:2.1.0-beta01"
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0-abeta01'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
     implementation 'com.h6ah4i.android.materialshadowninepatch:materialshadowninepatch:1.0.0'
     implementation 'com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:1.0.0'
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'

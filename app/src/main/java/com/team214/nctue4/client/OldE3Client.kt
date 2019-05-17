@@ -328,7 +328,7 @@ class OldE3Client(context: Context) : E3Client() {
             Observable.just(annItem)
         } else {
             ensureCourseIdMap()
-                .flatMap { ensureCoursePage(annItem.detailLocationHint) }
+                .flatMap { ensureCoursePage(annItem.detailLocationHint!!) }
                 .flatMap { get("/stu_announcement_online.aspx") }
                 .flatMap { parseHtmlResponse(it) }
                 .flatMap { document ->

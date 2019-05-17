@@ -17,7 +17,7 @@ import org.json.JSONObject
 import java.util.*
 import java.util.concurrent.CountDownLatch
 
-class NewE3ApiClient(val context: Context) : E3Client() {
+class NewE3ApiClient(context: Context) : E3Client() {
     class TokenInvalidException : Exception()
     class SitePolicyNotAgreedException : Exception()
 

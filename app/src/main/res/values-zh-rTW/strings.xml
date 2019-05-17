@@ -80,14 +80,16 @@
     <string name="title_activity_assign">作業</string>
     <string name="start_time">開始：</string>
     <string name="end_time">結束：</string>
-    <string name="wrong_credential">登入資訊錯誤</string>
+    <string name="wrong_credential">登入資訊錯誤\n請至帳戶管理頁面重新登入</string>
     <string name="login_again">重新登入</string>
     <string name="drag_drop_tip">長按即可重新排序</string>
     <string name="action_download_assign">已繳交的檔案</string>
     <string name="no_submitted_assign">沒有已繳交的檔案</string>
 
-    <string name="new_e3_ann_error">現在無法取得新e3公告\n下拉重試</string>
-    <string name="old_e3_ann_error">現在無法取得舊e3公告\n下拉重試</string>
+    <string name="new_e3_ann_error">現在無法更新新e3公告\n下拉重試</string>
+    <string name="old_e3_ann_error">現在無法更新舊e3公告\n下拉重試</string>
+    <string name="ann_error">現在無法更新公告\n下拉重試</string>
+
     <string name="login_help">登入幫助</string>
     <string name="login_help_student_id">學號：就是你的學號（例如：0612345）</string>
     <string name="login_help_old_e3">
