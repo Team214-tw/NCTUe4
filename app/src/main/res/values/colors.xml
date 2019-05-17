@@ -15,5 +15,8 @@
     <color name="windowBackground">#FAFAFA</color>
     <color name="floatingBackground">#FFFFFF</color>
     <color name="homeBackground">#FAFAFA</color>
+    <color name="colorPrimaryDay">#225ebb</color>
+    <color name="colorPrimaryDarkDay">#104698</color>
+    <color name="colorAccentDay">#2196F3</color>
 </resources>
 
