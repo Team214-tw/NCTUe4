@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
+import com.team214.nctue4.client.E3Clients
 import com.team214.nctue4.client.E3Type
 import com.team214.nctue4.course.CourseActivity
 import com.team214.nctue4.model.CourseDBHelper
@@ -80,8 +81,8 @@ class CourseListFragment : Fragment() {
         progress_bar.visibility = View.VISIBLE
         error_request.visibility = View.GONE
         val client = when (e3Type) {
-            E3Type.OLD -> (activity as MainActivity).oldE3Client
-            E3Type.NEW -> (activity as MainActivity).newE3ApiClient
+            E3Type.OLD -> E3Clients.getOldE3Client(context!!)
+            E3Type.NEW -> E3Clients.getNewE3ApiClient(context!!)
         }
         disposable = client.getCourseList()
             .observeOn(AndroidSchedulers.mainThread())

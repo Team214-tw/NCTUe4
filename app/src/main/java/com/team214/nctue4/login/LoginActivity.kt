@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
+import com.team214.nctue4.client.E3Clients
 import com.team214.nctue4.client.NewE3ApiClient
 import com.team214.nctue4.client.OldE3Client
 import com.team214.nctue4.main.MainActivity
@@ -76,8 +77,8 @@ class LoginActivity : AppCompatActivity() {
                 }.show()
         }
 
-        oldE3Client = OldE3Client(this)
-        newE3ApiClient = NewE3ApiClient(this)
+        oldE3Client = E3Clients.getOldE3Client(this)
+        newE3ApiClient = E3Clients.getNewE3ApiClient(this)
         login_button?.setOnClickListener {
             disableInput()
 

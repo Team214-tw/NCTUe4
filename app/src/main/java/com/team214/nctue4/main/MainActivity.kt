@@ -14,10 +14,7 @@ import com.team214.nctue4.BaseActivity
 import com.team214.nctue4.BuildConfig
 import com.team214.nctue4.R
 import com.team214.nctue4.SettingsFragment
-import com.team214.nctue4.client.E3Type
-import com.team214.nctue4.client.NewE3ApiClient
-import com.team214.nctue4.client.NewE3WebClient
-import com.team214.nctue4.client.OldE3Client
+import com.team214.nctue4.client.*
 import com.team214.nctue4.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -47,9 +44,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val studentEmail = prefs.getString("studentEmail", "")
         val studentName = prefs.getString("studentName", "")
 
-        oldE3Client = OldE3Client(this)
-        newE3ApiClient = NewE3ApiClient(this)
-        newE3WebClient = NewE3WebClient(this)
+        oldE3Client = E3Clients.getOldE3Client(this)
+        newE3ApiClient = E3Clients.getNewE3ApiClient(this)
+        newE3WebClient = E3Clients.getNewE3WebClient(this)
 
         if (savedInstanceState == null) {
             switchFragment(

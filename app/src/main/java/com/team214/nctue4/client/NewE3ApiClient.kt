@@ -348,7 +348,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
                     .forEach {
                         val roles = it.getJSONArray("roles")
                         val type =
-                        //They don't provide role information sometimes, let's just assume it's student
+                            //They don't provide role information sometimes, let's just assume it's student
                             if (roles.length() > 0) {
                                 when (it.getJSONArray("roles").getJSONObject(0).getInt("roleid")) {
                                     5 -> MemberItem.Type.Student
