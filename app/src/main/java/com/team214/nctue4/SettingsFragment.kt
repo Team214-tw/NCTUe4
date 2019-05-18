@@ -9,7 +9,6 @@ import androidx.preference.PreferenceFragmentCompat
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.night_mode_pref)
         addPreferencesFromResource(R.xml.pref)
         activity!!.setTitle(R.string.settings)
     }

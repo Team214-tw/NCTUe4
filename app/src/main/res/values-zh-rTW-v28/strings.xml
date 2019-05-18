@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="pref_night_mode_entries_array">
+        <item>開</item>
+        <item>關</item>
+        <item>遵循系統設定</item>
+    </string-array>
+</resources>

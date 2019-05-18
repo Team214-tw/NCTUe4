@@ -3,6 +3,30 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
 >
+
+    <PreferenceCategory android:title="@string/general"
+                        app:iconSpaceReserved="false">
+
+        <ListPreference
+                android:key="night_mode"
+                android:title="@string/night_mode"
+                android:summary="%s"
+                android:entries="@array/pref_night_mode_entries_array"
+                android:entryValues="@array/pref_night_mode_entry_values_array"
+                android:defaultValue="MODE_NIGHT_FOLLOW_SYSTEM"
+                app:iconSpaceReserved="false"/>
+
+        <ListPreference
+                android:key="open_link_in"
+                android:title="@string/open_link_in"
+                android:summary="%s"
+                android:entries="@array/open_link_in_entries_array"
+                android:entryValues="@array/open_link_in_entry_values_array"
+                android:defaultValue="CUSTOM_TAB"
+                app:iconSpaceReserved="false"/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/home_screen_options"
                         app:iconSpaceReserved="false">
 
@@ -30,12 +54,7 @@
                 android:title="@string/home_enable_download_title"
                 app:iconSpaceReserved="false"
                 android:defaultValue="true"/>
-        <CheckBoxPreference
-                android:key="ann_enable_old_e3"
-                android:summary="@string/ann_enable_old_e3_sum"
-                android:title="@string/ann_enable_old_e3_title"
-                app:iconSpaceReserved="false"
-                android:defaultValue="false"/>
+
         <ListPreference
                 android:dependency="home_enable_download"
                 android:key="home_download_cnt"
@@ -87,4 +106,5 @@
                 app:iconSpaceReserved="false"
                 android:defaultValue="false"/>
     </PreferenceCategory>
+
 </PreferenceScreen>

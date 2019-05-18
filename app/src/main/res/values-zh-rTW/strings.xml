@@ -122,14 +122,16 @@
     <string name="night_mode">夜間模式</string>
     <string name="general">一般</string>
 
+    <string name="open_link_in">連結開啟方式</string>
+
+    <string-array name="open_link_in_entries_array">
+        <item>Chrome Custom Tabs</item>
+        <item>預設瀏覽器</item>
+    </string-array>
+
     <string-array name="pref_night_mode_entries_array">
         <item>開</item>
         <item>關</item>
     </string-array>
 
-    <string-array name="pref_night_mode_entries_array_v28">
-        <item>開</item>
-        <item>關</item>
-        <item>遵循系統設定</item>
-    </string-array>
 </resources>
