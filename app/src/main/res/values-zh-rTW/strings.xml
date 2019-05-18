@@ -85,6 +85,7 @@
     <string name="drag_drop_tip">長按即可重新排序</string>
     <string name="action_download_assign">已繳交的檔案</string>
     <string name="no_submitted_assign">沒有已繳交的檔案</string>
+    <string name="action_to_syllabus">課程綱要</string>
 
     <string name="new_e3_ann_error">現在無法更新新e3公告\n下拉重試</string>
     <string name="old_e3_ann_error">現在無法更新舊e3公告\n下拉重試</string>

@@ -49,6 +49,7 @@
 
     <!--Ann Activity-->
     <string name="title_activity_ann">Announcement</string>
+    <string name="action_to_syllabus">Syllabus</string>
 
     <!--License-->
     <string name="font_awesome_license">This app uses <a href="https://fontawesome.com/license">Font Awesome</a> icons.
