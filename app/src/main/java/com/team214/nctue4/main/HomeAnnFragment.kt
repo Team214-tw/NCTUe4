@@ -10,14 +10,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.team214.nctue4.R
 import com.team214.nctue4.ann.AnnActivity
 import kotlinx.android.synthetic.main.fragment_ann.*
 import kotlinx.android.synthetic.main.status_empty.*
 import kotlinx.android.synthetic.main.status_empty_compact.*
-import androidx.recyclerview.widget.DividerItemDecoration
-
 
 
 class HomeAnnFragment : Fragment() {
@@ -44,7 +43,9 @@ class HomeAnnFragment : Fragment() {
             intent.putExtra("annItem", it)
             startActivity(intent)
         }
-        val recyclerView = if (fromHome) ann_recycler_view_out_swipe else ann_recycler_view_in_swipe
+        val recyclerView =
+            if (fromHome) ann_recycler_view_out_swipe.apply { this.isNestedScrollingEnabled = false }
+            else ann_recycler_view_in_swipe
         recyclerView.visibility = View.VISIBLE
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
