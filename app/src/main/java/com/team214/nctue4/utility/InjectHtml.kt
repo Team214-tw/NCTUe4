@@ -6,6 +6,15 @@ import android.util.TypedValue
 
 fun injectHtml(html: String?, context: Context): String {
     if (html == null) return ""
+    val autoLinkScript  = """
+        <script type="text/javascript" src=" https://cdnjs.cloudflare.com/ajax/libs/autolinker/3.0.5/Autolinker.min.js"></script>
+        <script type="text/javascript">
+            var autolinker = new Autolinker( { stripPrefix: false } );
+            document.addEventListener("DOMContentLoaded", function () {
+                document.documentElement.innerHTML = autolinker.link( document.documentElement.innerHTML );
+            });
+        </script>
+    """.trimIndent()
     val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
     if (currentNightMode != Configuration.UI_MODE_NIGHT_YES) {
         return """
@@ -14,7 +23,7 @@ fun injectHtml(html: String?, context: Context): String {
                 word-wrap: break-word;
             }
         </style>
-        """.trimIndent() + html
+        """.trimIndent() + html + autoLinkScript
     }
     val typedValue = TypedValue()
     context.theme.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
@@ -61,5 +70,5 @@ fun injectHtml(html: String?, context: Context): String {
                 }
             })
         </script>
-    """.trimIndent()
+    """.trimIndent() + autoLinkScript
 }
