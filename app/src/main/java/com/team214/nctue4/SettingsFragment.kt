@@ -24,9 +24,9 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         when (key) {
             "night_mode" -> {
-                val prefs = PreferenceManager.getDefaultSharedPreferences(context)
                 when (prefs.getString("night_mode", "MODE_NIGHT_FOLLOW_SYSTEM")) {
                     "MODE_NIGHT_FOLLOW_SYSTEM" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                     "MODE_NIGHT_YES" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -34,6 +34,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 }
                 activity?.recreate()
             }
+            "ann_enable_old_e3", "ann_enable_new_e3_system" -> prefs.edit().putLong("home_ann_last_refresh", -1).apply()
         }
     }
 

@@ -11,11 +11,9 @@ import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.client.E3Clients
 import com.team214.nctue4.model.AnnItem
 import com.team214.nctue4.utility.Event
-import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.mergeDelayError
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 
 class HomeAnnViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -32,13 +30,17 @@ class HomeAnnViewModel(application: Application) : AndroidViewModel(application)
 
     init {
         annItems.value = annDao.getAll()
-        getData()
+        loading.value = false
+        getData(false)
     }
 
-    fun getData() {
+    fun getData(forceRefresh: Boolean = true) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(getApplication())
+        val current = System.currentTimeMillis()
+        if (current - prefs.getLong("home_ann_last_refresh", -1) < 60 * 5 * 1000 && !forceRefresh) return
+
         loading.value = true
         disposable?.dispose()
-        val prefs = PreferenceManager.getDefaultSharedPreferences(getApplication())
 
         val observables = mutableListOf(
             newE3Client.getFrontPageAnns()
@@ -59,6 +61,7 @@ class HomeAnnViewModel(application: Application) : AndroidViewModel(application)
                     annDao.deleteAll()
                     annDao.insertAll(*it.toTypedArray())
                     annItems.postValue(annDao.getAll())
+                    prefs.edit().putLong("home_ann_last_refresh", current).apply()
                 },
                 onError = {
                     if (it is E3Client.WrongCredentialsException) {
@@ -78,6 +81,7 @@ class HomeAnnViewModel(application: Application) : AndroidViewModel(application)
                             error.postValue(Event(getApplication<MainApplication>().resources.getString(R.string.old_e3_ann_error)))
                         }
                     }
+                    prefs.edit().putLong("home_ann_last_refresh", -1).apply()
                 }
             )
     }

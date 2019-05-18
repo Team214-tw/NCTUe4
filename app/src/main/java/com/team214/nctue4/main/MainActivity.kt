@@ -48,6 +48,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         newE3ApiClient = E3Clients.getNewE3ApiClient(this)
         newE3WebClient = E3Clients.getNewE3WebClient(this)
 
+        newE3WebClient.login()
+
         if (savedInstanceState == null) {
             switchFragment(
                 when (intent?.getStringExtra("shortcut")) {
