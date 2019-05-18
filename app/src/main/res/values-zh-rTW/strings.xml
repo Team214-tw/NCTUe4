@@ -81,7 +81,6 @@
     <string name="start_time">開始：</string>
     <string name="end_time">結束：</string>
     <string name="wrong_credential">登入資訊錯誤\n請至帳戶管理頁面重新登入</string>
-    <string name="login_again">重新登入</string>
     <string name="drag_drop_tip">長按即可重新排序</string>
     <string name="action_download_assign">已繳交的檔案</string>
     <string name="no_submitted_assign">沒有已繳交的檔案</string>

@@ -35,7 +35,7 @@ class NewE3WebClient(context: Context) : E3Client() {
         })
         .followRedirects(false)
         .followSslRedirects(false)
-        .build()!!
+        .build()
 
     override fun login(studentId: String?, password: String?): Observable<Unit> {
         Log.d("NewE3Web", "Login")

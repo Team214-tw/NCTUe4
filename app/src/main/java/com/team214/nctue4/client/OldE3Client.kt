@@ -50,7 +50,7 @@ class OldE3Client(context: Context) : E3Client() {
         })
         .followRedirects(false)
         .followSslRedirects(false)
-        .build()!!
+        .build()
 
     private fun get(path: String): Observable<String> {
         return Observable.fromCallable {

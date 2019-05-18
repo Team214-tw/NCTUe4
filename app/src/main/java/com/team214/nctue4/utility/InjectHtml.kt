@@ -6,7 +6,7 @@ import android.util.TypedValue
 
 fun injectHtml(html: String?, context: Context): String {
     if (html == null) return ""
-    val autoLinkScript  = """
+    val autoLinkScript = """
         <script type="text/javascript" src=" https://cdnjs.cloudflare.com/ajax/libs/autolinker/3.0.5/Autolinker.min.js"></script>
         <script type="text/javascript">
             var autolinker = new Autolinker( { stripPrefix: false } );
