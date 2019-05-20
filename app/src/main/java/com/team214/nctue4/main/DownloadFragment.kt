@@ -40,11 +40,11 @@ class DownloadFragment : Fragment() {
 
     fun updateList(homeActivity: FragmentActivity? = null) {
         val path = if (homeActivity != null) homeActivity.getExternalFilesDir(null) else
-            activity!!.getExternalFilesDir(null)
+            activity?.getExternalFilesDir(null)
         val dir = File(path, "Download")
         val fileList = dir.listFiles()
         files.clear()
-        if (dir.exists() && !fileList.isEmpty()) {
+        if (dir.exists() && fileList.isNotEmpty()) {
             download_recycler.visibility = View.VISIBLE
             emptyRequest.visibility = View.GONE
             fileList.sortByDescending { it.lastModified() }

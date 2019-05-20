@@ -44,9 +44,9 @@ class CourseAnnFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         if (courseItem.e3Type != E3Type.NEW) return
         Regex("(\\d{3})(\\d)\\.(\\d+)").find(courseItem.additionalInfo)?.apply {
-            val acy = this.groupValues[1]
-            val sem = this.groupValues[2]
-            val crsNo = this.groupValues[3]
+            val acy = groupValues[1]
+            val sem = groupValues[2]
+            val crsNo = groupValues[3]
             syllabusURL = "http://timetable.nctu.edu.tw/?r=main/crsoutline&Acy=$acy&Sem=$sem&CrsNo=$crsNo&lang=zh-tw"
             inflater.inflate(R.menu.to_syllabus, menu)
         }

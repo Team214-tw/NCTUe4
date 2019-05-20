@@ -6,15 +6,14 @@ import android.util.Log
 import com.team214.nctue4.model.*
 import io.reactivex.Emitter
 import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import okhttp3.*
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.CountDownLatch
 
 class OldE3Client(context: Context) : E3Client() {
     class SessionInvalidException : Exception()
@@ -521,63 +520,39 @@ class OldE3Client(context: Context) : E3Client() {
         )
     )
 
-    private var courseFolderLatches: List<CountDownLatch>? = null
-    private var courseFolderCache: List<MutableList<FolderItem>>? = null
-    private var courseFolderPrepared = false
-
-    override fun prepareCourseFolders(courseItem: CourseItem): Observable<Unit> {
-        courseFolderPrepared = true
-        courseFolderLatches = listOf(CountDownLatch(1), CountDownLatch(1))
-        courseFolderCache = listOf(mutableListOf(), mutableListOf())
+    override fun getCourseFolders(courseItem: CourseItem): Observable<FolderItem> {
         return ensureCourseIdMap()
             .flatMap { ensureCoursePage(courseItem.courseId) }
             .flatMap { get("/stu_materials_document_list.aspx") }
             .flatMap { parseHtmlResponse(it) }
             .flatMap { document ->
                 getCourseFolderByProperty(document, folderProperties[0])
-                getCourseFolderByProperty(document, folderProperties[1])
-                Observable.just(Unit)
+                    .mergeWith(
+                        getCourseFolderByProperty(document, folderProperties[1])
+                    )
             }
     }
 
-    override fun getCourseFolders(courseItem: CourseItem, folderType: FolderItem.Type): Observable<FolderItem> {
-        if (!courseFolderPrepared) prepareCourseFolders(courseItem).subscribe()
-        val folderTypeIdx = when (folderType) {
-            FolderItem.Type.Handout -> 0
-            FolderItem.Type.Reference -> 1
-        }
+    private fun getCourseFolderByProperty(document: Document, folderProperty: FolderProperty): Observable<FolderItem> {
         return Observable.create<FolderItem> { emitter ->
-            try {
-                courseFolderLatches!![folderTypeIdx].await()
-                courseFolderCache!![folderTypeIdx].forEach { emitter.onNext(it) }
-            } catch (e: InterruptedException) {
-                if (!emitter.isDisposed) emitter.onError(e)
-            } finally {
+            val dataNavigatorText = document
+                .getElementById(folderProperty.dataNavigatorElId)
+                .text()
+            val totalPage = Regex("共 ([\\d]*) 頁")
+                .find(dataNavigatorText)
+                ?.groups?.get(1)?.value?.toInt()
+            if (totalPage != null) {
+                parseMaterialFolderTable(document, folderProperty, emitter)
+                Observable.concatArray(
+                    *(MutableList(totalPage - 1) { getRemainingFolder(folderProperty) }.toTypedArray())
+                ).subscribeBy(
+                    onNext = { emitter.onNext(it) },
+                    onComplete = { emitter.onComplete() }
+                )
+            } else {
                 emitter.onComplete()
             }
-        }.subscribeOn(Schedulers.io())
-    }
-
-    private fun getCourseFolderByProperty(document: Document, folderProperty: FolderProperty) {
-
-        val dataNavigatorText = document
-            .getElementById(folderProperty.dataNavigatorElId)
-            .text()
-        val totalPage = Regex("共 ([\\d]*) 頁")
-            .find(dataNavigatorText)
-            ?.groups?.get(1)?.value?.toInt()
-        if (totalPage != null) {
-            parseMaterialFolderTable(document, folderProperty)
-            Observable.concatArray(
-                *(MutableList(totalPage - 1) { getRemainingFolder(folderProperty) }.toTypedArray())
-            ).subscribeBy(
-                onNext = { courseFolderCache!![folderProperty.index].add(it) },
-                onComplete = { courseFolderLatches!![folderProperty.index].countDown() }
-            )
-        } else {
-            courseFolderLatches!![folderProperty.index].countDown()
         }
-
     }
 
     private fun getRemainingFolder(folderProperty: FolderProperty): Observable<FolderItem> {
@@ -596,7 +571,7 @@ class OldE3Client(context: Context) : E3Client() {
                     json.getJSONObject("controls")
                         .getString(folderProperty.jsonKey)
                 )
-                parseMaterialFolderTable(document, folderProperty)
+                parseMaterialFolderTable(document, folderProperty, emitter)
                 emitter.onComplete()
             }
         }
@@ -604,7 +579,8 @@ class OldE3Client(context: Context) : E3Client() {
 
     private fun parseMaterialFolderTable(
         document: Document,
-        folderProperty: FolderProperty
+        folderProperty: FolderProperty,
+        emitter: ObservableEmitter<FolderItem>
     ) {
         val tableEl = document.getElementById(folderProperty.tableElId)
         val trEls = tableEl.getElementsByTag("tr").drop(1)
@@ -618,11 +594,10 @@ class OldE3Client(context: Context) : E3Client() {
             val folderId = matched!!.groups[1]!!.value
             val courseId = matched.groups[2]!!.value
             val df = SimpleDateFormat("yyyy/MM/dd", Locale.US)
-            courseFolderCache!![folderProperty.index].add(
-                FolderItem(name, folderId, courseId, folderProperty.folderType, df.parse(tdEls[2].text()))
-            )
+            emitter.onNext(FolderItem(name, folderId, courseId, folderProperty.folderType, df.parse(tdEls[2].text())))
         }
     }
+
 
     override fun getFiles(folderItem: FolderItem): Observable<FileItem> {
         return ensureCourseIdMap()

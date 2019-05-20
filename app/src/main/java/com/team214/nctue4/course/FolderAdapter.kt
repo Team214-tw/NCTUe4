@@ -1,6 +1,5 @@
 package com.team214.nctue4.course
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +11,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class FolderAdapter(
-    private val context: Context,
-    private val dataSet: MutableList<FolderItem>,
+    private val dataSet: List<FolderItem>,
     private val itemClickListener: (FolderItem) -> Unit
 ) :
     RecyclerView.Adapter<FolderAdapter.ViewHolder>() {
 
     class ViewHolder(
-        private val context: Context,
         private val view: View,
         private val itemClickListener: (FolderItem) -> Unit
     ) : RecyclerView.ViewHolder(view) {
@@ -36,10 +33,10 @@ class FolderAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): FolderAdapter.ViewHolder {
+    ): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_course_folder, parent, false)
-        return ViewHolder(context, view, itemClickListener)
+        return ViewHolder(view, itemClickListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
