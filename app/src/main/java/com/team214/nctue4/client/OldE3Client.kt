@@ -393,7 +393,8 @@ class OldE3Client(context: Context) : E3Client() {
                         *(MutableList(totalPage - 1) { getRemainingCourseList() }.toTypedArray())
                     ).subscribeBy(
                         onNext = { emitter.onNext(it) },
-                        onComplete = { emitter.onComplete() }
+                        onComplete = { emitter.onComplete() },
+                        onError = { emitter.onError(it) }
                     )
                 } else {
                     emitter.onComplete()
