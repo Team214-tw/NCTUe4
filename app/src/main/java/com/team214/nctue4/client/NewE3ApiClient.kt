@@ -14,7 +14,6 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
-import java.util.concurrent.CountDownLatch
 
 class NewE3ApiClient(context: Context) : E3Client() {
     class TokenInvalidException : Exception()
@@ -230,17 +229,15 @@ class NewE3ApiClient(context: Context) : E3Client() {
                             }
                             else -> FolderItem.Type.Handout
                         }
-                    val folderItem = FolderItem(
-                        name,
-                        it.getString("coursemodule"),
-                        courseItem.courseId,
-                        folderType,
-                        Date(it.getLong("timemodified") * 1000)
+                    emitter.onNext(
+                        FolderItem(
+                            unescapeHtml(name),
+                            it.getString("coursemodule"),
+                            courseItem.courseId,
+                            folderType,
+                            Date(it.getLong("timemodified") * 1000)
+                        )
                     )
-                    when (folderType) {
-                        FolderItem.Type.Handout -> emitter.onNext(folderItem)
-                        FolderItem.Type.Reference -> emitter.onNext(folderItem)
-                    }
                 }
                 emitter.onComplete()
             }
@@ -267,7 +264,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
                         (0 until data.length()).map { data.get(it) as JSONObject }.forEach {
                             emitter.onNext(
                                 FileItem(
-                                    it.getString("filename"),
+                                    unescapeHtml(it.getString("filename")),
                                     it.getString("fileurl") + "&token=$token"
                                 )
                             )
