@@ -31,7 +31,7 @@ abstract class E3Client {
 
     abstract fun login(studentId: String? = null, password: String? = null): Observable<Unit>
 
-    abstract fun getFrontPageAnns(): Observable<AnnItem>
+    abstract fun getFrontPageAnns(courses: List<CourseItem>? = null): Observable<AnnItem>
 
     abstract fun getAnn(annItem: AnnItem): Observable<AnnItem>
 

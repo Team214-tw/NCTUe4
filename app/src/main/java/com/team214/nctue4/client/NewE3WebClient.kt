@@ -87,7 +87,7 @@ class NewE3WebClient(context: Context) : E3Client() {
         }
     }
 
-    override fun getFrontPageAnns(): Observable<AnnItem> {
+    override fun getFrontPageAnns(courses: List<CourseItem>?): Observable<AnnItem> {
         return get("https://e3new.nctu.edu.tw/theme/dcpc/news/index.php").flatMap {
             Observable.create<AnnItem> { emitter ->
                 val document = Jsoup.parse(it).apply {

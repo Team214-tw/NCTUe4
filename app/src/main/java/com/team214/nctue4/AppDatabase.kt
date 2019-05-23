@@ -9,7 +9,7 @@ import com.team214.nctue4.model.AnnDao
 import com.team214.nctue4.model.AnnItem
 
 
-@Database(entities = [AnnItem::class], version = 1)
+@Database(entities = [AnnItem::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -29,7 +29,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
-                ).allowMainThreadQueries().build()
+                ).allowMainThreadQueries()
+                    .fallbackToDestructiveMigrationFrom(1)
+                    .fallbackToDestructiveMigrationOnDowngrade().build()
                 INSTANCE = instance
                 return instance
             }

@@ -299,7 +299,7 @@ class OldE3Client(context: Context) : E3Client() {
             }
     }
 
-    override fun getFrontPageAnns(): Observable<AnnItem> {
+    override fun getFrontPageAnns(courses: List<CourseItem>?): Observable<AnnItem> {
         return toHomePage().flatMap { document ->
             Observable.create<AnnItem> { emitter ->
                 buildCourseIdMap(document)

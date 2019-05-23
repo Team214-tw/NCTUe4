@@ -13,6 +13,7 @@ import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.time.Duration
 import java.util.*
 
 class NewE3ApiClient(context: Context) : E3Client() {
@@ -433,8 +434,11 @@ class NewE3ApiClient(context: Context) : E3Client() {
         return Observable.just(hwkItem)
     }
 
-    override fun getFrontPageAnns(): Observable<AnnItem> {
-        throw NotImplementedError()
+    override fun getFrontPageAnns(courses: List<CourseItem>?): Observable<AnnItem> {
+        var ob = Observable.empty<AnnItem>()
+        val cur = System.currentTimeMillis() / 1000
+        courses?.filter {  cur <= it.sortKey  }?.forEach { ob = ob.mergeWith(getCourseAnns(it)) }
+        return ob
     }
 
     override fun getAnn(annItem: AnnItem): Observable<AnnItem> {

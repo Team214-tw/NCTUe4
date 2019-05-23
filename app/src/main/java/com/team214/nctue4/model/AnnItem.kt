@@ -17,14 +17,13 @@ import java.util.*
 @Parcelize
 
 data class AnnItem(
-
     var e3Type: E3Type = E3Type.NEW,
     var title: String = "",
     var date: Date? = null,
     var courseName: String = "",
     var detailLocationHint: String?,
-    @Ignore val content: String?,
-    @Ignore val attachItems: MutableList<FileItem>
+    val content: String?,
+    val attachItems: MutableList<FileItem>
 ) : Parcelable {
     @PrimaryKey(autoGenerate = true)
     @IgnoredOnParcel

@@ -10,6 +10,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.team214.nctue4.BaseActivity
 import com.team214.nctue4.BuildConfig
 import com.team214.nctue4.R
@@ -25,6 +27,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     lateinit var newE3ApiClient: NewE3ApiClient
     lateinit var newE3WebClient: NewE3WebClient
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private val remoteConfigInstance = FirebaseRemoteConfig.getInstance()
+
+    override fun onResume() {
+        super.onResume()
+        remoteConfigInstance.fetchAndActivate()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +57,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         newE3ApiClient = E3Clients.getNewE3ApiClient(this)
         newE3WebClient = E3Clients.getNewE3WebClient(this)
 
-        newE3WebClient.login()
+        remoteConfigInstance.setDefaults(mapOf("use_api_for_home_ann" to false))
+        val configSettings = FirebaseRemoteConfigSettings.Builder()
+            .setMinimumFetchIntervalInSeconds(3600)
+            .build()
+        remoteConfigInstance.setConfigSettingsAsync(configSettings)
+        remoteConfigInstance.fetchAndActivate()
 
         if (savedInstanceState == null) {
             switchFragment(
