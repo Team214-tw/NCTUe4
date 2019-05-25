@@ -11,12 +11,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class FolderAdapter(
-    private val dataSet: List<FolderItem>,
     private val itemClickListener: (FolderItem) -> Unit
-) :
-    RecyclerView.Adapter<FolderAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<FolderAdapter.ViewHolder>() {
 
-    class ViewHolder(
+    private var dataSet = emptyList<FolderItem>()
+
+    inner class ViewHolder(
         private val view: View,
         private val itemClickListener: (FolderItem) -> Unit
     ) : RecyclerView.ViewHolder(view) {
@@ -30,10 +30,7 @@ class FolderAdapter(
         }
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_course_folder, parent, false)
         return ViewHolder(view, itemClickListener)
@@ -41,7 +38,11 @@ class FolderAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(dataSet[position])
+    }
 
+    internal fun setFolderItems(folderItems: List<FolderItem>) {
+        this.dataSet = folderItems
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = dataSet.size

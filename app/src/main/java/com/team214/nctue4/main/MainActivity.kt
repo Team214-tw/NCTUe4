@@ -62,7 +62,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             .setMinimumFetchIntervalInSeconds(3600)
             .build()
         remoteConfigInstance.setConfigSettingsAsync(configSettings)
-        remoteConfigInstance.fetchAndActivate()
 
         if (savedInstanceState == null) {
             switchFragment(

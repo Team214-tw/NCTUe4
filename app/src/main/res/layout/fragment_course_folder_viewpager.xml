@@ -5,10 +5,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <include layout="@layout/status_error"/>
-
-    <include layout="@layout/progress_bar"/>
-
     <androidx.viewpager.widget.ViewPager
             android:id="@+id/course_folder_view_pager"
             android:layout_width="match_parent"
