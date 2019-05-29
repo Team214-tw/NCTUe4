@@ -13,7 +13,6 @@ import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.time.Duration
 import java.util.*
 
 class NewE3ApiClient(context: Context) : E3Client() {
@@ -36,14 +35,16 @@ class NewE3ApiClient(context: Context) : E3Client() {
     private fun post(
         data: HashMap<String, String>
     ): Observable<String> {
-        if (token == null) throw TokenInvalidException()
-        data["wstoken"] = token
-        val formBodyBuilder = FormBody.Builder()
-        data.forEach { entry -> formBodyBuilder.add(entry.key, entry.value) }
-        val formBody = formBodyBuilder.build()
-        val request = okhttp3.Request.Builder().url(API_URL).post(formBody).build()
-        Log.d("NewE3ApiPost", data["wsfunction"] ?: "")
-        return clientExecute(request).flatMap { (_, response) ->
+
+        return Observable.fromCallable {
+            if (token == null) throw TokenInvalidException()
+            data["wstoken"] = token
+            val formBodyBuilder = FormBody.Builder()
+            data.forEach { entry -> formBodyBuilder.add(entry.key, entry.value) }
+            val formBody = formBodyBuilder.build()
+            Log.d("NewE3ApiPost", data["wsfunction"] ?: "")
+            okhttp3.Request.Builder().url(API_URL).post(formBody).build()
+        }.flatMap { clientExecute(it) }.flatMap { (_, response) ->
             Observable.fromCallable {
                 response.apply {
                     try {
@@ -437,7 +438,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
     override fun getFrontPageAnns(courses: List<CourseItem>?): Observable<AnnItem> {
         var ob = Observable.empty<AnnItem>()
         val cur = System.currentTimeMillis() / 1000
-        courses?.filter {  cur <= it.sortKey  }?.forEach { ob = ob.mergeWith(getCourseAnns(it)) }
+        courses?.filter { cur <= it.sortKey }?.forEach { ob = ob.mergeWith(getCourseAnns(it)) }
         return ob
     }
 
