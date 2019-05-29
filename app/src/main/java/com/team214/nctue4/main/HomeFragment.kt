@@ -27,21 +27,22 @@ class HomeFragment : Fragment() {
     private var fragment2: DownloadFragment? = null
 
     override fun onStart() {
-        if (fragment2 != null) {
-            fragment2?.updateList(activity)
-        } else {
-            home_swipe_refresh?.setOnRefreshListener {
-                fragment1?.refresh()
-                fragment2?.updateList(activity)
-                val handler = Handler()
-                handler.postDelayed({ home_swipe_refresh?.isRefreshing = false }, 1000)
-            }
-            loadFragments()
-        }
+        fragment2?.updateList(activity)
         super.onStart()
     }
 
-    private fun loadFragments() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        loadFragments(savedInstanceState)
+        home_swipe_refresh?.setOnRefreshListener {
+            fragment1?.refresh()
+            fragment2?.updateList(activity)
+            val handler = Handler()
+            handler.postDelayed({ home_swipe_refresh?.isRefreshing = false }, 1000)
+        }
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun loadFragments(savedInstanceState: Bundle?) {
         val fragmentManager = activity!!.supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
         val bundle = Bundle()
@@ -51,7 +52,10 @@ class HomeFragment : Fragment() {
 
         if (prefs.getBoolean("home_enable_ann", true)) {
             ann_layout.visibility = View.VISIBLE
-            fragment1 = fragmentManager.findFragmentById(R.id.home_ann) as HomeAnnFragment? ?: HomeAnnFragment()
+            val tmpFragment = fragmentManager.findFragmentById(R.id.home_ann) as HomeAnnFragment?
+            fragment1 =
+                if (savedInstanceState == null || tmpFragment == null) HomeAnnFragment()
+                else tmpFragment
             bundle.putInt("home_ann_cnt", prefs.getString("home_ann_cnt", "5")!!.toInt())
             fragment1!!.arguments = bundle
             transaction.replace(R.id.home_ann, fragment1!!)
@@ -60,8 +64,10 @@ class HomeFragment : Fragment() {
 
         if (prefs.getBoolean("home_enable_download", true)) {
             download_layout.visibility = View.VISIBLE
-            fragment2 = fragmentManager.findFragmentById(R.id.home_download) as DownloadFragment? ?: DownloadFragment()
-            bundle.putInt("home_download_cnt", prefs.getString("home_download_cnt", "5")!!.toInt())
+            val tmpFragment = fragmentManager.findFragmentById(R.id.home_download) as DownloadFragment?
+            fragment2 =
+                if (savedInstanceState == null || tmpFragment == null) DownloadFragment()
+                else tmpFragment
             fragment2!!.arguments = bundle
             transaction.replace(R.id.home_download, fragment2!!)
             home_more_download?.setOnClickListener { (activity!! as MainActivity).switchFragment(R.id.nav_download) }
@@ -70,7 +76,10 @@ class HomeFragment : Fragment() {
 
         if (prefs.getBoolean("home_enable_bookmarked", true)) {
             bookmarked_layout.visibility = View.VISIBLE
-            val fragment3 = fragmentManager.findFragmentById(R.id.home_bookmarked) as BookmarkedFragment? ?: BookmarkedFragment()
+            val tmpFragment = fragmentManager.findFragmentById(R.id.home_bookmarked) as BookmarkedFragment?
+            val fragment3 =
+                if (savedInstanceState == null || tmpFragment == null) BookmarkedFragment()
+                else tmpFragment
             bundle.putInt("home_bookmarked_cnt", prefs.getString("home_bookmarked_cnt", "5")!!.toInt())
             fragment3.arguments = bundle
             transaction.replace(R.id.home_bookmarked, fragment3)

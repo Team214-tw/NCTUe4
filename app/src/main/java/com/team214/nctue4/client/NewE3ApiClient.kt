@@ -72,7 +72,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
     }
 
     override fun login(studentId: String?, password: String?): Observable<Unit> {
-
+        Log.d("NewE3ApiLogin", "Login")
         val formBody = FormBody.Builder()
             .add("username", (studentId ?: prefs.getString("studentId", "")!!))
             .add("password", (password ?: prefs.getString("studentPortalPassword", "")!!))

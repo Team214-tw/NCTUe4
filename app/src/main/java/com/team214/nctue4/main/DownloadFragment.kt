@@ -18,6 +18,7 @@ import java.io.File
 
 class DownloadFragment : Fragment() {
     private var fromHome: Boolean = false
+    private var viewCreated = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +33,7 @@ class DownloadFragment : Fragment() {
     private var files = ArrayList<File>()
     private lateinit var emptyRequest: View
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewCreated = true
         super.onViewCreated(view, savedInstanceState)
         emptyRequest = if (fromHome) empty_request_compact else empty_request
         updateList()
@@ -39,6 +41,7 @@ class DownloadFragment : Fragment() {
     }
 
     fun updateList(homeActivity: FragmentActivity? = null) {
+        if (!viewCreated) return
         val path = if (homeActivity != null) homeActivity.getExternalFilesDir(null) else
             activity?.getExternalFilesDir(null)
         val dir = File(path, "Download")
