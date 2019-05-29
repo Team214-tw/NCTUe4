@@ -51,7 +51,7 @@ class HomeFragment : Fragment() {
 
         if (prefs.getBoolean("home_enable_ann", true)) {
             ann_layout.visibility = View.VISIBLE
-            fragment1 = HomeAnnFragment()
+            fragment1 = fragmentManager.findFragmentById(R.id.home_ann) as HomeAnnFragment? ?: HomeAnnFragment()
             bundle.putInt("home_ann_cnt", prefs.getString("home_ann_cnt", "5")!!.toInt())
             fragment1!!.arguments = bundle
             transaction.replace(R.id.home_ann, fragment1!!)
@@ -60,7 +60,7 @@ class HomeFragment : Fragment() {
 
         if (prefs.getBoolean("home_enable_download", true)) {
             download_layout.visibility = View.VISIBLE
-            fragment2 = DownloadFragment()
+            fragment2 = fragmentManager.findFragmentById(R.id.home_download) as DownloadFragment? ?: DownloadFragment()
             bundle.putInt("home_download_cnt", prefs.getString("home_download_cnt", "5")!!.toInt())
             fragment2!!.arguments = bundle
             transaction.replace(R.id.home_download, fragment2!!)
@@ -70,7 +70,7 @@ class HomeFragment : Fragment() {
 
         if (prefs.getBoolean("home_enable_bookmarked", true)) {
             bookmarked_layout.visibility = View.VISIBLE
-            val fragment3 = BookmarkedFragment()
+            val fragment3 = fragmentManager.findFragmentById(R.id.home_bookmarked) as BookmarkedFragment? ?: BookmarkedFragment()
             bundle.putInt("home_bookmarked_cnt", prefs.getString("home_bookmarked_cnt", "5")!!.toInt())
             fragment3.arguments = bundle
             transaction.replace(R.id.home_bookmarked, fragment3)
