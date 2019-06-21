@@ -6,6 +6,7 @@ import android.util.Log
 import com.team214.nctue4.model.*
 import com.team214.nctue4.utility.unescapeHtml
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.zipWith
 import okhttp3.Cookie
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
@@ -64,10 +65,14 @@ class NewE3ApiClient(context: Context) : E3Client() {
                     }
                 }
             }
-        }.retryWhen {
-            it.flatMap { error ->
-                if (error is TokenInvalidException) login() else Observable.error(error)
-            }
+        }.retryWhen { errors ->
+            errors.zipWith(Observable.range(0, 3)) { error, _ -> error }
+                .map { error ->
+                    when (error) {
+                        is TokenInvalidException -> login()
+                        else -> throw error
+                    }
+                }.doOnComplete { throw ServiceErrorException() }
         }
     }
 

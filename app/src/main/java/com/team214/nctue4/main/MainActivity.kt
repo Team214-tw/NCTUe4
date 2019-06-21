@@ -57,7 +57,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         newE3ApiClient = E3Clients.getNewE3ApiClient(this)
         newE3WebClient = E3Clients.getNewE3WebClient(this)
 
-        remoteConfigInstance.setDefaults(mapOf("use_api_for_home_ann" to false))
+        remoteConfigInstance.setDefaults(mapOf("use_api_for_home_ann" to true))
         val configSettings = FirebaseRemoteConfigSettings.Builder()
             .setMinimumFetchIntervalInSeconds(3600)
             .build()

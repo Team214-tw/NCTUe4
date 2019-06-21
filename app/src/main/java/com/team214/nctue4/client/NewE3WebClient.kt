@@ -5,6 +5,7 @@ import android.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.*
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.zipWith
 import okhttp3.*
 import org.jsoup.Jsoup
 import java.text.ParseException
@@ -80,10 +81,14 @@ class NewE3WebClient(context: Context) : E3Client() {
                 }
                 responseBody
             }
-        }.retryWhen {
-            it.flatMap { error ->
-                if (error is SessionInvalidException) login() else Observable.error(error)
-            }
+        }.retryWhen { errors ->
+            errors.zipWith(Observable.range(0, 3)) { error, _ -> error }
+                .map { error ->
+                    when (error) {
+                        is SessionInvalidException -> login()
+                        else -> throw error
+                    }
+                }.doOnComplete { throw ServiceErrorException() }
         }
     }
 
@@ -148,10 +153,6 @@ class NewE3WebClient(context: Context) : E3Client() {
                     emitter.onNext(AnnItem(E3Type.NEW, title, date, courseName, detailLocationHint))
                 }
                 emitter.onComplete()
-            }
-        }.retryWhen {
-            it.flatMap { error ->
-                if (error is SessionInvalidException) login() else Observable.error(error)
             }
         }
     }
