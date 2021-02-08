@@ -21,7 +21,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
     class SitePolicyNotAgreedException : Exception()
 
     companion object {
-        const val API_URL = "https://e3new.nctu.edu.tw/webservice/rest/server.php?moodlewsrestformat=json"
+        const val API_URL = "https://e3.nycu.edu.tw/webservice/rest/server.php?moodlewsrestformat=json"
     }
 
     override val client = OkHttpClient()
@@ -84,7 +84,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
             .add("service", "moodle_mobile_app")
             .build()
         val request = Request.Builder()
-            .url("https://e3new.nctu.edu.tw/login/token.php")
+            .url("https://e3.nycu.edu.tw/login/token.php")
             .post(formBody)
             .build()
         return clientExecute(request).flatMap { (_, response) ->
@@ -456,7 +456,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
     }
 
     override fun getBaseUrl(): String? {
-        return "https://e3new.nctu.edu.tw"
+        return "https://e3.nycu.edu.tw"
     }
 
 }
