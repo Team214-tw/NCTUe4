@@ -57,7 +57,6 @@ class CourseListFragment : Fragment() {
         activity!!.setTitle(
             when (e3Type) {
                 E3Type.NEW -> R.string.new_e3
-                E3Type.OLD -> R.string.old_e3
             }
         )
         setHasOptionsMenu(true)
@@ -81,7 +80,6 @@ class CourseListFragment : Fragment() {
         progress_bar.visibility = View.VISIBLE
         error_request.visibility = View.GONE
         val client = when (e3Type) {
-            E3Type.OLD -> E3Clients.getOldE3Client(context!!)
             E3Type.NEW -> E3Clients.getNewE3ApiClient(context!!)
         }
         disposable = client.getCourseList()
@@ -137,10 +135,6 @@ class CourseListFragment : Fragment() {
                             )
                         )
                     }
-                }
-                E3Type.OLD -> {
-                    empty_request_new_e3.visibility = View.GONE
-                    empty_request.visibility = View.VISIBLE
                 }
             }
 

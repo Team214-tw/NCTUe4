@@ -34,7 +34,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 }
                 activity?.recreate()
             }
-            "ann_enable_old_e3", "ann_enable_new_e3_system" -> prefs.edit().putLong("home_ann_last_refresh", -1).apply()
+            "ann_enable_new_e3_system" -> prefs.edit().putLong("home_ann_last_refresh", -1).apply()
         }
     }
 

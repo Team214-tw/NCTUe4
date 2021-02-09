@@ -23,9 +23,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
-    lateinit var oldE3Client: OldE3Client
     lateinit var newE3ApiClient: NewE3ApiClient
-    lateinit var newE3WebClient: NewE3WebClient
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private val remoteConfigInstance = FirebaseRemoteConfig.getInstance()
 
@@ -53,9 +51,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val studentEmail = prefs.getString("studentEmail", "")
         val studentName = prefs.getString("studentName", "")
 
-        oldE3Client = E3Clients.getOldE3Client(this)
         newE3ApiClient = E3Clients.getNewE3ApiClient(this)
-        newE3WebClient = E3Clients.getNewE3WebClient(this)
 
         remoteConfigInstance.setDefaults(mapOf("use_api_for_home_ann" to true))
         val configSettings = FirebaseRemoteConfigSettings.Builder()
@@ -69,7 +65,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     "nav_ann" -> R.id.nav_ann
                     "nav_bookmarked" -> R.id.nav_bookmarked
                     "nav_download" -> R.id.nav_download
-                    "nav_old_e3" -> R.id.nav_old_e3
                     "nav_new_e3" -> R.id.nav_new_e3
                     else -> R.id.nav_home
                 }
@@ -110,15 +105,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 firebaseAnalytics
                     .setCurrentScreen(this, "DownloadFragment", DownloadFragment::class.java.simpleName)
                 DownloadFragment()
-            }
-            R.id.nav_old_e3 -> {
-                firebaseAnalytics
-                    .setCurrentScreen(this, "OldE3Fragment", CourseListFragment::class.java.simpleName)
-                CourseListFragment().apply {
-                    val bundle = Bundle()
-                    bundle.putSerializable("e3Type", E3Type.OLD)
-                    this.arguments = bundle
-                }
             }
             R.id.nav_new_e3 -> {
                 firebaseAnalytics

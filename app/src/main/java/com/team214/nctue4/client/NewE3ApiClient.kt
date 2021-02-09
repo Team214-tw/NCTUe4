@@ -31,7 +31,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
         .build()
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     private var token = prefs.getString("newE3Token", null)
-    private var userId = prefs.getString("newE3UserId", "")
+    private var userId = prefs.getString("newE3UserId", "") ?: "Not Set"
 
     private fun post(
         data: HashMap<String, String>
@@ -39,7 +39,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
 
         return Observable.fromCallable {
             if (token == null) throw TokenInvalidException()
-            data["wstoken"] = token
+            data["wstoken"] = token ?: "Not Set"
             val formBodyBuilder = FormBody.Builder()
             data.forEach { entry -> formBodyBuilder.add(entry.key, entry.value) }
             val formBody = formBodyBuilder.build()

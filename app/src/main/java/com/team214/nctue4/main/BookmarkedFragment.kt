@@ -67,11 +67,6 @@ class BookmarkedFragment : Fragment() {
                             course.toggleBookmark()
                             view.course_star.setColorFilter(ContextCompat.getColor(context!!, R.color.md_grey_500))
                         }
-                        course.e3Type == E3Type.OLD -> {
-                            courseDBHelper.bookmarkCourse(course.courseId, 1)
-                            course.toggleBookmark()
-                            view.course_star.setColorFilter(ContextCompat.getColor(context!!, R.color.old_e3))
-                        }
                         else -> {
                             course.toggleBookmark()
                             view.course_star.setColorFilter(ContextCompat.getColor(context!!, R.color.new_e3))

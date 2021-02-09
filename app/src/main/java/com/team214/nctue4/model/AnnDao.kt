@@ -19,6 +19,4 @@ interface AnnDao {
     @Query("DELETE FROM annTable WHERE e3type = 0")
     fun deleteAllNewE3()
 
-    @Query("DELETE FROM annTable WHERE e3type = 1")
-    fun deleteAllOldE3()
 }

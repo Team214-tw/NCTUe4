@@ -5,6 +5,7 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.Toast
@@ -15,7 +16,6 @@ import com.team214.nctue4.R
 import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.client.E3Clients
 import com.team214.nctue4.client.NewE3ApiClient
-import com.team214.nctue4.client.OldE3Client
 import com.team214.nctue4.main.MainActivity
 import com.team214.nctue4.model.CourseDBHelper
 import com.team214.nctue4.model.CourseItem
@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.activity_login.*
 class LoginActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var disposable: Disposable? = null
-    private lateinit var oldE3Client: OldE3Client
     private lateinit var newE3ApiClient: NewE3ApiClient
     private var loggedInBefore = false
 
@@ -57,7 +56,6 @@ class LoginActivity : AppCompatActivity() {
             student_id.isEnabled = false
             logout_button.visibility = View.VISIBLE
             student_id.setText(prefs.getString("studentId", null))
-            student_password.setText(prefs.getString("studentPassword", ""))
             student_portal_password.setText(prefs.getString("studentPortalPassword", ""))
         }
 
@@ -77,17 +75,14 @@ class LoginActivity : AppCompatActivity() {
                 }.show()
         }
 
-        oldE3Client = E3Clients.getOldE3Client(this)
         newE3ApiClient = E3Clients.getNewE3ApiClient(this)
         login_button?.setOnClickListener {
             disableInput()
 
             val studentId = student_id.text.toString().trim()
             val studentPortalPassword = student_portal_password.text.toString()
-            val studentPassword = student_password.text.toString()
 
             var observable = newE3ApiClient.login(studentId, studentPortalPassword)
-            if (studentPassword != "") observable = observable.mergeWith(oldE3Client.login(studentId, studentPassword))
 
             disposable = observable
                 .flatMap { newE3ApiClient.saveUserInfo(studentId) }
@@ -95,11 +90,10 @@ class LoginActivity : AppCompatActivity() {
                 .subscribeBy(
                     onComplete = {
                         val prefsEditor = prefs.edit()
-                        prefsEditor.putString("studentPassword", studentPassword)
                         prefsEditor.putString("studentId", studentId)
                         prefsEditor.putString("studentPortalPassword", studentPortalPassword)
                         prefsEditor.apply()
-                        getCourseList(studentPassword != "")
+                        getCourseList()
                     },
                     onError = { error ->
                         when (error) {
@@ -112,14 +106,13 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCourseList(oldE3: Boolean) {
+    private fun getCourseList() {
         val courseDBHelper = CourseDBHelper(this)
         if (!courseDBHelper.isCoursesTableEmpty()) {
             handleLoginSuccess()
             return
         }
         var observable = newE3ApiClient.getCourseList()
-        if (oldE3) observable = observable.mergeWith(oldE3Client.getCourseList())
         disposable = observable
             .observeOn(AndroidSchedulers.mainThread())
             .collectInto(mutableListOf<CourseItem>()) { courseItems, courseItem -> courseItems.add(courseItem) }
@@ -171,14 +164,12 @@ class LoginActivity : AppCompatActivity() {
         login_progressbar?.visibility = View.GONE
         login_button?.text = getString(R.string.login)
         if (!loggedInBefore) student_id.isEnabled = true
-        student_password.isEnabled = true
         student_portal_password.isEnabled = true
         login_button?.isEnabled = true
     }
 
     private fun disableInput() {
         student_id.isEnabled = false
-        student_password.isEnabled = false
         student_portal_password.isEnabled = false
         login_progressbar?.visibility = View.VISIBLE
         login_button?.text = ""

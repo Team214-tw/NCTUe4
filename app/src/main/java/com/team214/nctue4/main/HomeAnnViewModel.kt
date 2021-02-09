@@ -24,20 +24,16 @@ class HomeAnnViewModel(application: Application) : AndroidViewModel(application)
     private val annDao = AppDatabase.getDatabase(application).annDao()
     val annItems = MutableLiveData<List<AnnItem>>()
     private val newE3Client: E3Client
-    private val oldE3Client = E3Clients.getOldE3Client(application)
     val loading = MutableLiveData<Boolean>()
     val error = MutableLiveData<Event<String>>()
     private val courseDBHelper = CourseDBHelper(application)
 
-    private var oldE3Failed = false
     private var newE3Failed = false
 
     private val useAPI = remoteConfigInstance.getBoolean("use_api_for_home_ann")
 
     init {
-        newE3Client =
-            if (useAPI) E3Clients.getNewE3ApiClient(application)
-            else E3Clients.getNewE3WebClient(application)
+        newE3Client = E3Clients.getNewE3ApiClient(application)
         annItems.value = annDao.getAll()
         loading.value = false
         getData(false)
@@ -56,11 +52,6 @@ class HomeAnnViewModel(application: Application) : AndroidViewModel(application)
             newE3Client.getFrontPageAnns(courseList)
                 .doOnError { newE3Failed = true }
         )
-        val enableOldE3 = prefs.getBoolean("ann_enable_old_e3", false)
-        if (enableOldE3) {
-            observables.add(oldE3Client.getFrontPageAnns()
-                .doOnError { oldE3Failed = true })
-        }
 
         val collector = mutableListOf<AnnItem>()
         disposable = observables.mergeDelayError()
@@ -77,18 +68,8 @@ class HomeAnnViewModel(application: Application) : AndroidViewModel(application)
                     if (it is E3Client.WrongCredentialsException) {
                         error.postValue(Event(getApplication<MainApplication>().resources.getString(R.string.wrong_credential)))
                     } else {
-                        if (newE3Failed && oldE3Failed) {
+                        if (newE3Failed) {
                             error.postValue(Event(getApplication<MainApplication>().resources.getString(R.string.ann_error)))
-                        } else if (newE3Failed) {
-                            annDao.deleteAllOldE3()
-                            annDao.insertAll(*collector.toTypedArray())
-                            annItems.postValue(annDao.getAll())
-                            error.postValue(Event(getApplication<MainApplication>().resources.getString(R.string.new_e3_ann_error)))
-                        } else if (oldE3Failed) {
-                            annDao.deleteAllNewE3()
-                            annDao.insertAll(*collector.toTypedArray())
-                            annItems.postValue(annDao.getAll())
-                            error.postValue(Event(getApplication<MainApplication>().resources.getString(R.string.old_e3_ann_error)))
                         }
                     }
                     prefs.edit().putLong("home_ann_last_refresh", -1).apply()

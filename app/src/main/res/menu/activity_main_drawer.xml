@@ -23,10 +23,6 @@
                 android:icon="@drawable/ic_file_download_black_24dp"
                 android:title="@string/download_history"/>
         <item
-                android:id="@+id/nav_old_e3"
-                android:icon="@drawable/ic_keyboard_arrow_right_black_24dp"
-                android:title="@string/old_e3"/>
-        <item
                 android:id="@+id/nav_new_e3"
                 android:icon="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:title="@string/new_e3"/>

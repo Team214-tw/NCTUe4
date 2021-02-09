@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import com.team214.nctue4.client.E3Client
 import com.team214.nctue4.client.NewE3ApiClient
-import com.team214.nctue4.client.NewE3WebClient
-import com.team214.nctue4.client.OldE3Client
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import java.io.IOException
@@ -36,9 +34,7 @@ class MainApplication : MultiDexApplication() {
                 c is E3Client.WrongCredentialsException ||
                 c is E3Client.ServiceErrorException ||
                 c is NewE3ApiClient.SitePolicyNotAgreedException ||
-                c is NewE3ApiClient.TokenInvalidException ||
-                c is NewE3WebClient.SessionInvalidException ||
-                c is OldE3Client.SessionInvalidException
+                c is NewE3ApiClient.TokenInvalidException
             ) {
                 return@setErrorHandler
             }
