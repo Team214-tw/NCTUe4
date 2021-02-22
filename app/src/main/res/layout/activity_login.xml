@@ -30,13 +30,6 @@
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/ic_fox"/>
 
-            <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="75dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/logo"/>
-
 
             <TextView
                     android:id="@+id/login_error_text_view"
@@ -48,6 +41,17 @@
                     android:textSize="16sp"
                     android:visibility="gone"/>
 
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="NYCU E4"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="48sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <EditText
                     android:id="@+id/student_id"
