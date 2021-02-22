@@ -1,6 +1,6 @@
 package com.team214.nctue4
 
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import com.team214.nctue4.client.E3Client
