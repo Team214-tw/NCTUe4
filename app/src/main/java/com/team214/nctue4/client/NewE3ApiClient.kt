@@ -1,7 +1,7 @@
 package com.team214.nctue4.client
 
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import android.util.Log
 import com.team214.nctue4.model.*
 import com.team214.nctue4.utility.unescapeHtml

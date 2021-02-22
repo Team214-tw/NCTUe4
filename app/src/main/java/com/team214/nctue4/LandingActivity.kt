@@ -51,7 +51,6 @@ class LandingActivity : AppCompatActivity() {
 
         val intent =
             if (studentId == null ||
-                studentPassword == null ||
                 studentPortalPassword == null ||
                 token == null ||
                 userId == null ||
