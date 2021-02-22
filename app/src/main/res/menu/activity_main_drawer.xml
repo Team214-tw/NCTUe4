@@ -25,7 +25,7 @@
         <item
                 android:id="@+id/nav_new_e3"
                 android:icon="@drawable/ic_keyboard_arrow_right_black_24dp"
-                android:title="@string/new_e3"/>
+                android:title="@string/course_list"/>
         <item
                 android:id="@+id/settings"
                 android:icon="@drawable/ic_settings_black_24dp"

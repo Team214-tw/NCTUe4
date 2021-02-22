@@ -3,7 +3,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:minWidth="1000dp"
-            tools:context="com.team214.nctue4.login.LoginHelpFragment">
+            tools:context="com.team214.nycue4.login.LoginHelpFragment">
 
     <LinearLayout
             android:layout_width="match_parent"

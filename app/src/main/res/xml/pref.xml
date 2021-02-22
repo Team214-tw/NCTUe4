@@ -85,7 +85,7 @@
                 app:iconSpaceReserved="false"/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/new_e3"
+    <PreferenceCategory android:title="@string/course_list"
                         app:iconSpaceReserved="false"
     >
         <CheckBoxPreference

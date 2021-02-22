@@ -4,7 +4,7 @@
              android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
              android:paddingBottom="8dp"
              android:paddingTop="8dp"
-             tools:context="com.team214.nctue4.main.DownloadDialog">
+             tools:context="com.team214.nycue4.main.DownloadDialog">
 
     <LinearLayout
         android:layout_width="match_parent"

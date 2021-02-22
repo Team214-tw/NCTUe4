@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NCTU e4</string>
+    <string name="app_name">NYCU e4</string>
 
     <string name="navigation_drawer_close">關閉側邊選單</string>
     <string name="navigation_drawer_open">開啟側邊選單</string>
@@ -8,7 +8,7 @@
     <string name="home">首頁</string>
     <string name="bookmarked_courses">收藏課程</string>
     <string name="old_e3">e3 教學平台</string>
-    <string name="new_e3">New e3 教學平台</string>
+    <string name="course_list">課程列表</string>
     <string name="settings">設定</string>
 
     <string name="constructing">這個頁面還在吸收日月精華</string>
@@ -95,7 +95,7 @@
     <string name="login_help_old_e3">
         舊e3密碼(若不需要舊e3功能則不必填)：登入ecampus（如下圖）所使用的密碼。\n網址：https://dcpc.nctu.edu.tw\n如果沒有手動更改，則和選課系統相同（選課系統密碼預設為身分證後六碼）。
     </string>
-    <string name="login_help_new_e3">單一入口密碼：登入單一入口（如下圖）時用的密碼。\n網址：https://portal.nctu.edu.tw</string>
+    <string name="login_help_new_e3">單一入口密碼：登入單一入口（如下圖）時用的密碼。\n網址：https://portal.nycu.edu.tw</string>
 
     <string name="warning">警告</string>
     <string name="course_not_found_in_db">本地資料庫沒有此課程，請至課程列表頁面刷新</string>

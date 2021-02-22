@@ -9,8 +9,8 @@
             android:shortcutShortLabel="@string/download_history">
         <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="com.team214.nctue4.LandingActivity"
-                android:targetPackage="com.team214.nctue4">
+                android:targetClass="com.team214.nycue4.LandingActivity"
+                android:targetPackage="com.team214.nycue4">
             <extra
                     android:name="shortcut"
                     android:value="nav_download"/>
@@ -26,8 +26,8 @@
             android:shortcutShortLabel="@string/bookmarked_courses">
         <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="com.team214.nctue4.LandingActivity"
-                android:targetPackage="com.team214.nctue4">
+                android:targetClass="com.team214.nycue4.LandingActivity"
+                android:targetPackage="com.team214.nycue4">
             <extra
                     android:name="shortcut"
                     android:value="nav_bookmarked"/>
@@ -43,8 +43,8 @@
             android:shortcutShortLabel="@string/latest_ann">
         <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="com.team214.nctue4.LandingActivity"
-                android:targetPackage="com.team214.nctue4">
+                android:targetClass="com.team214.nycue4.LandingActivity"
+                android:targetPackage="com.team214.nycue4">
             <extra
                     android:name="shortcut"
                     android:value="nav_ann"/>
@@ -56,12 +56,12 @@
             android:enabled="true"
             android:icon="@drawable/shortcut_list"
             android:shortcutId="compose4"
-            android:shortcutLongLabel="@string/new_e3"
-            android:shortcutShortLabel="@string/new_e3">
+            android:shortcutLongLabel="@string/course_list"
+            android:shortcutShortLabel="@string/course_list">
         <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="com.team214.nctue4.LandingActivity"
-                android:targetPackage="com.team214.nctue4">
+                android:targetClass="com.team214.nycue4.LandingActivity"
+                android:targetPackage="com.team214.nycue4">
             <extra
                     android:name="shortcut"
                     android:value="nav_new_e3"/>
@@ -77,8 +77,8 @@
             android:shortcutShortLabel="@string/old_e3">
         <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="com.team214.nctue4.LandingActivity"
-                android:targetPackage="com.team214.nctue4">
+                android:targetClass="com.team214.nycue4.LandingActivity"
+                android:targetPackage="com.team214.nycue4">
             <extra
                     android:name="shortcut"
                     android:value="nav_old_e3"/>

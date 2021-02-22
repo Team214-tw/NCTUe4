@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NCTU e4</string>
+    <string name="app_name">NYCU e4</string>
 
     <!--Main Activity-->
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -14,14 +14,14 @@
     <string name="download_history">Download History</string>
     <string name="bookmarked_courses">Bookmarked</string>
     <string name="old_e3">Old e3</string>
-    <string name="new_e3">New e3</string>
+    <string name="course_list">Course List</string>
     <string name="settings">Settings</string>
     <string name="license">License</string>
 
     <!--Login Activity-->
     <string name="student_id">Student ID</string>
     <string name="student_old_e3_password">Old E3 Password (Optional)</string>
-    <string name="portal_password">NCTU Portal Password</string>
+    <string name="portal_password">NYCU Portal Password</string>
     <string name="login">LogIn</string>
     <string name="logout">Log out</string>
     <string name="login_id_or_password_error">ID or Password incorrect, try again?</string>
@@ -117,8 +117,8 @@
         Course Registration System　(The default password for Course System is the last 6 digits of your National ID or
         "123456").
     </string>
-    <string name="login_help_new_e3">Portal password: The password you use when logging in NCTU Portal (as figure
-        below)\nURL: https://portal.nctu.edu.tw
+    <string name="login_help_new_e3">Portal password: The password you use when logging in NYCU Portal (as figure
+        below)\nURL: https://portal.nycu.edu.tw
     </string>
 
     <string name="warning">Warning</string>

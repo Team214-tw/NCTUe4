@@ -12,7 +12,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:fitsSystemWindows="true"
-            tools:context="com.team214.nctue4.course.CourseActivity">
+            tools:context="com.team214.nycue4.course.CourseActivity">
 
         <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.team214.nctue4"
+          package="com.team214.nycue4"
           tools:ignore="GoogleAppIndexingWarning">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-            android:name=".MainApplication"
+            android:name="com.team214.nycue4.MainApplication"
             android:icon="@mipmap/ic_launcher_fox"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_fox_round"
@@ -27,14 +27,14 @@
         </provider>
 
         <activity
-                android:name=".main.MainActivity"
+                android:name="com.team214.nycue4.main.MainActivity"
                 android:configChanges="orientation|screenSize"
                 android:label="@string/app_name"
                 android:launchMode="singleTask">
         </activity>
 
         <activity
-                android:name=".LandingActivity"
+                android:name="com.team214.nycue4.LandingActivity"
                 android:theme="@style/splashScreenTheme"
                 android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
@@ -47,31 +47,31 @@
         </activity>
 
         <activity
-                android:name=".login.LoginActivity"
+                android:name="com.team214.nycue4.login.LoginActivity"
                 android:theme="@style/LoginTheme"
                 android:configChanges="orientation|screenSize"
                 android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>
 
-        <activity android:name=".login.LogoutActivity"/>
+        <activity android:name="com.team214.nycue4.login.LogoutActivity"/>
 
         <activity
-                android:name=".ann.AnnActivity"
+                android:name="com.team214.nycue4.ann.AnnActivity"
                 android:configChanges="orientation|screenSize"
                 android:label="@string/title_activity_ann"/>
 
         <activity
-                android:name=".course.CourseActivity"
+                android:name="com.team214.nycue4.course.CourseActivity"
                 android:configChanges="orientation|screenSize"
                 android:label="@string/title_activity_course"
-                android:parentActivityName=".main.MainActivity">
+                android:parentActivityName="com.team214.nycue4.main.MainActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="com.team214.nctue4.main.MainActivity"/>
+                    android:value="com.team214.nycue4.main.MainActivity"/>
         </activity>
 
         <activity
-                android:name="com.team214.nctue4.course.HwkActivity"
+                android:name="com.team214.nycue4.course.HwkActivity"
                 android:configChanges="orientation|screenSize"
                 android:label="@string/title_activity_assign"/>
     </application>

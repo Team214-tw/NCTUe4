@@ -134,7 +134,7 @@
                     android:paddingTop="4dp"/>
 
 
-            <com.team214.nctue4.utility.NestedWebView
+            <com.team214.nycue4.utility.NestedWebView
                     android:id="@+id/assign_content_web_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

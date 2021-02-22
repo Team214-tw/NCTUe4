@@ -1,70 +1,65 @@
 {
   "project_info": {
-    "project_number": "328979385228",
-    "firebase_url": "https://nctu-e4-demo.firebaseio.com",
-    "project_id": "nctu-e4-demo",
-    "storage_bucket": "nctu-e4-demo.appspot.com"
+    "project_number": "1075765456949",
+    "project_id": "nycu-e4",
+    "storage_bucket": "nycu-e4.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:328979385228:android:8789caf76a8d40cb",
+        "mobilesdk_app_id": "1:1075765456949:android:f6d8764b53ef73de51017c",
         "android_client_info": {
-          "package_name": "com.team214.nctue4"
+          "package_name": "com.team214.nycue4"
         }
       },
       "oauth_client": [
         {
-          "client_id": "328979385228-nfeckub3voloeung0rrp4cgstjqak1nq.apps.googleusercontent.com",
+          "client_id": "1075765456949-v4h485e9j13l1b82b7pu02j0qpaugej5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC3x1ESjJHAtAD9LpUH2-bEkj0PwiC4JCk"
+          "current_key": "AIzaSyC10_P9mDkfUJ_WtRyXAQCrPLflhED0CuE"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1075765456949-v4h485e9j13l1b82b7pu02j0qpaugej5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:328979385228:android:88888aa6e96b0704",
+        "mobilesdk_app_id": "1:1075765456949:android:b75762b90af2425551017c",
         "android_client_info": {
-          "package_name": "com.team214.nctue4.dev"
+          "package_name": "com.team214.nycue4.dev"
         }
       },
       "oauth_client": [
         {
-          "client_id": "328979385228-nfeckub3voloeung0rrp4cgstjqak1nq.apps.googleusercontent.com",
+          "client_id": "1075765456949-v4h485e9j13l1b82b7pu02j0qpaugej5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC3x1ESjJHAtAD9LpUH2-bEkj0PwiC4JCk"
+          "current_key": "AIzaSyC10_P9mDkfUJ_WtRyXAQCrPLflhED0CuE"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1075765456949-v4h485e9j13l1b82b7pu02j0qpaugej5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

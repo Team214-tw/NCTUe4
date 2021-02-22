@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="com.team214.nctue4.ann.AnnActivity">
+        tools:context="com.team214.nycue4.ann.AnnActivity">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -102,7 +102,7 @@
                     android:layout_height="match_parent"
                     android:paddingTop="8dp"/>
 
-            <com.team214.nctue4.utility.NestedWebView
+            <com.team214.nycue4.utility.NestedWebView
                     android:id="@+id/ann_content_web_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
