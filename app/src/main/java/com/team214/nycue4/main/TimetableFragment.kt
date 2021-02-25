@@ -21,7 +21,7 @@ class TimetableFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         requireActivity().setTitle(R.string.timetable)
-        setHasOptionsMenu(true)
+//        setHasOptionsMenu(true)
         courseDBHelper = CourseDBHelper(requireContext())
         val cur = System.currentTimeMillis() / 1000
         courseItems = courseDBHelper.readCourses(E3Type.NEW)
