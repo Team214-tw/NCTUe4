@@ -11,7 +11,7 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
     override fun onCreate(db: SQLiteDatabase?) {
         db!!.execSQL(
             "CREATE TABLE if not exists courses ( id integer PRIMARY KEY autoincrement, " +
-                    "e3_type text, course_name text, course_id text," +
+                    "e3_type text, course_name text, course_id text, time text," +
                     "additional_info text, sort_key integer, bookmarked integer, bookmark_idx integer)"
         )
     }
@@ -85,7 +85,12 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
             values.put("bookmark_idx", it)
             writableDatabase.update("courses", values, "id =?", arrayOf(data[it].id.toString()))
         }
+    }
 
+    fun updateCourseTime(courseId: String, time: String) {
+        val values = ContentValues()
+        values.put("time", time)
+        writableDatabase.update("courses", values, "course_id = ?", arrayOf(courseId))
     }
 
     fun delTable() {
@@ -116,6 +121,7 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
             values.put("sort_key", it.sortKey)
             values.put("bookmarked", if (hashSet.contains(it.courseId)) 1 else 0)
             values.put("bookmark_idx", it.bookmarkIdx)
+            values.put("time", it.time)
             writableDatabase.insert("courses", null, values)
         }
     }
@@ -175,6 +181,7 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
             cursor.getLong(cursor.getColumnIndex("sort_key")),
             cursor.getInt(cursor.getColumnIndex("bookmarked")),
             cursor.getInt(cursor.getColumnIndex("bookmark_idx")),
+            cursor.getString(cursor.getColumnIndex("time")),
             cursor.getInt(cursor.getColumnIndex("id"))
         )
     }
@@ -190,6 +197,7 @@ class CourseDBHelper(context: Context) : SQLiteOpenHelper(context, "courses.db",
             -1,
             cursor.getInt(cursor.getColumnIndex("bookmarked")),
             cursor.getInt(cursor.getColumnIndex("bookmark_idx")),
+            cursor.getString(cursor.getColumnIndex("time")),
             cursor.getInt(cursor.getColumnIndex("id"))
         )
     }

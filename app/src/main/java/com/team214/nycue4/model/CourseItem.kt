@@ -13,6 +13,7 @@ data class CourseItem(
     val sortKey: Long,
     var bookmarked: Int = 0,
     val bookmarkIdx: Int = 10000,
+    var time: String? = null,
     val id: Int? = null
 ) : Parcelable {
     fun toggleBookmark() {

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/timetalbe_edit_item"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?android:attr/selectableItemBackground"
+              android:paddingBottom="15dp"
+              android:paddingEnd="15dp"
+              android:paddingStart="15dp"
+              android:paddingTop="15dp">
+
+    <View
+        android:id="@+id/course_item_e3_bar"
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:background="@color/old_e3" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:weightSum="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_weight="0.4"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/course_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="作業系統總整與實作"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/course_additional_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="耶耶耶"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edit_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:layout_weight="0.6"
+            android:text="Time" />
+
+
+    </LinearLayout>
+</LinearLayout>
+

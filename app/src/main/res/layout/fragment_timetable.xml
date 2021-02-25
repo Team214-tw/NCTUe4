@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/timetable_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/timetable_containier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.github.tlaabs.timetableview.TimetableView
+            android:id="@+id/timetable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_title="@array/timetable_header_title"
+            app:start_time="8"
+            app:column_count="6"
+            app:row_count="16" />
+    </FrameLayout>
+
+</RelativeLayout>

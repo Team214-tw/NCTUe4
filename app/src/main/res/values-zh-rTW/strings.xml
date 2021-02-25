@@ -133,4 +133,21 @@
         <item>關</item>
     </string-array>
 
+    <!--Timetable Activity-->
+    <string name="title_timetable">課表</string>
+    <string name="timetable">課表</string>
+    <string name="timetable_menu_edit">Edit</string>
+    <string name="timetable_menu_show_weekend">Show weekend</string>
+    <string name="edit">課程編輯</string>
+    <string-array name="timetable_header_title">
+        <item></item>
+        <item>一</item>
+        <item>二</item>
+        <item>三</item>
+        <item>四</item>
+        <item>五</item>
+        <item>六</item>
+        <item>日</item>
+    </string-array>
+
 </resources>

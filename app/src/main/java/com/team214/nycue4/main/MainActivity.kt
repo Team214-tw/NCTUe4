@@ -115,6 +115,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     this.arguments = bundle
                 }
             }
+            R.id.nav_timetable-> {
+                firebaseAnalytics
+                    .setCurrentScreen(this, "TimetableFragment", TimetableFragment::class.java.simpleName)
+                TimetableFragment()
+            }
+            R.id.nav_edit-> {
+                firebaseAnalytics
+                    .setCurrentScreen(this, "TimetableEditFragment", TimetableEditFragment::class.java.simpleName)
+                TimetableEditFragment()
+            }
             R.id.settings -> {
                 firebaseAnalytics
                     .setCurrentScreen(this, "SettingsFragment", CourseListFragment::class.java.simpleName)

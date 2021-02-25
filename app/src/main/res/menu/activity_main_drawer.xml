@@ -27,6 +27,14 @@
                 android:icon="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:title="@string/course_list"/>
         <item
+                android:id="@+id/nav_timetable"
+                android:icon="@drawable/ic_assignment_white_24dp"
+                android:title="@string/timetable"/>
+        <item
+            android:id="@+id/nav_edit"
+            android:icon="@drawable/ic_edit_black_24dp"
+            android:title="@string/edit"/>
+        <item
                 android:id="@+id/settings"
                 android:icon="@drawable/ic_settings_black_24dp"
                 android:title="@string/settings"/>

@@ -43,8 +43,7 @@ class NewE3ApiClient(context: Context) : E3Client() {
             val formBodyBuilder = FormBody.Builder()
             data.forEach { entry -> formBodyBuilder.add(entry.key, entry.value) }
             val formBody = formBodyBuilder.build()
-            Log.d("NewE3ApiPost", data["wsfunction"] ?: "")
-            okhttp3.Request.Builder().url(API_URL).post(formBody).build()
+            Request.Builder().url(API_URL).post(formBody).build()
         }.flatMap { clientExecute(it) }.flatMap { (_, response) ->
             Observable.fromCallable {
                 response.apply {

@@ -54,11 +54,7 @@ class CourseListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         e3Type = arguments!!.getSerializable("e3Type") as E3Type
-        activity!!.setTitle(
-            when (e3Type) {
-                E3Type.NEW -> R.string.course_list
-            }
-        )
+        requireActivity().setTitle(R.string.course_list)
         setHasOptionsMenu(true)
         courseDBHelper = CourseDBHelper(context!!)
         return inflater.inflate(R.layout.fragment_couse_list, container, false)

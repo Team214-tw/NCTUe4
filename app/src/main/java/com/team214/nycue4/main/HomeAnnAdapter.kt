@@ -35,8 +35,6 @@ class HomeAnnAdapter internal constructor(
             }
             val newE3Color = ContextCompat.getColor(context, R.color.new_e3)
             val oldE3Color = ContextCompat.getColor(context, R.color.old_e3)
-            view.e3_image.setImageResource(if (ann.e3Type == E3Type.NEW) R.drawable.ic_new_e3 else R.drawable.ic_old_e3)
-            view.e3_image.setColorFilter(if (ann.e3Type == E3Type.NEW) newE3Color else oldE3Color)
             view.ann_identifier_bar.setBackgroundColor(if (ann.e3Type == E3Type.NEW) newE3Color else oldE3Color)
             view.announcement_beginDate.setTextColor(if (ann.e3Type == E3Type.NEW) newE3Color else oldE3Color)
 

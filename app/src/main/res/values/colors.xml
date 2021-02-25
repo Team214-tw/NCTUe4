@@ -10,6 +10,7 @@
     <color name="msPowerPoint">#d24726</color>
     <color name="adobePdf">#780000</color>
     <color name="new_e3">#0277BD</color>
+    <color name="old_e3">#0277BD</color>
     <color name="row_activated">#E0E0E0</color>
     <color name="windowBackground">#FAFAFA</color>
     <color name="floatingBackground">#FFFFFF</color>

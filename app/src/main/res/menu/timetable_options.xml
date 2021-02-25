@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/timetable_menu_show_weekend"
+        android:title="@string/timetable_menu_show_weekend"
+        app:actionLayout="@layout/switch_item" />
+    <item
+        android:id="@+id/timetable_menu_edit"
+        android:icon="@drawable/ic_people_black_24dp"
+        android:title="@string/timetable_menu_edit" />
+</menu>

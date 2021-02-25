@@ -51,6 +51,20 @@
     <string name="title_activity_ann">Announcement</string>
     <string name="action_to_syllabus">Syllabus</string>
 
+    <!--Timetable Activity-->
+    <string name="title_timetable">Timetable</string>
+    <string name="timetable">Timetable</string>
+    <string-array name="timetable_header_title">
+        <item></item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
+
     <!--License-->
     <string name="font_awesome_license">This app uses <a href="https://fontawesome.com/license">Font Awesome</a> icons.
     </string>
@@ -182,4 +196,7 @@
     </string-array>
 
     <string name="account_management">Account management</string>
+    <string name="timetable_menu_edit">Edit</string>
+    <string name="timetable_menu_show_weekend">Show weekend</string>
+    <string name="edit">Edit</string>
 </resources>
